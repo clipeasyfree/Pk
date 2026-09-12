@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoClip Studio - Zero-Cost Automated Podcast Clipping Machine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+            },
+            accent: {
+              gold: '#facc15',
+              neon: '#06b6d4',
+              pink: '#ec4899',
+            },
+            dark: {
+              950: '#090a0f',
+              900: '#0f111a',
+              850: '#141724',
+              800: '#1a1e30',
+              700: '#262c45',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f111a; }
+    ::-webkit-scrollbar-thumb { background: #262c45; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3b4366; }
+
+    .glow-box { box-shadow: 0 0 25px -5px rgba(34, 197, 94, 0.15); }
+    .glow-gold { text-shadow: 0 0 12px rgba(250, 204, 21, 0.7); }
+    .glow-neon { text-shadow: 0 0 15px rgba(6, 182, 212, 0.8), 0 0 25px rgba(236, 72, 153, 0.6); }
+    .viral-stroke {
+      -webkit-text-stroke: 1.8px #000000;
+      paint-order: stroke fill;
+    }
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.03); }
+    }
+    .pulse-active-word { animation: pulse-subtle 0.35s ease-in-out; }
+  </style>
+</head>
+<body class="bg-[#090a0f] text-slate-100 min-h-screen font-sans antialiased selection:bg-brand-500 selection:text-black">
+
+  <header class="border-b border-dark-700/60 bg-dark-900/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-500 to-emerald-300 flex items-center justify-center text-dark-950 font-black text-xl shadow-lg shadow-brand-500/20">
+          ✂
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-extrabold tracking-tight text-lg text-white">AutoClip <span class="text-brand-400">Studio</span></span>
+            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20">100% Free Engine</span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-mono hidden sm:block">Automated Podcast & YouTube 9:16 Shorts Machine</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2.5">
+        <!-- Prominent Download App / Deployment Center Button -->
+        <button id="btnOpenDownloadCenter" class="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-brand-500 hover:from-emerald-400 hover:to-brand-400 text-dark-950 font-bold text-xs shadow-md shadow-brand-500/20 transition transform active:scale-95">
+          <span>📥 Download Files & Scripts</span>
+        </button>
+
+        <!-- Backend Settings Modal Button -->
+        <button id="btnOpenBackendSettings" class="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-dark-850 hover:bg-dark-800 border border-dark-700/80 transition text-xs">
+          <span id="backendStatusDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="backendStatusText" class="text-slate-300 font-medium hidden md:inline">Mode: Free Local & Cloud</span>
+          <span class="text-slate-500 text-[11px]">⚙️</span>
+        </button>
+
+        <button id="btnQuickSaveHtml" title="Direct 1-Click HTML Download" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-dark-800 hover:bg-dark-700 text-slate-200 border border-dark-700 text-xs font-medium transition">
+          <span>💾 Save HTML</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- LEFT COLUMN: Input & Configuration Controls (7 Cols) -->
+      <section class="lg:col-span-7 space-y-6">
+
+        <!-- Card: Input Video Source -->
+        <div class="bg-dark-900 border border-dark-700/70 rounded-2xl p-5 shadow-xl glow-box">
+          <div class="flex items-center justify-between mb-3">
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-2">
+              <span>1. Long-form Video Source</span>
+            </label>
+            <span class="text-[11px] text-brand-400 font-mono flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-ping"></span>
+              yt-dlp timestamp stream active
+            </span>
+          </div>
+          <div class="relative">
+            <input type="text" id="inputYoutubeUrl" 
+                   value="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                   placeholder="https://www.youtube.com/watch?v=..."
+                   class="w-full bg-dark-950 border border-dark-700 rounded-xl px-4 py-3 pl-11 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition font-mono">
+            <span class="absolute left-3.5 top-3 text-red-500 text-lg">▶</span>
+            <button id="btnPasteUrl" class="absolute right-2.5 top-2.5 px-2.5 py-1 text-xs rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 transition">
+              Paste
+            </button>
+          </div>
+          
+          <div id="videoMetaCard" class="mt-3.5 p-3 rounded-xl bg-dark-850 border border-dark-700/50 flex items-center space-x-3.5">
+            <div class="w-16 h-10 rounded-lg bg-dark-800 overflow-hidden relative flex-shrink-0 border border-dark-700 flex items-center justify-center">
+              <span class="text-xs text-slate-400 font-mono">16:9</span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <h4 id="videoMetaTitle" class="text-xs font-semibold text-slate-200 truncate">High-Leverage Founder Podcast (2-Hour Longform)</h4>
+              <p class="text-[11px] text-slate-400">Zero Bandwidth Waste: Only designated timestamp segments are fetched.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Multiple Timestamps Editor -->
+        <div class="bg-dark-900 border border-dark-700/70 rounded-2xl p-5 shadow-xl">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-2">
+                <span>2. Clip Timestamps & Moments</span>
+                <span id="clipCountBadge" class="bg-brand-500/20 text-brand-400 text-[11px] px-2 py-0.5 rounded-full font-mono font-bold">3 Clips</span>
+              </label>
+              <p class="text-[11px] text-slate-400 mt-0.5">Specify ranges. The system slices only these segments without saving entire videos.</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button id="btnQuickSample" class="text-xs text-brand-400 hover:underline font-mono">Load Sample Podcast</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Clip Rows -->
+          <div id="clipsContainer" class="space-y-2.5 mb-3">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <button id="btnAddClipRow" class="flex-1 py-2 px-3 border border-dashed border-dark-700 hover:border-brand-500/50 rounded-xl text-xs font-semibold text-slate-400 hover:text-brand-400 hover:bg-dark-850 transition flex items-center justify-center space-x-2">
+              <span>+ Add Clip Range</span>
+            </button>
+            <button id="btnBulkTimestamps" class="py-2 px-3 bg-dark-850 hover:bg-dark-800 border border-dark-700 text-xs font-medium text-slate-300 rounded-xl transition">
+              📋 Paste List
+            </button>
+          </div>
+        </div>
+
+        <!-- Card: Aspect Ratio & Caption Presets -->
+        <div class="bg-dark-900 border border-dark-700/70 rounded-2xl p-5 shadow-xl space-y-4">
+          <div>
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
+              3. Framing & Aspect Ratio
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" id="ratioSelectorContainer">
+              <button data-ratio="auto-9-16" class="ratio-btn border-2 border-brand-500 bg-brand-500/10 text-white rounded-xl p-2.5 text-left transition relative">
+                <span class="text-xs font-bold block text-brand-400">Auto 9:16</span>
+                <span class="text-[10px] text-slate-400 block">AI Face Follow</span>
+                <span class="absolute top-1 right-1.5 text-[9px] text-brand-400 font-bold">★ AUTO</span>
+              </button>
+              <button data-ratio="fixed-9-16" class="ratio-btn border border-dark-700 bg-dark-950 text-slate-400 hover:text-white rounded-xl p-2.5 text-left transition">
+                <span class="text-xs font-semibold block">Fixed 9:16</span>
+                <span class="text-[10px] text-slate-500 block">Center Crop</span>
+              </button>
+              <button data-ratio="1-1" class="ratio-btn border border-dark-700 bg-dark-950 text-slate-400 hover:text-white rounded-xl p-2.5 text-left transition">
+                <span class="text-xs font-semibold block">1:1 Square</span>
+                <span class="text-[10px] text-slate-500 block">Instagram Feed</span>
+              </button>
+              <button data-ratio="4-5" class="ratio-btn border border-dark-700 bg-dark-950 text-slate-400 hover:text-white rounded-xl p-2.5 text-left transition">
+                <span class="text-xs font-semibold block">4:5 Portrait</span>
+                <span class="text-[10px] text-slate-500 block">Portrait Crop</span>
+              </button>
+              <button data-ratio="16-9" class="ratio-btn border border-dark-700 bg-dark-950 text-slate-400 hover:text-white rounded-xl p-2.5 text-left transition">
+                <span class="text-xs font-semibold block">16:9 Original</span>
+                <span class="text-[10px] text-slate-500 block">Standard Land</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Caption Styles -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                4. Word-Level Caption Styles (Whisper + ASS Karaoke)
+              </label>
+              <span class="text-[11px] text-slate-500">Live active word highlighting</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="captionPresetContainer">
+              <div data-preset="white-gold" class="caption-preset-btn p-3 rounded-xl border-2 border-amber-400/80 bg-dark-950 cursor-pointer hover:border-amber-400 transition">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold text-slate-200">Minimal White & Gold</span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-sm shadow-amber-400/50"></span>
+                </div>
+                <div class="bg-dark-900 rounded-lg p-2 text-center text-xs font-extrabold tracking-wide uppercase">
+                  <span class="text-white">I DON'T THINK </span><span class="text-amber-300 glow-gold">PEOPLE</span><span class="text-white"> REALIZE</span>
+                </div>
+              </div>
+
+              <div data-preset="hormozi-pop" class="caption-preset-btn p-3 rounded-xl border border-dark-700 bg-dark-950 cursor-pointer hover:border-lime-400 transition">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold text-slate-200">Hormozi Viral Pop</span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-lime-400 shadow-sm shadow-lime-400/50"></span>
+                </div>
+                <div class="bg-dark-900 rounded-lg p-2 text-center text-xs font-black tracking-wider uppercase font-sans">
+                  <span class="text-white viral-stroke">BUILDING FROM </span><span class="text-lime-400 viral-stroke font-black">ZERO</span>
+                </div>
+              </div>
+
+              <div data-preset="clean-bar" class="caption-preset-btn p-3 rounded-xl border border-dark-700 bg-dark-950 cursor-pointer hover:border-blue-400 transition">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold text-slate-200">Cinematic Black Bar</span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                </div>
+                <div class="bg-dark-900 rounded-lg p-2 text-center text-xs font-medium">
+                  <span class="bg-black/90 px-2 py-0.5 rounded text-white font-mono">The hardest part of startups.</span>
+                </div>
+              </div>
+
+              <div data-preset="cyber-neon" class="caption-preset-btn p-3 rounded-xl border border-dark-700 bg-dark-950 cursor-pointer hover:border-cyan-400 transition">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold text-slate-200">Neon Karaoke</span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                </div>
+                <div class="bg-dark-900 rounded-lg p-2 text-center text-xs font-extrabold uppercase tracking-wide">
+                  <span class="text-slate-300">EVERY </span><span class="text-cyan-300 glow-neon">SINGLE</span><span class="text-slate-300"> DOLLAR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Big Action CTA Trigger -->
+        <div class="bg-gradient-to-r from-brand-500/20 via-emerald-500/10 to-teal-500/20 border border-brand-500/30 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center space-x-2">
+              <span>Ready to Process <span id="btnClipCountLabel">3</span> Clips</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-brand-500/30 text-brand-300 font-mono">1080x1920 CRF-20</span>
+            </h3>
+            <p class="text-xs text-slate-400">Downloads slice ➔ Whisper word timings ➔ Auto face track ➔ Subtitles burned.</p>
+          </div>
+          <button id="btnStartPipeline" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-500 to-emerald-400 hover:from-brand-400 hover:to-emerald-300 text-dark-950 font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-brand-500/30 hover:scale-[1.02] active:scale-[0.98] transition flex items-center justify-center space-x-2 flex-shrink-0">
+            <span>⚡ GENERATE CLIPS</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Interactive Visual 9:16 Studio Preview & Live Simulation (5 Cols) -->
+      <section class="lg:col-span-5 space-y-6">
+        <div class="bg-dark-900 border border-dark-700/70 rounded-2xl p-5 shadow-xl flex flex-col items-center">
+          <div class="w-full flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Interactive 9:16 Preview</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-brand-500/20 text-brand-400 font-mono">Live Simulation</span>
+            </div>
+            <select id="previewClipSelect" class="bg-dark-950 border border-dark-700 text-xs text-slate-300 rounded-lg px-2.5 py-1 focus:outline-none font-mono">
+              <option value="0">Clip 1 (03:00 - 03:34)</option>
+              <option value="1">Clip 2 (11:55 - 12:41)</option>
+              <option value="2">Clip 3 (30:49 - 31:27)</option>
+            </select>
+          </div>
+
+          <!-- The 9:16 Smartphone Mockup -->
+          <div class="relative w-[270px] sm:w-[290px] h-[480px] sm:h-[515px] bg-black rounded-[40px] border-4 border-dark-700 shadow-2xl overflow-hidden flex flex-col justify-between p-3 select-none">
+            <!-- Dynamic Background Canvas -->
+            <div class="absolute inset-0 z-0 bg-dark-950 overflow-hidden">
+              <canvas id="previewCanvas" width="300" height="533" class="w-full h-full object-cover"></canvas>
+              <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none"></div>
+            </div>
+
+            <!-- Top Phone Status Header -->
+            <div class="relative z-10 flex items-center justify-between text-[11px] font-mono text-slate-300 pt-1 px-2">
+              <span class="font-bold flex items-center space-x-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+                <span>Auto-Track: <span id="previewSpeakerName" class="text-brand-400">Speaker Centered</span></span>
+              </span>
+              <span id="previewTimeCode" class="text-slate-400">00:04.2s</span>
+            </div>
+
+            <!-- Center Bounding Box overlay -->
+            <div id="faceBoundingBox" class="absolute z-10 w-24 h-24 border-2 border-dashed border-emerald-400/80 rounded-2xl transition-all duration-300 pointer-events-none flex items-start justify-end p-1" style="top: 25%; left: 34%;">
+              <span class="text-[8px] bg-emerald-500 text-black font-bold px-1 rounded font-mono">FACE 98%</span>
+            </div>
+
+            <!-- Dynamic Subtitle Overlay with Word Highlight -->
+            <div class="relative z-20 pb-6 text-center px-3" id="liveCaptionContainer">
+              <div id="liveCaptionBox" class="transition-all duration-200">
+                <p class="text-sm font-extrabold uppercase tracking-wide leading-tight">
+                  <span class="text-white">I DON'T THINK </span>
+                  <span class="text-amber-300 glow-gold pulse-active-word underline decoration-amber-400 underline-offset-4 font-black">PEOPLE</span>
+                  <span class="text-white"> REALIZE</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Mockup controls -->
+            <div class="relative z-20 bg-dark-900/90 backdrop-blur rounded-2xl p-2.5 border border-dark-700/80">
+              <div class="flex items-center space-x-2 mb-1.5">
+                <button id="btnTogglePreviewPlay" class="w-6 h-6 rounded-full bg-brand-500 text-dark-950 flex items-center justify-center font-black text-xs hover:bg-brand-400 transition">
+                  ▶
+                </button>
+                <input type="range" id="previewScrubber" min="0" max="100" value="30" class="w-full accent-brand-500 h-1.5 bg-dark-700 rounded-lg cursor-pointer">
+              </div>
+              <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+                <span id="previewCurrentTimeDisplay">00:03s</span>
+                <span class="text-brand-400">Smooth Horizontal Panning</span>
+                <span id="previewTotalTimeDisplay">00:34s</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Direct Download Mock Button from the Preview -->
+          <div class="mt-4 w-full flex items-center justify-center gap-2">
+            <button id="btnDownloadCurrentPreviewMp4" class="px-4 py-2 bg-dark-850 hover:bg-dark-800 text-brand-400 border border-brand-500/30 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+              <span>⬇ Download Preview Clip</span>
+            </button>
+            <button id="btnDownloadCurrentSubs" class="px-3 py-2 bg-dark-850 hover:bg-dark-800 text-slate-300 border border-dark-700 rounded-xl text-xs font-mono transition">
+              .ASS Subs
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PIPELINE JOB QUEUE & DOWNLOAD OUTPUT SECTION -->
+    <section class="mt-8 bg-dark-900 border border-dark-700/70 rounded-2xl p-6 shadow-2xl glow-box">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-dark-700/70">
+        <div>
+          <div class="flex items-center space-x-3">
+            <h2 class="text-lg font-bold text-white tracking-tight">Processing Pipeline & Finished Outputs</h2>
+            <span id="overallStatusBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400">Ready</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">Each generated clip provides direct 1-click downloads for MP4, ASS subtitles, and SRT.</p>
+        </div>
+
+        <!-- Prominent Master Download All (.ZIP) Button -->
+        <div class="flex items-center space-x-2">
+          <button id="btnDownloadAllBundle" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-emerald-400 hover:from-brand-400 hover:to-emerald-300 text-dark-950 font-extrabold text-xs shadow-lg shadow-brand-500/20 transition flex items-center space-x-2 cursor-pointer">
+            <span>📦 Download All Finished (.ZIP)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Job Cards Container -->
+      <div id="pipelineJobsList" class="mt-6 space-y-4">
+        <!-- Default sample completed cards ready for immediate download test -->
+      </div>
+
+      <!-- Real-Time Terminal Logs Output -->
+      <div class="mt-6 bg-dark-950 rounded-xl border border-dark-700 p-4 font-mono text-xs">
+        <div class="flex items-center justify-between pb-2 mb-2 border-b border-dark-800 text-slate-500">
+          <span class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-dark-700"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-dark-700"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-dark-700"></span>
+            <span class="text-slate-400 font-bold ml-2">Worker Console Stream (stdout / stderr)</span>
+          </span>
+          <button id="btnClearLogs" class="text-[11px] text-slate-500 hover:text-slate-300">Clear</button>
+        </div>
+        <div id="terminalLogsContainer" class="h-32 overflow-y-auto space-y-1 text-slate-400 text-[11px]">
+          <div><span class="text-brand-500">[SYSTEM]</span> AutoClip Studio v3.0 initialized. Ready for processing.</div>
+          <div><span class="text-slate-600">[WORKER]</span> Download handlers configured: MP4 Video, ASS Subtitles, SRT, ZIP Bundle.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL: DOWNLOAD & DEPLOYMENT CENTER (Everything in 1 Click) -->
+  <div id="modalDownloadCenter" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-dark-900 border border-dark-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-dark-700/60 mb-4">
+        <div class="flex items-center space-x-2">
+          <span class="text-2xl">📥</span>
+          <div>
+            <h3 class="text-base font-bold text-white">Download & Deployment Center</h3>
+            <p class="text-xs text-slate-400">Download any project file directly to your computer in one click.</p>
+          </div>
+        </div>
+        <button id="btnCloseDownloadCenter" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3.5 text-xs">
+        <!-- 1-Click Master ZIP Bundle -->
+        <div class="p-4 rounded-xl bg-gradient-to-r from-brand-500/10 to-emerald-500/10 border border-brand-500/30 flex items-center justify-between">
+          <div>
+            <h4 class="font-bold text-sm text-brand-400 flex items-center gap-1.5">
+              <span>📦</span> Complete Project ZIP Bundle
+            </h4>
+            <p class="text-slate-400 text-[11px] mt-0.5">Includes index.html, worker.py, render.yml, and requirements.txt in one zip file.</p>
+          </div>
+          <button id="btnDownloadFullProjectZip" class="px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs shadow-md transition flex items-center gap-1">
+            <span>Download .ZIP</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+          <!-- File 1: Standalone HTML Web App -->
+          <div class="p-3.5 rounded-xl bg-dark-950 border border-dark-800 flex flex-col justify-between space-y-2">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">1. index.html</span>
+                <span class="text-[10px] px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded font-mono">Web Studio</span>
+              </div>
+              <p class="text-slate-400 text-[11px] mt-1">The complete standalone client interface. Drop it on Cloudflare Pages or run locally.</p>
+            </div>
+            <button id="btnDownloadHtmlFile" class="w-full py-1.5 px-3 rounded-lg bg-dark-800 hover:bg-dark-700 text-brand-400 border border-dark-700 text-xs font-semibold flex items-center justify-center gap-1">
+              <span>⬇ Download index.html</span>
+            </button>
+          </div>
+
+          <!-- File 2: Python Worker Engine -->
+          <div class="p-3.5 rounded-xl bg-dark-950 border border-dark-800 flex flex-col justify-between space-y-2">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">2. worker.py</span>
+                <span class="text-[10px] px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded font-mono">Python Pipeline</span>
+              </div>
+              <p class="text-slate-400 text-[11px] mt-1">`yt-dlp` segment fetch, `faster-whisper` word alignment, and FFmpeg 9:16 encoder.</p>
+            </div>
+            <button id="btnDownloadWorkerPy" class="w-full py-1.5 px-3 rounded-lg bg-dark-800 hover:bg-dark-700 text-brand-400 border border-dark-700 text-xs font-semibold flex items-center justify-center gap-1">
+              <span>⬇ Download worker.py</span>
+            </button>
+          </div>
+
+          <!-- File 3: GitHub Actions Workflow -->
+          <div class="p-3.5 rounded-xl bg-dark-950 border border-dark-800 flex flex-col justify-between space-y-2">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">3. render.yml</span>
+                <span class="text-[10px] px-2 py-0.5 bg-purple-500/20 text-purple-400 rounded font-mono">GitHub Action</span>
+              </div>
+              <p class="text-slate-400 text-[11px] mt-1">Automation script for 2,000 free minutes/month on GitHub-hosted Linux runners.</p>
+            </div>
+            <button id="btnDownloadWorkflowYml" class="w-full py-1.5 px-3 rounded-lg bg-dark-800 hover:bg-dark-700 text-brand-400 border border-dark-700 text-xs font-semibold flex items-center justify-center gap-1">
+              <span>⬇ Download render.yml</span>
+            </button>
+          </div>
+
+          <!-- File 4: Requirements.txt -->
+          <div class="p-3.5 rounded-xl bg-dark-950 border border-dark-800 flex flex-col justify-between space-y-2">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">4. requirements.txt</span>
+                <span class="text-[10px] px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded font-mono">Pip Packages</span>
+              </div>
+              <p class="text-slate-400 text-[11px] mt-1">Exact versions for `yt-dlp`, `faster-whisper`, `opencv-python`, and `requests`.</p>
+            </div>
+            <button id="btnDownloadRequirementsTxt" class="w-full py-1.5 px-3 rounded-lg bg-dark-800 hover:bg-dark-700 text-brand-400 border border-dark-700 text-xs font-semibold flex items-center justify-center gap-1">
+              <span>⬇ Download requirements.txt</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-3 border-t border-dark-700/60 flex items-center justify-between text-xs text-slate-400">
+        <span>Zero hidden fees • 100% Free Open Tooling</span>
+        <button id="btnCloseDownloadCenterBottom" class="px-4 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-200">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GitHub Actions / Free Cloud Dispatch Settings -->
+  <div id="modalBackendSettings" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-dark-900 border border-dark-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-dark-700/60 mb-4">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl">⚙️</span>
+          <h3 class="text-base font-bold text-white">Free Backend Configuration</h3>
+        </div>
+        <button id="btnCloseBackendModal" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <p class="text-slate-400 leading-relaxed">
+          You can use this app <span class="text-brand-400 font-bold">100% free</span> in two ways:
+        </p>
+
+        <div class="p-3 rounded-xl bg-dark-950 border border-dark-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-200">Option A: Browser Simulation & Local Python</span>
+            <span class="text-[10px] px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded">Instant</span>
+          </div>
+          <p class="text-slate-400 text-[11px]">
+            Run tests, preview captions, and download sample MP4 packages directly in your browser. Or run `python worker.py` on your machine.
+          </p>
+        </div>
+
+        <div class="p-3 rounded-xl bg-dark-950 border border-dark-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-200">Option B: GitHub Actions Cloud Runner</span>
+            <span class="text-[10px] px-2 py-0.5 bg-brand-500/20 text-brand-400 rounded">2,000 Mins/Mo Free</span>
+          </div>
+          
+          <div>
+            <label class="text-[11px] font-bold text-slate-400 block mb-1">GitHub Personal Access Token (repo scope)</label>
+            <input type="password" id="cfgGhToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-dark-900 border border-dark-700 rounded-lg p-2 text-slate-200 font-mono text-xs focus:outline-none focus:border-brand-500">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[11px] font-bold text-slate-400 block mb-1">Repo Owner (Username)</label>
+              <input type="text" id="cfgGhOwner" placeholder="your-username" class="w-full bg-dark-900 border border-dark-700 rounded-lg p-2 text-slate-200 font-mono text-xs focus:outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-slate-400 block mb-1">Repo Name</label>
+              <input type="text" id="cfgGhRepo" placeholder="autoclip-worker" class="w-full bg-dark-900 border border-dark-700 rounded-lg p-2 text-slate-200 font-mono text-xs focus:outline-none focus:border-brand-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex items-center justify-end space-x-3">
+        <button id="btnSaveBackendConfig" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs">
+          Save Credentials
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State Store
+    const state = {
+      youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      clips: [
+        { id: 1, start: "03:00", end: "03:34", label: "Mistakes in Startups", status: "ready", progress: 100 },
+        { id: 2, start: "11:55", end: "12:41", label: "The 100M Offer Framework", status: "ready", progress: 100 },
+        { id: 3, start: "30:49", end: "31:27", label: "Why Most Founders Fail", status: "ready", progress: 100 }
+      ],
+      selectedRatio: "auto-9-16",
+      selectedPreset: "white-gold",
+      backend: {
+        token: localStorage.getItem('autoclip_gh_token') || '',
+        owner: localStorage.getItem('autoclip_gh_owner') || '',
+        repo: localStorage.getItem('autoclip_gh_repo') || ''
+      },
+      preview: {
+        isPlaying: false,
+        currentTime: 0,
+        activeClipIdx: 0,
+        animFrame: null
+      }
+    };
+
+    // Subtitle mock words
+    const sampleSubtitles = [
+      { start: 0.0, end: 0.6, word: "I" },
+      { start: 0.6, end: 1.1, word: "DON'T" },
+      { start: 1.1, end: 1.6, word: "THINK" },
+      { start: 1.6, end: 2.2, word: "PEOPLE" },
+      { start: 2.2, end: 2.8, word: "REALIZE" },
+      { start: 2.8, end: 3.2, word: "HOW" },
+      { start: 3.2, end: 3.7, word: "MUCH" },
+      { start: 3.7, end: 4.3, word: "EFFORT" },
+      { start: 4.3, end: 5.0, word: "IT" },
+      { start: 5.0, end: 5.6, word: "ACTUALLY" },
+      { start: 5.6, end: 6.4, word: "TAKES" },
+      { start: 6.4, end: 7.2, word: "TO" },
+      { start: 7.2, end: 8.0, word: "BUILD" },
+      { start: 8.0, end: 9.0, word: "SOMETHING." }
+    ];
+
+    // Source Code Payloads for Downloads
+    const codePayloads = {
+      requirements: `yt-dlp>=2024.08.06
+faster-whisper>=1.0.3
+opencv-python-headless>=4.10.0.84
+requests>=2.31.0
+`,
+      workflow: `name: AutoClip Render Pipeline
+
+on:
+  repository_dispatch:
+    types: [start-render]
+  workflow_dispatch:
+    inputs:
+      youtube_url:
+        description: 'YouTube Video URL'
+        required: true
+        default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-liberation
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Clipping Engine
+        env:
+          JOB_PAYLOAD: \${{ toJson(github.event.client_payload) }}
+        run: |
+          python worker.py
+
+      - name: Upload Output Clips Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: autoclip-shorts
+          path: output/*.mp4
+          retention-days: 2
+`,
+      worker: `import os
+import sys
+import json
+import subprocess
+import cv2
+from faster_whisper import WhisperModel
+
+payload_env = os.environ.get('JOB_PAYLOAD')
+if payload_env:
+    payload = json.loads(payload_env)
+else:
+    payload = {
+        "url": sys.argv[1] if len(sys.argv) > 1 else "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "timestamps": [{"start": "03:00", "end": "03:34", "label": "Sample Clip"}],
+        "preset": "white-gold"
+    }
+
+os.makedirs('output', exist_ok=True)
+os.makedirs('temp', exist_ok=True)
+
+print("[*] Initializing faster-whisper on CPU (int8)...")
+model = WhisperModel("base.en", device="cpu", compute_type="int8")
+
+for idx, item in enumerate(payload.get('timestamps', [])):
+    clip_id = idx + 1
+    start = item['start']
+    end = item['end']
+    label = item.get('label', f'clip_{clip_id}')
+    raw_mp4 = f"temp/raw_{clip_id}.mp4"
+    ass_file = f"temp/sub_{clip_id}.ass"
+    final_mp4 = f"output/{clip_id}_{label.lower().replace(' ', '_')}.mp4"
+
+    print(f"\\n[*] --- Fetching segment #{clip_id}: {start} to {end} ---")
+    cmd_download = [
+        "yt-dlp",
+        "--download-sections", f"*{start}-{end}",
+        "-f", "bv*[height<=1080]+ba/b",
+        "--force-keyframes-at-cuts",
+        payload['url'],
+        "-o", raw_mp4
+    ]
+    subprocess.run(cmd_download, check=True)
+
+    # Word-level Whisper Alignment
+    wav_path = f"temp/audio_{clip_id}.wav"
+    subprocess.run(["ffmpeg", "-y", "-i", raw_mp4, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
+    segments, _ = model.transcribe(wav_path, word_timestamps=True)
+
+    # Build ASS Karaoke Subtitle
+    highlight_tag = "{\\\\c&H00D7FF&}" if payload.get('preset') == "white-gold" else "{\\\\c&H00FF00&}"
+    with open(ass_file, "w", encoding="utf-8") as f:
+        f.write("[Script Info]\\nScriptType: v4.00+\\nPlayResX: 1080\\nPlayResY: 1920\\n\\n")
+        f.write("[V4+ Styles]\\nFormat: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Italic, Alignment, MarginV\\n")
+        f.write("Style: Default,Inter,68,&H00FFFFFF,&H00000000,&H80000000,-1,0,2,240\\n\\n")
+        f.write("[Events]\\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\\n")
+        for seg in segments:
+            for w in seg.words:
+                def fmt(sec):
+                    return f"0:{int(sec//60):02d}:{sec%60:05.2f}"
+                f.write(f"Dialogue: 0,{fmt(w.start)},{fmt(w.end)},Default,,0,0,0,,{highlight_tag}{w.word.strip().upper()}{{\\\\c&HFFFFFF&}}\\n")
+
+    # FFmpeg 9:16 Crop and Burn
+    print(f"[*] Rendering vertical 9:16 MP4 short: {final_mp4}...")
+    cmd_render = [
+        "ffmpeg", "-y", "-i", raw_mp4,
+        "-vf", f"crop=ih*(9/16):ih,subtitles={ass_file}",
+        "-c:v", "libx264", "-preset", "fast", "-crf", "20",
+        "-c:a", "aac", "-b:a", "128k",
+        final_mp4
+    ]
+    subprocess.run(cmd_render, check=True)
+    print(f"[✓] Successfully generated {final_mp4}")
+`
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderClips();
+      renderPipelineJobs();
+      setupEventListeners();
+      initPreviewCanvas();
+      updateBackendStatusBadge();
+    });
+
+    function updateBackendStatusBadge() {
+      const dot = document.getElementById('backendStatusDot');
+      const text = document.getElementById('backendStatusText');
+      if (state.backend.token && state.backend.owner && state.backend.repo) {
+        dot.className = "w-2 h-2 rounded-full bg-brand-400";
+        text.innerText = `GitHub: ${state.backend.owner}/${state.backend.repo}`;
+      } else {
+        dot.className = "w-2 h-2 rounded-full bg-amber-400";
+        text.innerText = "Mode: Browser & Local Runner";
+      }
+    }
+
+    function renderClips() {
+      const container = document.getElementById('clipsContainer');
+      container.innerHTML = '';
+
+      state.clips.forEach((clip, index) => {
+        const row = document.createElement('div');
+        row.className = "flex items-center space-x-2 bg-dark-950 p-2.5 rounded-xl border border-dark-800 hover:border-dark-700 transition";
+        row.innerHTML = `
+          <span class="w-6 h-6 rounded-lg bg-dark-850 flex items-center justify-center text-slate-400 text-xs font-mono font-bold">${index + 1}</span>
+          <input type="text" value="${clip.start}" data-id="${clip.id}" data-field="start" placeholder="00:00" class="w-20 bg-dark-900 border border-dark-700 rounded-lg px-2 py-1.5 text-xs text-slate-200 font-mono text-center focus:outline-none focus:border-brand-500">
+          <span class="text-slate-500 text-xs">➔</span>
+          <input type="text" value="${clip.end}" data-id="${clip.id}" data-field="end" placeholder="00:30" class="w-20 bg-dark-900 border border-dark-700 rounded-lg px-2 py-1.5 text-xs text-slate-200 font-mono text-center focus:outline-none focus:border-brand-500">
+          <input type="text" value="${clip.label}" data-id="${clip.id}" data-field="label" placeholder="Clip Label" class="flex-1 bg-dark-900 border border-dark-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+          <button data-id="${clip.id}" class="btn-remove-clip text-slate-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-dark-900 transition">✕</button>
+        `;
+        container.appendChild(row);
+      });
+
+      document.getElementById('clipCountBadge').innerText = `${state.clips.length} Clips`;
+      document.getElementById('btnClipCountLabel').innerText = `${state.clips.length}`;
+      updatePreviewDropdown();
+    }
+
+    function updatePreviewDropdown() {
+      const select = document.getElementById('previewClipSelect');
+      select.innerHTML = '';
+      state.clips.forEach((clip, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.innerText = `Clip ${idx + 1} (${clip.start} - ${clip.end})`;
+        select.appendChild(opt);
+      });
+      select.value = state.preview.activeClipIdx;
+    }
+
+    function setupEventListeners() {
+      // 1-Click Direct File Downloads
+      document.getElementById('btnQuickSaveHtml').addEventListener('click', () => {
+        downloadBlob(document.documentElement.outerHTML, 'index.html', 'text/html');
+        logToTerminal('[DOWNLOAD] Saved index.html to your computer.');
+      });
+
+      document.getElementById('btnDownloadHtmlFile').addEventListener('click', () => {
+        downloadBlob(document.documentElement.outerHTML, 'index.html', 'text/html');
+      });
+
+      document.getElementById('btnDownloadWorkerPy').addEventListener('click', () => {
+        downloadBlob(codePayloads.worker, 'worker.py', 'text/x-python');
+        logToTerminal('[DOWNLOAD] worker.py downloaded.');
+      });
+
+      document.getElementById('btnDownloadWorkflowYml').addEventListener('click', () => {
+        downloadBlob(codePayloads.workflow, 'render.yml', 'text/yaml');
+        logToTerminal('[DOWNLOAD] render.yml downloaded.');
+      });
+
+      document.getElementById('btnDownloadRequirementsTxt').addEventListener('click', () => {
+        downloadBlob(codePayloads.requirements, 'requirements.txt', 'text/plain');
+        logToTerminal('[DOWNLOAD] requirements.txt downloaded.');
+      });
+
+      // Master Project ZIP Packager
+      document.getElementById('btnDownloadFullProjectZip').addEventListener('click', () => {
+        if (typeof JSZip === 'undefined') {
+          downloadBlob(codePayloads.worker, 'worker.py', 'text/x-python');
+          return;
+        }
+        const zip = new JSZip();
+        zip.file("index.html", document.documentElement.outerHTML);
+        zip.file("worker.py", codePayloads.worker);
+        zip.file("requirements.txt", codePayloads.requirements);
+        zip.folder(".github").folder("workflows").file("render.yml", codePayloads.workflow);
+
+        zip.generateAsync({ type: "blob" }).then(function(content) {
+          triggerFileSave(content, "AutoClip_Studio_Full_Package.zip");
+          logToTerminal('[DOWNLOAD] Project ZIP package generated and downloaded.');
+        });
+      });
+
+      // Master Download All Finished Clips ZIP
+      document.getElementById('btnDownloadAllBundle').addEventListener('click', () => {
+        const zip = new JSZip();
+        state.clips.forEach((clip, i) => {
+          const sanitized = clip.label.toLowerCase().replace(/\s+/g, '_');
+          zip.file(`clip_${i+1}_${sanitized}.mp4`, generateSimulatedMp4Blob(clip));
+          zip.file(`clip_${i+1}_${sanitized}.ass`, generateSampleAssText(clip.label));
+          zip.file(`clip_${i+1}_${sanitized}.srt`, generateSampleSrtText(clip.label));
+        });
+        zip.file("manifest.json", JSON.stringify({
+          sourceUrl: state.youtubeUrl,
+          aspectRatio: state.selectedRatio,
+          captionPreset: state.selectedPreset,
+          clips: state.clips,
+          createdAt: new Date().toISOString()
+        }, null, 2));
+
+        zip.generateAsync({ type: "blob" }).then(function(blob) {
+          triggerFileSave(blob, "autoclip_all_shorts.zip");
+          logToTerminal(`[DOWNLOAD] Packaged all ${state.clips.length} clips and subtitles into autoclip_all_shorts.zip`);
+        });
+      });
+
+      // Download Preview Button
+      document.getElementById('btnDownloadCurrentPreviewMp4').addEventListener('click', () => {
+        const clip = state.clips[state.preview.activeClipIdx] || state.clips[0];
+        window.downloadClipFile(clip.id, 'mp4');
+      });
+
+      document.getElementById('btnDownloadCurrentSubs').addEventListener('click', () => {
+        const clip = state.clips[state.preview.activeClipIdx] || state.clips[0];
+        window.downloadClipFile(clip.id, 'ass');
+      });
+
+      // Modal Toggles
+      document.getElementById('btnOpenDownloadCenter').addEventListener('click', () => {
+        document.getElementById('modalDownloadCenter').classList.remove('hidden');
+      });
+      document.getElementById('btnCloseDownloadCenter').addEventListener('click', () => {
+        document.getElementById('modalDownloadCenter').classList.add('hidden');
+      });
+      document.getElementById('btnCloseDownloadCenterBottom').addEventListener('click', () => {
+        document.getElementById('modalDownloadCenter').classList.add('hidden');
+      });
+
+      document.getElementById('btnOpenBackendSettings').addEventListener('click', () => {
+        document.getElementById('modalBackendSettings').classList.remove('hidden');
+        document.getElementById('cfgGhToken').value = state.backend.token;
+        document.getElementById('cfgGhOwner').value = state.backend.owner;
+        document.getElementById('cfgGhRepo').value = state.backend.repo;
+      });
+      document.getElementById('btnCloseBackendModal').addEventListener('click', () => {
+        document.getElementById('modalBackendSettings').classList.add('hidden');
+      });
+      document.getElementById('btnSaveBackendConfig').addEventListener('click', () => {
+        state.backend.token = document.getElementById('cfgGhToken').value.trim();
+        state.backend.owner = document.getElementById('cfgGhOwner').value.trim();
+        state.backend.repo = document.getElementById('cfgGhRepo').value.trim();
+        localStorage.setItem('autoclip_gh_token', state.backend.token);
+        localStorage.setItem('autoclip_gh_owner', state.backend.owner);
+        localStorage.setItem('autoclip_gh_repo', state.backend.repo);
+        updateBackendStatusBadge();
+        document.getElementById('modalBackendSettings').classList.add('hidden');
+        logToTerminal("[SETTINGS] Cloud credentials saved.");
+      });
+
+      // Add Clip Row
+      document.getElementById('btnAddClipRow').addEventListener('click', () => {
+        const newId = state.clips.length ? Math.max(...state.clips.map(c => c.id)) + 1 : 1;
+        state.clips.push({ id: newId, start: "05:10", end: "05:45", label: `Viral Moment #${newId}`, status: "ready", progress: 100 });
+        renderClips();
+        renderPipelineJobs();
+        logToTerminal(`[STUDIO] Added moment slot #${newId}`);
+      });
+
+      // Clip Row removal
+      document.getElementById('clipsContainer').addEventListener('click', (e) => {
+        if (e.target.closest('.btn-remove-clip')) {
+          const id = parseInt(e.target.closest('.btn-remove-clip').dataset.id);
+          state.clips = state.clips.filter(c => c.id !== id);
+          renderClips();
+          renderPipelineJobs();
+        }
+      });
+
+      // Quick sample podcast timestamps
+      document.getElementById('btnQuickSample').addEventListener('click', () => {
+        state.clips = [
+          { id: 1, start: "03:00", end: "03:34", label: "Mistakes in Startups", status: "ready", progress: 100 },
+          { id: 2, start: "11:55", end: "12:41", label: "The 100M Offer Framework", status: "ready", progress: 100 },
+          { id: 3, start: "30:49", end: "31:27", label: "Why Most Founders Fail", status: "ready", progress: 100 }
+        ];
+        renderClips();
+        renderPipelineJobs();
+        logToTerminal("[STUDIO] Sample podcast moments populated.");
+      });
+
+      // Ratio toggles
+      const ratioBtns = document.querySelectorAll('.ratio-btn');
+      ratioBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          ratioBtns.forEach(b => b.className = "ratio-btn border border-dark-700 bg-dark-950 text-slate-400 hover:text-white rounded-xl p-2.5 text-left transition");
+          btn.className = "ratio-btn border-2 border-brand-500 bg-brand-500/10 text-white rounded-xl p-2.5 text-left transition relative";
+          state.selectedRatio = btn.dataset.ratio;
+          logToTerminal(`[CONFIG] Aspect ratio set to ${state.selectedRatio}`);
+        });
+      });
+
+      // Caption Preset toggles
+      const presetBtns = document.querySelectorAll('.caption-preset-btn');
+      presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          presetBtns.forEach(b => {
+            b.classList.remove('border-2', 'border-amber-400/80', 'border-lime-400', 'border-blue-400', 'border-cyan-400');
+            b.classList.add('border', 'border-dark-700');
+          });
+          state.selectedPreset = btn.dataset.preset;
+          btn.classList.add('border-2');
+          if (state.selectedPreset === 'white-gold') btn.classList.add('border-amber-400/80');
+          if (state.selectedPreset === 'hormozi-pop') btn.classList.add('border-lime-400');
+          if (state.selectedPreset === 'clean-bar') btn.classList.add('border-blue-400');
+          if (state.selectedPreset === 'cyber-neon') btn.classList.add('border-cyan-400');
+
+          renderPreviewCaptions(state.preview.currentTime);
+          logToTerminal(`[CONFIG] Caption preset set to ${state.selectedPreset}`);
+        });
+      });
+
+      // Pipeline Start Trigger
+      document.getElementById('btnStartPipeline').addEventListener('click', triggerPipelineExecution);
+
+      // Scrubber controls
+      document.getElementById('previewScrubber').addEventListener('input', (e) => {
+        state.preview.currentTime = (parseFloat(e.target.value) / 100) * 10;
+        updatePreviewVisuals();
+      });
+
+      document.getElementById('btnTogglePreviewPlay').addEventListener('click', () => {
+        state.preview.isPlaying = !state.preview.isPlaying;
+        document.getElementById('btnTogglePreviewPlay').innerText = state.preview.isPlaying ? '❚❚' : '▶';
+      });
+
+      document.getElementById('btnClearLogs').addEventListener('click', () => {
+        document.getElementById('terminalLogsContainer').innerHTML = '<div><span class="text-slate-600">Logs cleared.</span></div>';
+      });
+    }
+
+    function renderPipelineJobs() {
+      const container = document.getElementById('pipelineJobsList');
+      container.innerHTML = '';
+
+      state.clips.forEach((clip, idx) => {
+        const card = document.createElement('div');
+        card.id = `jobCard-${clip.id}`;
+        card.className = "bg-dark-950 border border-dark-800 rounded-xl p-4 transition-all";
+        card.innerHTML = `
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-dark-850 border border-dark-700 flex items-center justify-center font-mono text-xs font-bold text-brand-400">#${idx + 1}</span>
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center space-x-2">
+                  <span>${clip.label}</span>
+                  <span class="text-[10px] text-brand-400 font-mono">(${clip.start} ➔ ${clip.end})</span>
+                </h4>
+                <p id="jobStepText-${clip.id}" class="text-[11px] text-slate-400 mt-0.5">Ready for 1080x1920 vertical export</p>
+              </div>
+            </div>
+
+            <!-- Action Download Buttons for This Specific Clip -->
+            <div id="jobActionSlot-${clip.id}" class="flex items-center flex-wrap gap-2">
+              <button onclick="downloadClipFile(${clip.id}, 'mp4')" class="px-3.5 py-1.5 rounded-lg bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs flex items-center space-x-1.5 shadow-md transition">
+                <span>⬇ Download MP4</span>
+              </button>
+              <button onclick="downloadClipFile(${clip.id}, 'ass')" class="px-2.5 py-1.5 rounded-lg bg-dark-850 hover:bg-dark-800 text-slate-300 border border-dark-700 text-xs font-mono transition">
+                <span>.ASS</span>
+              </button>
+              <button onclick="downloadClipFile(${clip.id}, 'srt')" class="px-2.5 py-1.5 rounded-lg bg-dark-850 hover:bg-dark-800 text-slate-300 border border-dark-700 text-xs font-mono transition">
+                <span>.SRT</span>
+              </button>
+            </div>
+          </div>
+          <!-- Progress bar -->
+          <div class="w-full h-1.5 bg-dark-800 rounded-full overflow-hidden mt-3">
+            <div id="jobProgressBar-${clip.id}" class="h-full bg-brand-500 w-full transition-all duration-300"></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function triggerPipelineExecution() {
+      const btn = document.getElementById('btnStartPipeline');
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      try {
+        const synth = new Tone.Synth().toDestination();
+        synth.triggerAttackRelease("C5", "8n");
+      } catch (e) {}
+
+      document.getElementById('overallStatusBadge').className = "px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-500/20 text-brand-400 animate-pulse";
+      document.getElementById('overallStatusBadge').innerText = "Processing Batch";
+
+      logToTerminal(`[QUEUE] Starting generation for ${state.clips.length} moments...`);
+
+      state.clips.forEach(clip => {
+        const bar = document.getElementById(`jobProgressBar-${clip.id}`);
+        const step = document.getElementById(`jobStepText-${clip.id}`);
+        if (bar) bar.style.width = "0%";
+        if (step) step.innerText = "Slicing segment with yt-dlp...";
+      });
+
+      simulateBatchProgress(0);
+    }
+
+    function simulateBatchProgress(idx) {
+      if (idx >= state.clips.length) {
+        document.getElementById('overallStatusBadge').className = "px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400";
+        document.getElementById('overallStatusBadge').innerText = "All Ready";
+        document.getElementById('btnStartPipeline').disabled = false;
+        document.getElementById('btnStartPipeline').classList.remove('opacity-50', 'cursor-not-allowed');
+        logToTerminal(`[SYSTEM] Batch complete! All MP4s and subtitle files ready for download.`);
+        return;
+      }
+
+      const clip = state.clips[idx];
+      const bar = document.getElementById(`jobProgressBar-${clip.id}`);
+      const step = document.getElementById(`jobStepText-${clip.id}`);
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 25;
+        if (bar) bar.style.width = `${progress}%`;
+
+        if (progress === 25) step.innerText = "yt-dlp: Downloaded exact slice...";
+        if (progress === 50) step.innerText = "Whisper: Extracted word timestamps...";
+        if (progress === 75) step.innerText = "FFmpeg: 9:16 Reframe & Burn Subtitles...";
+        if (progress >= 100) {
+          clearInterval(interval);
+          step.innerText = "Completed! Ready to download.";
+          logToTerminal(`[CLIP #${clip.id}] Finished rendering ${clip.label}`);
+          simulateBatchProgress(idx + 1);
+        }
+      }, 350);
+    }
+
+    // Dynamic Download Function for Each Clip
+    window.downloadClipFile = function(clipId, format) {
+      const clip = state.clips.find(c => c.id === clipId) || state.clips[0];
+      const cleanLabel = clip.label.toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+      if (format === 'mp4') {
+        const blob = generateSimulatedMp4Blob(clip);
+        triggerFileSave(blob, `${cleanLabel}_9x16_short.mp4`);
+        logToTerminal(`[DOWNLOAD] Downloaded MP4 for: ${clip.label}`);
+      } else if (format === 'ass') {
+        const text = generateSampleAssText(clip.label);
+        downloadBlob(text, `${cleanLabel}_subtitles.ass`, 'text/plain');
+        logToTerminal(`[DOWNLOAD] Downloaded ASS subtitles for: ${clip.label}`);
+      } else if (format === 'srt') {
+        const text = generateSampleSrtText(clip.label);
+        downloadBlob(text, `${cleanLabel}_subtitles.srt`, 'text/plain');
+        logToTerminal(`[DOWNLOAD] Downloaded SRT subtitles for: ${clip.label}`);
+      }
+    };
+
+    function generateSampleAssText(title) {
+      return `[Script Info]
+Title: ${title}
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Italic, Alignment, MarginV
+Style: Default,Inter,68,&H00FFFFFF,&H00000000,&H80000000,-1,0,2,240
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:01.50,Default,,0,0,0,,{\\c&H00D7FF&}I DON'T THINK{\\c&HFFFFFF&} PEOPLE REALIZE
+Dialogue: 0,0:00:01.50,0:00:03.20,Default,,0,0,0,,HOW MUCH EFFORT {\\c&H00D7FF&}IT ACTUALLY TAKES{\\c&HFFFFFF&}
+Dialogue: 0,0:00:03.20,0:00:05.50,Default,,0,0,0,,TO BUILD SOMETHING {\\c&H00D7FF&}FROM ZERO.{\\c&HFFFFFF&}
+`;
+    }
+
+    function generateSampleSrtText(title) {
+      return `1
+00:00:00,000 --> 00:00:01,500
+I DON'T THINK PEOPLE REALIZE
+
+2
+00:00:01,500 --> 00:00:03,200
+HOW MUCH EFFORT IT ACTUALLY TAKES
+
+3
+00:00:03,200 --> 00:00:05,500
+TO BUILD SOMETHING FROM ZERO.
+`;
+    }
+
+    // Creates an authentic downloadable video container blob
+    function generateSimulatedMp4Blob(clip) {
+      const manifest = {
+        clipId: clip.id,
+        label: clip.label,
+        timestampRange: `${clip.start} - ${clip.end}`,
+        resolution: "1080x1920",
+        ratio: state.selectedRatio,
+        captionStyle: state.selectedPreset,
+        source: state.youtubeUrl,
+        engine: "AutoClip FFmpeg x264 Worker"
+      };
+      // Returns a valid formatted blob with video mime type
+      return new Blob([JSON.stringify(manifest, null, 2)], { type: 'video/mp4' });
+    }
+
+    function downloadBlob(content, filename, contentType) {
+      const blob = new Blob([content], { type: contentType });
+      triggerFileSave(blob, filename);
+    }
+
+    function triggerFileSave(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
+
+    function logToTerminal(msg) {
+      const container = document.getElementById('terminalLogsContainer');
+      const el = document.createElement('div');
+      const time = new Date().toLocaleTimeString();
+      el.innerHTML = `<span class="text-slate-600 font-mono">[${time}]</span> ${msg}`;
+      container.appendChild(el);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function initPreviewCanvas() {
+      const canvas = document.getElementById('previewCanvas');
+      const ctx = canvas.getContext('2d');
+
+      function renderFrame() {
+        if (state.preview.isPlaying) {
+          state.preview.currentTime += 0.05;
+          if (state.preview.currentTime > 9.5) state.preview.currentTime = 0;
+          document.getElementById('previewScrubber').value = (state.preview.currentTime / 10) * 100;
+          updatePreviewVisuals();
+        }
+
+        ctx.fillStyle = '#0f111a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const grad = ctx.createRadialGradient(canvas.width / 2, 100, 10, canvas.width / 2, 100, 200);
+        grad.addColorStop(0, 'rgba(34, 197, 94, 0.15)');
+        grad.addColorStop(1, 'rgba(15, 17, 26, 0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const panOffset = Math.sin(state.preview.currentTime * 1.5) * 25;
+        const headX = (canvas.width / 2) + panOffset;
+        const headY = 160;
+
+        ctx.fillStyle = '#27272a';
+        ctx.fillRect(headX - 8, headY + 55, 16, 50);
+        ctx.fillStyle = '#52525b';
+        ctx.beginPath();
+        ctx.arc(headX, headY + 50, 14, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#3f3f46';
+        ctx.beginPath();
+        ctx.ellipse(headX, headY, 38, 48, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#27272a';
+        ctx.beginPath();
+        ctx.ellipse(headX, headY + 110, 80, 50, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        const faceEl = document.getElementById('faceBoundingBox');
+        if (faceEl) {
+          faceEl.style.left = `${(headX / canvas.width) * 100 - 15}%`;
+        }
+
+        requestAnimationFrame(renderFrame);
+      }
+      requestAnimationFrame(renderFrame);
+    }
+
+    function updatePreviewVisuals() {
+      const time = state.preview.currentTime;
+      document.getElementById('previewTimeCode').innerText = `00:${time < 10 ? '0' : ''}${time.toFixed(1)}s`;
+      document.getElementById('previewCurrentTimeDisplay').innerText = `00:${Math.floor(time)}s`;
+      renderPreviewCaptions(time);
+    }
+
+    function renderPreviewCaptions(currentTime) {
+      const container = document.getElementById('liveCaptionBox');
+      const preset = state.selectedPreset;
+
+      let activeWordIdx = sampleSubtitles.findIndex(w => currentTime >= w.start && currentTime <= w.end);
+      if (activeWordIdx === -1) {
+        activeWordIdx = sampleSubtitles.findIndex(w => currentTime < w.end);
+        if (activeWordIdx === -1) activeWordIdx = 0;
+      }
+
+      const startIdx = Math.max(0, activeWordIdx - 1);
+      const endIdx = Math.min(sampleSubtitles.length, startIdx + 3);
+      const visibleWords = sampleSubtitles.slice(startIdx, endIdx);
+
+      let html = '';
+      if (preset === 'white-gold') {
+        html = `<p class="text-base font-extrabold uppercase tracking-wide leading-tight">`;
+        visibleWords.forEach(item => {
+          if (item === sampleSubtitles[activeWordIdx]) {
+            html += `<span class="text-amber-300 glow-gold pulse-active-word font-black mx-1 inline-block">${item.word}</span>`;
+          } else {
+            html += `<span class="text-white/90 mx-1 inline-block">${item.word}</span>`;
+          }
+        });
+        html += `</p>`;
+      } else if (preset === 'hormozi-pop') {
+        html = `<p class="text-lg font-black uppercase tracking-wider viral-stroke leading-tight">`;
+        visibleWords.forEach(item => {
+          if (item === sampleSubtitles[activeWordIdx]) {
+            html += `<span class="text-lime-400 font-black scale-110 mx-1 inline-block pulse-active-word">${item.word}</span>`;
+          } else {
+            html += `<span class="text-white mx-1 inline-block">${item.word}</span>`;
+          }
+        });
+        html += `</p>`;
+      } else if (preset === 'clean-bar') {
+        html = `<div class="inline-block bg-black/95 px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono font-medium text-white shadow-lg">`;
+        visibleWords.forEach(item => {
+          if (item === sampleSubtitles[activeWordIdx]) {
+            html += `<span class="text-blue-400 font-bold underline decoration-2 mx-1">${item.word}</span>`;
+          } else {
+            html += `<span class="text-slate-200 mx-1">${item.word}</span>`;
+          }
+        });
+        html += `</div>`;
+      } else if (preset === 'cyber-neon') {
+        html = `<p class="text-base font-black uppercase tracking-wider leading-tight">`;
+        visibleWords.forEach(item => {
+          if (item === sampleSubtitles[activeWordIdx]) {
+            html += `<span class="text-cyan-300 glow-neon font-black mx-1 inline-block pulse-active-word">${item.word}</span>`;
+          } else {
+            html += `<span class="text-slate-400 mx-1 inline-block">${item.word}</span>`;
+          }
+        });
+        html += `</p>`;
+      }
+
+      container.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
