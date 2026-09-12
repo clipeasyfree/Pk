@@ -1,0 +1,72 @@
+import os
+import sys
+import json
+import subprocess
+from faster_whisper import WhisperModel
+
+payload_env = os.environ.get('JOB_PAYLOAD')
+if payload_env:
+    payload = json.loads(payload_env)
+else:
+    payload = {
+        "url": sys.argv[1] if len(sys.argv) > 1 else "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "timestamps": [{"start": "03:00", "end": "03:34", "label": "Sample Clip"}],
+        "preset": "white-gold"
+    }
+
+os.makedirs('output', exist_ok=True)
+os.makedirs('temp', exist_ok=True)
+
+print("[*] Initializing faster-whisper on CPU (int8)...")
+model = WhisperModel("base.en", device="cpu", compute_type="int8")
+
+for idx, item in enumerate(payload.get('timestamps', [])):
+    clip_id = idx + 1
+    start = item['start']
+    end = item['end']
+    label = item.get('label', f'clip_{clip_id}')
+    raw_mp4 = f"temp/raw_{clip_id}.mp4"
+    ass_file = f"temp/sub_{clip_id}.ass"
+    final_mp4 = f"output/{clip_id}_{label.lower().replace(' ', '_')}.mp4"
+
+    print(f"\n[*] --- Fetching segment #{clip_id}: {start} to {end} ---")
+    cmd_download = [
+        "yt-dlp",
+        "--download-sections", f"*{start}-{end}",
+        "-f", "bv*[height<=1080]+ba/b",
+        "--force-keyframes-at-cuts",
+        payload['url'],
+        "-o", raw_mp4
+    ]
+    subprocess.run(cmd_download, check=True)
+
+    # Word-level Whisper Alignment
+    wav_path = f"temp/audio_{clip_id}.wav"
+    subprocess.run(["ffmpeg", "-y", "-i", raw_mp4, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
+    segments, _ = model.transcribe(wav_path, word_timestamps=True)
+
+    # Build ASS Karaoke Subtitle
+    highlight_tag = "{\\c&H00D7FF&}" if payload.get('preset') == "white-gold" else "{\\c&H00FF00&}"
+    with open(ass_file, "w", encoding="utf-8") as f:
+        f.write("[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\n\n")
+        f.write("[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Italic, Alignment, MarginV\n")
+        f.write("Style: Default,Arial,68,&H00FFFFFF,&H00000000,&H80000000,-1,0,2,240\n\n")
+        f.write("[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
+        for seg in segments:
+            for w in seg.words:
+                def fmt(sec):
+                    return f"0:{int(sec//60):02d}:{sec%60:05.2f}"
+                f.write(f"Dialogue: 0,{fmt(w.start)},{fmt(w.end)},Default,,0,0,0,,{highlight_tag}{w.word.strip().upper()}{{\\c&HFFFFFF&}}\n")
+
+    # FFmpeg 9:16 Crop and Burn
+    print(f"[*] Rendering vertical 9:16 MP4 short: {final_mp4}...")
+    cmd_render = [
+        "ffmpeg", "-y", "-i", raw_mp4,
+        "-vf", f"crop=ih*(9/16):ih,subtitles={ass_file}",
+        "-c:v", "libx264", "-preset", "fast", "-crf", "20",
+        "-c:a", "aac", "-b:a", "128k",
+        final_mp4
+    ]
+    subprocess.run(cmd_render, check=True)
+    print(f"[✓] Successfully generated {final_mp4}")
+
