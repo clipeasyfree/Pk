@@ -1,0 +1,5 @@
+yt-dlp>=2024.08.06
+faster-whisper>=1.0.3
+opencv-python-headless>=4.10.0.84
+requests>=2.31.0
+
