@@ -72,7 +72,6 @@
       <label class="text-xs font-mono uppercase tracking-widest text-gold-400 block">3. Trending Caption Style</label>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="styleGrid">
         
-        <!-- Style 1: Hormozi -->
         <button data-style="hormozi" class="style-btn border-2 border-gold-500 bg-gold-500/10 rounded-xl p-3.5 text-left transition">
           <div class="flex justify-between items-center mb-1">
             <span class="text-xs font-bold text-white">Hormozi Viral</span>
@@ -81,7 +80,6 @@
           <p class="text-[11px] font-black uppercase text-lime-400 tracking-wider">BIG GREEN & YELLOW</p>
         </button>
 
-        <!-- Style 2: MrBeast -->
         <button data-style="mrbeast" class="style-btn border border-white/[0.08] bg-onyx-950 rounded-xl p-3.5 text-left transition hover:border-white/[0.2]">
           <div class="flex justify-between items-center mb-1">
             <span class="text-xs font-bold text-white">MrBeast Pop</span>
@@ -90,7 +88,6 @@
           <p class="text-[11px] font-black uppercase text-yellow-300 tracking-wider">BOLD STROKE POP</p>
         </button>
 
-        <!-- Style 3: Luxury Gold -->
         <button data-style="gold" class="style-btn border border-white/[0.08] bg-onyx-950 rounded-xl p-3.5 text-left transition hover:border-white/[0.2]">
           <div class="flex justify-between items-center mb-1">
             <span class="text-xs font-bold text-white">Luxury Gold</span>
@@ -99,7 +96,6 @@
           <p class="text-[11px] font-extrabold uppercase text-gold-300 tracking-wider">CHAMPAGNE HIGHLIGHT</p>
         </button>
 
-        <!-- Style 4: Cyber Neon -->
         <button data-style="neon" class="style-btn border border-white/[0.08] bg-onyx-950 rounded-xl p-3.5 text-left transition hover:border-white/[0.2]">
           <div class="flex justify-between items-center mb-1">
             <span class="text-xs font-bold text-white">Cyber Neon</span>
@@ -108,7 +104,6 @@
           <p class="text-[11px] font-extrabold uppercase text-fuchsia-400 tracking-wider">HOT PINK KARAOKE</p>
         </button>
 
-        <!-- Style 5: Clean Minimal -->
         <button data-style="minimal" class="style-btn border border-white/[0.08] bg-onyx-950 rounded-xl p-3.5 text-left transition hover:border-white/[0.2]">
           <div class="flex justify-between items-center mb-1">
             <span class="text-xs font-bold text-white">Clean Minimal</span>
@@ -136,7 +131,7 @@
       <div id="downloadContainer" class="pt-4 border-t border-white/[0.08] hidden space-y-3">
         <h4 class="text-xs font-mono text-slate-400 uppercase">Your Finished Video is Ready:</h4>
         <a id="downloadLink" href="#" target="_blank" class="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm shadow-lg transition">
-          <span>⬇ Download Finished 9:16 Shorts (.ZIP)</span>
+          <span>⬇ Click Here to Download Your Clips (.ZIP)</span>
         </a>
       </div>
     </div>
@@ -177,7 +172,6 @@
       });
     }
 
-    // Caption Style Selection
     document.querySelectorAll('.style-btn').forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll('.style-btn').forEach(b => {
@@ -215,7 +209,7 @@
       statusSection.classList.remove('hidden');
       downloadContainer.classList.add('hidden');
       statusBadge.innerText = "Dispatching...";
-      statusMsg.innerText = "Triggering backend runner with style: " + selectedStyle.toUpperCase();
+      statusMsg.innerText = "Triggering runner with style: " + selectedStyle.toUpperCase();
 
       try {
         await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
@@ -228,9 +222,8 @@
         });
 
         statusBadge.innerText = "Encoding Video...";
-        statusMsg.innerText = "Processing video with Whisper & FFmpeg. The download button will appear here once ready...";
+        statusMsg.innerText = "Downloading video, transcribing with Whisper, and rendering 9:16 vertical short...";
 
-        // Auto-poll GitHub Actions until complete
         const interval = setInterval(async () => {
           const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
             headers: { "Authorization": `Bearer ${token}` }
@@ -243,7 +236,7 @@
             if (run.conclusion === "success") {
               statusBadge.className = "text-xs px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 font-mono border border-emerald-500/30";
               statusBadge.innerText = "Complete ✓";
-              statusMsg.innerText = "Your clips are ready!";
+              statusMsg.innerText = "Your vertical short is finished and ready!";
               downloadLink.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
               downloadContainer.classList.remove('hidden');
             } else {
