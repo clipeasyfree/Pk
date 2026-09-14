@@ -28,7 +28,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
-          pip install --upgrade yt-dlp faster-whisper
+          pip install --upgrade yt-dlp yt-dlp-ejs faster-whisper
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run Clipping Engine
