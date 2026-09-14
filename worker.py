@@ -6,17 +6,19 @@ from faster_whisper import WhisperModel
 
 print("[*] Starting Clip Studio Engine...")
 
-# 1. Setup cookies from GitHub Secrets
+# 1. Setup cookies from GitHub Secrets or environment
 cookies_path = None
 cookies_env = os.environ.get('COOKIES_DATA', '').strip()
-if cookies_env:
+if cookies_env and len(cookies_env) > 20:
     cookies_path = "temp/youtube_cookies.txt"
     os.makedirs('temp', exist_ok=True)
     with open(cookies_path, "w", encoding="utf-8") as f:
         f.write(cookies_env)
     print("[*] Secure YouTube cookies loaded successfully.")
+else:
+    print("[!] No cookies found or COOKIES_DATA was empty. Using mobile client bypass.")
 
-# 2. Parse job inputs
+# 2. Parse payload
 payload_env = os.environ.get('JOB_PAYLOAD', '')
 payload = {}
 if payload_env and payload_env != 'null':
@@ -33,7 +35,7 @@ if not url:
     print("[!] No URL provided. Exiting.")
     sys.exit(1)
 
-# Clean URL parameters
+# Clean tracking IDs from URL
 if "youtu.be/" in url:
     video_id = url.split("youtu.be/")[1].split("?")[0]
     url = f"https://www.youtube.com/watch?v={video_id}"
@@ -77,17 +79,24 @@ for idx, item in enumerate(timestamps):
     final_mp4 = f"output/{clip_id}_{clean_label}.mp4"
 
     print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end})...")
+    
+    # Android client bypass to prevent bot verification errors
     cmd_download = [
         "yt-dlp",
+        "--extractor-args", "youtube:player-client=android,ios,web",
         "--download-sections", f"*{start}-{end}",
         "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
         "--force-keyframes-at-cuts",
-        "--no-check-certificates"
+        "--no-check-certificates",
+        "--geo-bypass"
     ]
-    if cookies_path:
+    
+    if cookies_path and os.path.exists(cookies_path):
         cmd_download.extend(["--cookies", cookies_path])
+        
     cmd_download.extend([url, "-o", raw_mp4])
 
+    print(f"[*] Running command: {' '.join(cmd_download)}")
     subprocess.run(cmd_download, check=True)
 
     print(f"[*] Transcribing audio for Clip #{clip_id}...")
