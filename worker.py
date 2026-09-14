@@ -1,5 +1,6 @@
 import os
 import sys
+import glob
 import json
 import subprocess
 from faster_whisper import WhisperModel
@@ -87,20 +88,20 @@ for idx, item in enumerate(timestamps):
     label = item.get('label', f'Clip {clip_id}')
     clean_label = "".join(c if c.isalnum() else "_" for c in label)
 
-    raw_mp4 = f"temp/raw_{clip_id}.mp4"
+    out_template = f"temp/raw_{clip_id}.%(ext)s"
     wav_path = f"temp/audio_{clip_id}.wav"
     ass_file = f"temp/sub_{clip_id}.ass"
     final_mp4 = f"output/{clip_id}_{clean_label}.mp4"
 
     print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end})...")
     
-    # Uses external JS solver + bypasses tv_downgraded bug
     cmd_download = [
         "yt-dlp",
         "--remote-components", "ejs:github",
         "--extractor-args", "youtube:player_client=default,web_embedded",
         "--download-sections", f"*{start}-{end}",
         "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
+        "--merge-output-format", "mp4",
         "--force-keyframes-at-cuts",
         "--no-check-certificates"
     ]
@@ -108,13 +109,21 @@ for idx, item in enumerate(timestamps):
     if cookies_path and os.path.exists(cookies_path):
         cmd_download.extend(["--cookies", cookies_path])
         
-    cmd_download.extend([url, "-o", raw_mp4])
+    cmd_download.extend([url, "-o", out_template])
 
     print(f"[*] Downloading slice with yt-dlp...")
     subprocess.run(cmd_download, check=True)
 
+    # Automatically detect whatever file yt-dlp actually created (.mp4, .webm, .mkv)
+    downloaded_files = glob.glob(f"temp/raw_{clip_id}.*")
+    valid_raw_files = [f for f in downloaded_files if not f.endswith(".part") and not f.endswith(".ytdl")]
+    if not valid_raw_files:
+        raise FileNotFoundError(f"Could not find downloaded file for clip {clip_id}")
+    actual_raw_video = valid_raw_files[0]
+    print(f"[*] Downloaded source file verified: {actual_raw_video}")
+
     print(f"[*] Transcribing audio with word-level timestamps...")
-    subprocess.run(["ffmpeg", "-y", "-i", raw_mp4, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
+    subprocess.run(["ffmpeg", "-y", "-i", actual_raw_video, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
     segments, _ = model.transcribe(wav_path, word_timestamps=True)
 
     print(f"[*] Generating {style.upper()} subtitles...")
@@ -134,7 +143,7 @@ for idx, item in enumerate(timestamps):
 
     print(f"[*] Rendering vertical 9:16 video...")
     cmd_render = [
-        "ffmpeg", "-y", "-i", raw_mp4,
+        "ffmpeg", "-y", "-i", actual_raw_video,
         "-vf", f"crop=ih*(9/16):ih,subtitles={ass_file}",
         "-c:v", "libx264", "-preset", "fast", "-crf", "22",
         "-c:a", "aac", "-b:a", "128k",
@@ -144,4 +153,3 @@ for idx, item in enumerate(timestamps):
     print(f"[✓] Finished Clip #{clip_id}: {final_mp4}")
 
 print("[*] All jobs finished successfully!")
-
