@@ -6,7 +6,7 @@ from faster_whisper import WhisperModel
 
 print("[*] Starting Clip Studio Engine...")
 
-# 1. Setup cookies
+# 1. Setup & sanitize cookies
 cookies_path = None
 cookies_env = os.environ.get('COOKIES_DATA', '').strip()
 
@@ -33,9 +33,9 @@ if cookies_env and len(cookies_env) > 20:
         f.write("\n".join(sanitized_lines) + "\n")
     print("[*] Secure YouTube cookies loaded successfully.")
 else:
-    print("[*] No custom cookies found, using direct fallback.")
+    print("[*] No custom cookies found.")
 
-# 2. Parse job parameters
+# 2. Parse payload
 payload_env = os.environ.get('JOB_PAYLOAD', '')
 payload = {}
 if payload_env and payload_env != 'null':
@@ -77,7 +77,7 @@ STYLES = {
 active_cfg = STYLES.get(style, STYLES["hormozi"])
 
 print(f"[*] Target video: {url}")
-print(f"[*] Loading AI Whisper model...")
+print("[*] Loading AI Whisper model...")
 model = WhisperModel("base.en", device="cpu", compute_type="int8")
 
 for idx, item in enumerate(timestamps):
@@ -94,37 +94,24 @@ for idx, item in enumerate(timestamps):
 
     print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end})...")
     
-    # 1. Primary Strategy: Authenticated download with cookies (uses Deno JS runtime)
-    download_success = False
+    # Uses external JS solver + bypasses tv_downgraded bug
+    cmd_download = [
+        "yt-dlp",
+        "--remote-components", "ejs:github",
+        "--extractor-args", "youtube:player_client=default,web_embedded",
+        "--download-sections", f"*{start}-{end}",
+        "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
+        "--force-keyframes-at-cuts",
+        "--no-check-certificates"
+    ]
+    
     if cookies_path and os.path.exists(cookies_path):
-        cmd_primary = [
-            "yt-dlp",
-            "--download-sections", f"*{start}-{end}",
-            "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
-            "--force-keyframes-at-cuts",
-            "--no-check-certificates",
-            "--cookies", cookies_path,
-            url, "-o", raw_mp4
-        ]
-        print("[*] Attempting download with authenticated cookies...")
-        res = subprocess.run(cmd_primary)
-        if res.returncode == 0 and os.path.exists(raw_mp4):
-            download_success = True
+        cmd_download.extend(["--cookies", cookies_path])
+        
+    cmd_download.extend([url, "-o", raw_mp4])
 
-    # 2. Fallback Strategy: Android client WITHOUT cookies (never triggers cookie warning)
-    if not download_success:
-        print("[*] Falling back to Android client download...")
-        cmd_fallback = [
-            "yt-dlp",
-            "--extractor-args", "youtube:player_client=android",
-            "--download-sections", f"*{start}-{end}",
-            "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
-            "--force-keyframes-at-cuts",
-            "--no-check-certificates",
-            "--geo-bypass",
-            url, "-o", raw_mp4
-        ]
-        subprocess.run(cmd_fallback, check=True)
+    print(f"[*] Downloading slice with yt-dlp...")
+    subprocess.run(cmd_download, check=True)
 
     print(f"[*] Transcribing audio with word-level timestamps...")
     subprocess.run(["ffmpeg", "-y", "-i", raw_mp4, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
@@ -157,3 +144,4 @@ for idx, item in enumerate(timestamps):
     print(f"[✓] Finished Clip #{clip_id}: {final_mp4}")
 
 print("[*] All jobs finished successfully!")
+
