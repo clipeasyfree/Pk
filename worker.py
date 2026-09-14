@@ -6,15 +6,13 @@ from faster_whisper import WhisperModel
 
 print("[*] Starting Clip Studio Engine...")
 
-# 1. Setup & automatically sanitize cookies to satisfy Python's cookiejar
+# 1. Setup cookies
 cookies_path = None
 cookies_env = os.environ.get('COOKIES_DATA', '').strip()
 
 if cookies_env and len(cookies_env) > 20:
     cookies_path = "temp/youtube_cookies.txt"
     os.makedirs('temp', exist_ok=True)
-    
-    # Fix Netscape format mismatch (domain_specified == initial_dot)
     sanitized_lines = []
     for line in cookies_env.splitlines():
         line_clean = line.strip()
@@ -23,9 +21,7 @@ if cookies_env and len(cookies_env) > 20:
             continue
         parts = line.split("\t")
         if len(parts) >= 7:
-            domain = parts[0]
-            # If domain starts with a dot, column 2 must be TRUE
-            if domain.startswith("."):
+            if parts[0].startswith("."):
                 parts[1] = "TRUE"
             else:
                 parts[1] = "FALSE"
@@ -35,9 +31,9 @@ if cookies_env and len(cookies_env) > 20:
 
     with open(cookies_path, "w", encoding="utf-8") as f:
         f.write("\n".join(sanitized_lines) + "\n")
-    print("[*] Secure YouTube cookies loaded and sanitized successfully.")
+    print("[*] Secure YouTube cookies loaded successfully.")
 else:
-    print("[!] No cookies provided in Secrets.")
+    print("[!] Running without custom cookies.")
 
 # 2. Parse payload
 payload_env = os.environ.get('JOB_PAYLOAD', '')
@@ -56,7 +52,6 @@ if not url:
     print("[!] No URL provided. Exiting.")
     sys.exit(1)
 
-# Clean tracking IDs from URL
 if "youtu.be/" in url:
     video_id = url.split("youtu.be/")[1].split("?")[0]
     url = f"https://www.youtube.com/watch?v={video_id}"
@@ -68,6 +63,7 @@ if not timestamps:
     timestamps = [{"start": "00:00", "end": "00:30", "label": "Clip 1"}]
 
 os.makedirs('output', exist_ok=True)
+os.makedirs('temp', exist_ok=True)
 
 # 5 Trending Caption Presets
 STYLES = {
@@ -100,12 +96,15 @@ for idx, item in enumerate(timestamps):
 
     print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end})...")
     
+    # Force Android/iOS client to bypass web JS challenges completely
     cmd_download = [
         "yt-dlp",
+        "--extractor-args", "youtube:player_client=android,ios",
         "--download-sections", f"*{start}-{end}",
         "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
         "--force-keyframes-at-cuts",
-        "--no-check-certificates"
+        "--no-check-certificates",
+        "--geo-bypass"
     ]
     
     if cookies_path and os.path.exists(cookies_path):
@@ -113,14 +112,14 @@ for idx, item in enumerate(timestamps):
         
     cmd_download.extend([url, "-o", raw_mp4])
 
-    print(f"[*] Running yt-dlp...")
+    print(f"[*] Downloading slice...")
     subprocess.run(cmd_download, check=True)
 
-    print(f"[*] Transcribing audio for Clip #{clip_id}...")
+    print(f"[*] Transcribing audio with word timestamps...")
     subprocess.run(["ffmpeg", "-y", "-i", raw_mp4, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
     segments, _ = model.transcribe(wav_path, word_timestamps=True)
 
-    print(f"[*] Creating {style.upper()} animated captions...")
+    print(f"[*] Generating {style.upper()} subtitles...")
     with open(ass_file, "w", encoding="utf-8") as f:
         f.write("[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\n\n")
         f.write("[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Italic, Alignment, MarginV, Outline\n")
@@ -135,7 +134,7 @@ for idx, item in enumerate(timestamps):
                 if word_clean:
                     f.write(f"Dialogue: 0,{fmt(w.start)},{fmt(w.end)},Default,,0,0,0,,{{\\c{active_cfg['highlight']}}}{word_clean}{{\\c{active_cfg['primary']}}}\n")
 
-    print(f"[*] Rendering vertical 9:16 video...")
+    print(f"[*] Rendering vertical 9:16 short...")
     cmd_render = [
         "ffmpeg", "-y", "-i", raw_mp4,
         "-vf", f"crop=ih*(9/16):ih,subtitles={ass_file}",
