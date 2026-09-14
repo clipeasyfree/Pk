@@ -6,17 +6,38 @@ from faster_whisper import WhisperModel
 
 print("[*] Starting Clip Studio Engine...")
 
-# 1. Setup cookies from GitHub Secrets or environment
+# 1. Setup & automatically sanitize cookies to satisfy Python's cookiejar
 cookies_path = None
 cookies_env = os.environ.get('COOKIES_DATA', '').strip()
+
 if cookies_env and len(cookies_env) > 20:
     cookies_path = "temp/youtube_cookies.txt"
     os.makedirs('temp', exist_ok=True)
+    
+    # Fix Netscape format mismatch (domain_specified == initial_dot)
+    sanitized_lines = []
+    for line in cookies_env.splitlines():
+        line_clean = line.strip()
+        if not line_clean or line_clean.startswith("#"):
+            sanitized_lines.append(line)
+            continue
+        parts = line.split("\t")
+        if len(parts) >= 7:
+            domain = parts[0]
+            # If domain starts with a dot, column 2 must be TRUE
+            if domain.startswith("."):
+                parts[1] = "TRUE"
+            else:
+                parts[1] = "FALSE"
+            sanitized_lines.append("\t".join(parts))
+        else:
+            sanitized_lines.append(line)
+
     with open(cookies_path, "w", encoding="utf-8") as f:
-        f.write(cookies_env)
-    print("[*] Secure YouTube cookies loaded successfully.")
+        f.write("\n".join(sanitized_lines) + "\n")
+    print("[*] Secure YouTube cookies loaded and sanitized successfully.")
 else:
-    print("[!] No cookies found or COOKIES_DATA was empty. Using mobile client bypass.")
+    print("[!] No cookies provided in Secrets.")
 
 # 2. Parse payload
 payload_env = os.environ.get('JOB_PAYLOAD', '')
@@ -47,7 +68,6 @@ if not timestamps:
     timestamps = [{"start": "00:00", "end": "00:30", "label": "Clip 1"}]
 
 os.makedirs('output', exist_ok=True)
-os.makedirs('temp', exist_ok=True)
 
 # 5 Trending Caption Presets
 STYLES = {
@@ -80,15 +100,12 @@ for idx, item in enumerate(timestamps):
 
     print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end})...")
     
-    # Android client bypass to prevent bot verification errors
     cmd_download = [
         "yt-dlp",
-        "--extractor-args", "youtube:player-client=android,ios,web",
         "--download-sections", f"*{start}-{end}",
         "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
         "--force-keyframes-at-cuts",
-        "--no-check-certificates",
-        "--geo-bypass"
+        "--no-check-certificates"
     ]
     
     if cookies_path and os.path.exists(cookies_path):
@@ -96,7 +113,7 @@ for idx, item in enumerate(timestamps):
         
     cmd_download.extend([url, "-o", raw_mp4])
 
-    print(f"[*] Running command: {' '.join(cmd_download)}")
+    print(f"[*] Running yt-dlp...")
     subprocess.run(cmd_download, check=True)
 
     print(f"[*] Transcribing audio for Clip #{clip_id}...")
