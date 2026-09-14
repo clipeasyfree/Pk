@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLIPSTUDIO PRESTIGE // Automated Shorts Engine</title>
+  <title>ATELIER CLIP // Studio Prestige</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -19,119 +18,193 @@
             mono: ['"Space Mono"', 'monospace'],
           },
           colors: {
-            gold: { 300: '#F7E7A9', 400: '#E6CA65', 500: '#D4AF37' },
-            onyx: { 950: '#050608', 900: '#090B0E', 850: '#0F1217', 800: '#161B22' }
+            gold: {
+              50: '#FDFBF7',
+              100: '#F7F3E8',
+              200: '#EFE7D2',
+              300: '#DFCFA9',
+              400: '#CEB278',
+              500: '#B89047',
+              600: '#9E7634',
+              700: '#7F5B27',
+              800: '#5C3F1B',
+            },
+            sand: {
+              50: '#FDFCFB',
+              100: '#F7F6F3',
+              200: '#EEECE6',
+              300: '#E2DFD6',
+              800: '#2A2824',
+              900: '#1C1B18',
+            }
+          },
+          boxShadow: {
+            'luxury': '0 20px 45px -15px rgba(28, 27, 24, 0.06), 0 0 1px 1px rgba(184, 144, 71, 0.12)',
+            'gold-glow': '0 12px 30px -5px rgba(184, 144, 71, 0.22)',
           }
         }
       }
     }
   </script>
   <style>
-    .gold-glow { box-shadow: 0 0 35px -8px rgba(212, 175, 55, 0.25); }
-    .gold-border { border: 1px solid rgba(212, 175, 55, 0.35); }
+    body {
+      background-color: #FBFBF9;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(184, 144, 71, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(28, 27, 24, 0.03) 0px, transparent 50%);
+    }
+    .fine-line {
+      border: 1px solid rgba(184, 144, 71, 0.22);
+    }
   </style>
 </head>
-<body class="bg-[#050608] text-slate-200 min-h-screen font-sans selection:bg-gold-500 selection:text-black">
+<body class="text-sand-900 min-h-screen antialiased selection:bg-gold-500 selection:text-white">
 
-  <header class="border-b border-white/[0.06] bg-onyx-950/80 backdrop-blur-xl sticky top-0 z-50">
+  <!-- TOP EDITORIAL BAR -->
+  <header class="border-b border-sand-200/80 bg-white/85 backdrop-blur-xl sticky top-0 z-50">
     <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-400 via-gold-500 to-amber-600 flex items-center justify-center text-black font-display font-black text-xl shadow-lg shadow-gold-500/20">
+      <div class="flex items-center space-x-4">
+        <div class="w-10 h-10 rounded-xl bg-sand-900 text-gold-300 font-display font-bold text-lg flex items-center justify-center shadow-md border border-gold-500/30">
           ✦
         </div>
         <div>
-          <span class="font-display font-bold tracking-widest text-lg text-white">CLIP<span class="text-gold-400">STUDIO</span></span>
-          <p class="text-[10px] text-slate-400 font-mono">100% Free Automated Shorts Machine</p>
+          <div class="flex items-center space-x-2.5">
+            <span class="font-display font-bold tracking-[0.2em] text-lg text-sand-900">ATELIER<span class="text-gold-600 font-medium">CLIP</span></span>
+            <span class="text-[9px] uppercase tracking-[0.25em] font-bold px-2 py-0.5 rounded-full bg-gold-100 text-gold-800 border border-gold-300/60">Studio Prestige</span>
+          </div>
+          <p class="text-[11px] text-stone-500 font-mono tracking-wide">Automated 9:16 Viral Shorts Engine</p>
         </div>
       </div>
-      <button id="btnSettings" class="px-3 py-1.5 rounded-lg bg-onyx-900 border border-white/[0.1] text-xs font-mono text-gold-400 hover:border-gold-500 transition flex items-center gap-1.5">
-        <span>⚙ Settings</span>
-      </button>
+
+      <div class="flex items-center space-x-3">
+        <button id="btnSettings" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white hover:bg-gold-50 border border-sand-200 hover:border-gold-300 text-xs font-mono text-sand-900 transition shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>GitHub Runner Connected</span>
+          <span class="text-gold-600">⚙</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+  <main class="max-w-4xl mx-auto px-6 py-10 space-y-8">
 
-    <!-- 1. YouTube Link -->
-    <div class="bg-onyx-900 border gold-border rounded-2xl p-6 shadow-2xl space-y-3">
-      <label class="text-xs font-mono uppercase tracking-widest text-gold-400 block">1. YouTube Video URL</label>
-      <input type="text" id="urlInput" placeholder="Paste YouTube link here..." class="w-full bg-onyx-950 border border-white/[0.1] rounded-xl px-4 py-3.5 text-sm text-slate-100 placeholder-slate-600 font-mono focus:outline-none focus:border-gold-500">
-    </div>
-
-    <!-- 2. Timestamps -->
-    <div class="bg-onyx-900 border border-white/[0.08] rounded-2xl p-6 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center">
-        <label class="text-xs font-mono uppercase tracking-widest text-gold-400">2. Clip Timestamps</label>
-        <button id="btnAddClip" class="text-xs font-mono text-gold-400 hover:underline">+ Add Clip</button>
+    <!-- 1. Source Link -->
+    <div class="bg-white border fine-line rounded-2xl p-7 shadow-luxury transition hover:border-gold-400/50">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold flex items-center gap-2">
+          <span>01. Source Material</span>
+        </span>
+        <span class="text-[10px] font-mono text-stone-500 px-2.5 py-0.5 rounded-full bg-sand-100 border border-sand-200">
+          yt-dlp Stream Slice
+        </span>
       </div>
-      <div id="clipsList" class="space-y-3"></div>
+      <div class="relative">
+        <input type="text" id="urlInput" 
+               placeholder="Paste YouTube Podcast Link (https://www.youtube.com/watch?v=...)"
+               class="w-full bg-sand-50/70 border border-sand-200 rounded-xl px-4 py-3.5 pl-11 text-sm text-sand-900 placeholder-stone-400 focus:outline-none focus:bg-white focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition font-mono shadow-inner">
+        <span class="absolute left-4 top-3.5 text-gold-600 text-sm">▶</span>
+      </div>
     </div>
 
-    <!-- 3. Trending Caption Style Selector -->
-    <div class="bg-onyx-900 border border-white/[0.08] rounded-2xl p-6 shadow-2xl space-y-4">
-      <label class="text-xs font-mono uppercase tracking-widest text-gold-400 block">3. Trending Caption Style</label>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="styleGrid">
+    <!-- 2. Timestamps & Speaker Framing -->
+    <div class="bg-white border border-sand-200 rounded-2xl p-7 shadow-luxury space-y-5">
+      <div class="flex justify-between items-center pb-3 border-b border-sand-100">
+        <div>
+          <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold block">
+            02. High-Demand Segments & Framing
+          </span>
+          <p class="text-xs text-stone-500 mt-0.5">Select the exact segment and identify which side of the wide camera the speaker sits on.</p>
+        </div>
+        <button id="btnAddClip" class="px-3 py-1.5 rounded-lg border border-gold-300/70 hover:bg-gold-50 text-gold-800 text-xs font-mono font-medium transition">
+          + Add Segment
+        </button>
+      </div>
+
+      <div id="clipsList" class="space-y-4">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- 3. Caption Style Selector -->
+    <div class="bg-white border border-sand-200 rounded-2xl p-7 shadow-luxury space-y-5">
+      <div class="flex justify-between items-center">
+        <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold block">
+          03. Visual Typography & Subtitle Preset
+        </span>
+        <span class="text-[10px] font-mono text-stone-500">Whisper Word-Sync Active</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5" id="styleGrid">
         
-        <button data-style="hormozi" class="style-btn border-2 border-gold-500 bg-gold-500/10 rounded-xl p-3.5 text-left transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white">Hormozi Viral</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-lime-400"></span>
+        <!-- Hormozi -->
+        <button data-style="hormozi" class="style-btn border-2 border-gold-500 bg-gold-50/60 rounded-xl p-4 text-left transition shadow-sm">
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-bold text-sand-900 font-sans">Hormozi Viral</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-lime-500"></span>
           </div>
-          <p class="text-[11px] font-black uppercase text-lime-400 tracking-wider">BIG GREEN & YELLOW</p>
+          <p class="text-[11px] font-black uppercase text-stone-800 tracking-wider">
+            <span class="text-lime-600">BIG GREEN</span> & YELLOW
+          </p>
         </button>
 
-        <button data-style="mrbeast" class="style-btn border border-white/[0.08] bg-onyx-950 rounded-xl p-3.5 text-left transition hover:border-white/[0.2]">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white">MrBeast Pop</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
-          </div>
-          <p class="text-[11px] font-black uppercase text-yellow-300 tracking-wider">BOLD STROKE POP</p>
-        </button>
-
-        <button data-style="gold" class="style-btn border border-white/[0.08] bg-onyx-950 rounded-xl p-3.5 text-left transition hover:border-white/[0.2]">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white">Luxury Gold</span>
+        <!-- MrBeast -->
+        <button data-style="mrbeast" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-semibold text-sand-800 font-sans">MrBeast Pop</span>
             <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
           </div>
-          <p class="text-[11px] font-extrabold uppercase text-gold-300 tracking-wider">CHAMPAGNE HIGHLIGHT</p>
+          <p class="text-[11px] font-black uppercase text-stone-800 tracking-wider">
+            <span class="text-amber-500">BOLD STROKE</span> POP
+          </p>
         </button>
 
-        <button data-style="neon" class="style-btn border border-white/[0.08] bg-onyx-950 rounded-xl p-3.5 text-left transition hover:border-white/[0.2]">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white">Cyber Neon</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-fuchsia-400"></span>
+        <!-- Luxury Gold -->
+        <button data-style="gold" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-semibold text-sand-800 font-sans">Luxury Gold</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-gold-500"></span>
           </div>
-          <p class="text-[11px] font-extrabold uppercase text-fuchsia-400 tracking-wider">HOT PINK KARAOKE</p>
+          <p class="text-[11px] font-extrabold uppercase text-gold-700 tracking-wider">CHAMPAGNE KARAOKE</p>
         </button>
 
-        <button data-style="minimal" class="style-btn border border-white/[0.08] bg-onyx-950 rounded-xl p-3.5 text-left transition hover:border-white/[0.2]">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white">Clean Minimal</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+        <!-- Cyber Neon -->
+        <button data-style="neon" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-semibold text-sand-800 font-sans">Cyber Neon</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-fuchsia-500"></span>
           </div>
-          <p class="text-[11px] font-mono text-slate-300">Cinematic Subtitle</p>
+          <p class="text-[11px] font-extrabold uppercase text-fuchsia-600 tracking-wider">VIBRANT HIGHLIGHT</p>
+        </button>
+
+        <!-- Clean Minimal -->
+        <button data-style="minimal" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-semibold text-sand-800 font-sans">Editorial Bar</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-stone-400"></span>
+          </div>
+          <p class="text-[11px] font-mono text-stone-500">Clean Minimalist</p>
         </button>
 
       </div>
     </div>
 
-    <!-- 4. Generate Button -->
-    <button id="btnGenerate" class="w-full py-4 rounded-xl bg-gradient-to-r from-gold-400 via-gold-500 to-amber-600 hover:from-gold-300 hover:to-gold-500 text-black font-display font-black text-sm uppercase tracking-[0.25em] shadow-xl shadow-gold-500/20 transition active:scale-[0.99]">
-      ⚡ Generate & Download Clips
+    <!-- 4. GENERATE BUTTON -->
+    <button id="btnGenerate" class="w-full py-4 rounded-xl bg-sand-900 hover:bg-black text-gold-300 font-display font-bold text-xs uppercase tracking-[0.3em] shadow-luxury transition transform active:scale-[0.99] flex items-center justify-center space-x-3 border border-gold-500/30 hover:shadow-gold-glow">
+      <span>✦ GENERATE VIRAL SHORTS</span>
     </button>
 
     <!-- 5. Real-Time Status & In-Page Download -->
-    <div id="statusSection" class="bg-onyx-900 border border-white/[0.08] rounded-2xl p-6 shadow-2xl hidden space-y-4">
+    <div id="statusSection" class="bg-white border fine-line rounded-2xl p-7 shadow-luxury hidden space-y-4">
       <div class="flex items-center justify-between">
-        <span class="text-xs font-mono uppercase tracking-widest text-gold-400">Pipeline Status</span>
-        <span id="statusBadge" class="text-xs px-2.5 py-1 rounded bg-gold-500/10 text-gold-300 font-mono border border-gold-500/30 animate-pulse">Running...</span>
+        <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold">Studio Status</span>
+        <span id="statusBadge" class="text-xs px-3 py-1 rounded-full bg-gold-50 text-gold-800 font-mono border border-gold-300/80 animate-pulse font-medium">Running...</span>
       </div>
-      <p id="statusMsg" class="text-sm text-slate-300 font-mono">Job dispatched. Downloading slice & generating captions...</p>
+      <p id="statusMsg" class="text-xs text-stone-600 font-mono">Job dispatched to runner...</p>
 
-      <div id="downloadContainer" class="pt-4 border-t border-white/[0.08] hidden space-y-3">
-        <h4 class="text-xs font-mono text-slate-400 uppercase">Your Finished Video is Ready:</h4>
-        <a id="downloadLink" href="#" target="_blank" class="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm shadow-lg transition">
-          <span>⬇ Click Here to Download Your Clips (.ZIP)</span>
+      <div id="downloadContainer" class="pt-5 border-t border-sand-100 hidden space-y-3">
+        <h4 class="text-xs font-mono text-stone-500 uppercase tracking-wider">Your Mastered 9:16 Video Is Ready:</h4>
+        <a id="downloadLink" href="#" target="_blank" class="inline-flex items-center space-x-2.5 px-6 py-3.5 rounded-xl bg-gold-600 hover:bg-gold-500 text-white font-bold text-xs uppercase tracking-widest shadow-gold-glow transition">
+          <span>⬇ DOWNLOAD FINISHED 9:16 SHORTS (.ZIP)</span>
         </a>
       </div>
     </div>
@@ -139,13 +212,19 @@
   </main>
 
   <!-- Settings Modal -->
-  <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-onyx-900 border gold-border rounded-2xl max-w-md w-full p-6 space-y-4">
-      <h3 class="text-sm font-mono text-gold-400 uppercase">GitHub Token Setup</h3>
-      <p class="text-xs text-slate-400">Enter your token once so the page can trigger the runner and pull the download button automatically.</p>
-      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-onyx-950 border border-white/[0.1] rounded-lg p-2.5 text-xs text-slate-200 font-mono focus:border-gold-500">
-      <button id="btnSaveSettings" class="w-full py-2.5 bg-gold-500 hover:bg-gold-400 text-black font-bold text-xs rounded-lg uppercase font-mono">
-        Save Token
+  <div id="settingsModal" class="fixed inset-0 bg-sand-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border fine-line rounded-2xl max-w-md w-full p-7 space-y-5 shadow-2xl">
+      <div class="flex justify-between items-center pb-3 border-b border-sand-100">
+        <h3 class="text-xs font-mono text-gold-800 uppercase tracking-widest font-bold">GitHub Access Credentials</h3>
+        <button id="btnCloseSettings" class="text-stone-400 hover:text-stone-700 font-mono">✕</button>
+      </div>
+      <p class="text-xs text-stone-500 leading-relaxed">Enter your Personal Access Token once so this dashboard can dispatch encoding runners and fetch download links directly to this screen.</p>
+      <div>
+        <label class="text-[11px] font-mono text-stone-600 block mb-1.5 uppercase tracking-wider">GitHub Personal Token</label>
+        <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-sand-50 border border-sand-200 rounded-xl p-3 text-xs text-sand-900 font-mono focus:bg-white focus:outline-none focus:border-gold-500">
+      </div>
+      <button id="btnSaveSettings" class="w-full py-3 bg-sand-900 hover:bg-black text-gold-300 font-display font-bold text-xs rounded-xl uppercase tracking-widest transition">
+        Save & Verify Key
       </button>
     </div>
   </div>
@@ -153,8 +232,8 @@
   <script>
     let selectedStyle = "hormozi";
     const clips = [
-      { id: 1, start: "00:00", end: "00:30", label: "Clip 1" },
-      { id: 2, start: "01:00", end: "01:30", label: "Clip 2" }
+      { id: 1, start: "00:00", end: "00:30", label: "Clip 1", crop_pos: 0.5 },
+      { id: 2, start: "01:00", end: "01:30", label: "Clip 2", crop_pos: 0.5 }
     ];
 
     function renderClips() {
@@ -162,33 +241,64 @@
       el.innerHTML = '';
       clips.forEach((c, i) => {
         el.innerHTML += `
-          <div class="flex items-center space-x-2 bg-onyx-950 p-3 rounded-xl border border-white/[0.06]">
-            <span class="text-xs font-mono text-gold-400 w-16">${c.label}</span>
-            <input type="text" value="${c.start}" onchange="clips[${i}].start=this.value" class="w-20 bg-onyx-900 border border-white/[0.08] rounded-lg px-2 py-1.5 text-xs text-center font-mono">
-            <span class="text-slate-600 text-xs">➔</span>
-            <input type="text" value="${c.end}" onchange="clips[${i}].end=this.value" class="w-20 bg-onyx-900 border border-white/[0.08] rounded-lg px-2 py-1.5 text-xs text-center font-mono">
+          <div class="bg-sand-50/80 p-4 rounded-xl border border-sand-200/80 space-y-3.5">
+            <div class="flex items-center space-x-3">
+              <span class="text-xs font-mono font-bold text-gold-700 w-16">${c.label}</span>
+              <input type="text" value="${c.start}" onchange="clips[${i}].start=this.value" class="w-20 bg-white border border-sand-200 rounded-lg px-2 py-1.5 text-xs text-center font-mono focus:border-gold-500 focus:outline-none shadow-sm">
+              <span class="text-stone-400 text-xs">➔</span>
+              <input type="text" value="${c.end}" onchange="clips[${i}].end=this.value" class="w-20 bg-white border border-sand-200 rounded-lg px-2 py-1.5 text-xs text-center font-mono focus:border-gold-500 focus:outline-none shadow-sm">
+            </div>
+
+            <!-- Face Focus Selector -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2.5 border-t border-sand-200/50">
+              <div class="flex items-center space-x-1.5">
+                <span class="text-[11px] font-mono text-stone-500 mr-1">Speaker Face:</span>
+                <button type="button" onclick="setPos(${i}, 0.15)" class="px-2.5 py-1 rounded-lg text-[11px] font-mono transition ${c.crop_pos <= 0.3 ? 'bg-sand-900 text-gold-300 font-bold shadow-sm' : 'bg-white text-stone-600 border border-sand-200 hover:border-gold-300'}">Left (Host)</button>
+                <button type="button" onclick="setPos(${i}, 0.5)" class="px-2.5 py-1 rounded-lg text-[11px] font-mono transition ${c.crop_pos > 0.3 && c.crop_pos < 0.7 ? 'bg-sand-900 text-gold-300 font-bold shadow-sm' : 'bg-white text-stone-600 border border-sand-200 hover:border-gold-300'}">Center</button>
+                <button type="button" onclick="setPos(${i}, 0.85)" class="px-2.5 py-1 rounded-lg text-[11px] font-mono transition ${c.crop_pos >= 0.7 ? 'bg-sand-900 text-gold-300 font-bold shadow-sm' : 'bg-white text-stone-600 border border-sand-200 hover:border-gold-300'}">Right (Guest)</button>
+              </div>
+
+              <!-- Fine-tune Slider -->
+              <div class="flex items-center space-x-2">
+                <span class="text-[10px] font-mono text-stone-400">Nudge:</span>
+                <input type="range" min="0" max="100" value="${Math.round(c.crop_pos * 100)}" oninput="setSlider(${i}, this.value)" class="w-24 accent-gold-600 cursor-pointer">
+                <span id="pos-lbl-${i}" class="text-[10px] font-mono text-gold-800 font-semibold w-8 text-right">${Math.round(c.crop_pos * 100)}%</span>
+              </div>
+            </div>
           </div>
         `;
       });
     }
 
+    window.setPos = (idx, val) => {
+      clips[idx].crop_pos = val;
+      renderClips();
+    };
+
+    window.setSlider = (idx, val) => {
+      clips[idx].crop_pos = parseFloat(val) / 100;
+      document.getElementById(`pos-lbl-${idx}`).innerText = `${val}%`;
+    };
+
+    // Style Selectors
     document.querySelectorAll('.style-btn').forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll('.style-btn').forEach(b => {
-          b.className = "style-btn border border-white/[0.08] bg-onyx-950 rounded-xl p-3.5 text-left transition hover:border-white/[0.2]";
+          b.className = "style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition";
         });
-        btn.className = "style-btn border-2 border-gold-500 bg-gold-500/10 rounded-xl p-3.5 text-left transition";
+        btn.className = "style-btn border-2 border-gold-500 bg-gold-50/60 rounded-xl p-4 text-left transition shadow-sm";
         selectedStyle = btn.dataset.style;
       };
     });
 
     document.getElementById('btnAddClip').onclick = () => {
       const n = clips.length + 1;
-      clips.push({ id: n, start: "00:00", end: "00:30", label: `Clip ${n}` });
+      clips.push({ id: n, start: "00:00", end: "00:30", label: `Clip ${n}`, crop_pos: 0.5 });
       renderClips();
     };
 
     document.getElementById('btnSettings').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
+    document.getElementById('btnCloseSettings').onclick = () => document.getElementById('settingsModal').classList.add('hidden');
     document.getElementById('btnSaveSettings').onclick = () => {
       localStorage.setItem('autoclip_token', document.getElementById('tokenInput').value.trim());
       document.getElementById('settingsModal').classList.add('hidden');
@@ -197,7 +307,7 @@
     document.getElementById('btnGenerate').onclick = async () => {
       const url = document.getElementById('urlInput').value.trim();
       const token = localStorage.getItem('autoclip_token');
-      if (!url) return alert("Please paste a YouTube link first.");
+      if (!url) return alert("Please paste a valid YouTube video link first.");
       if (!token) return document.getElementById('settingsModal').classList.remove('hidden');
 
       const statusSection = document.getElementById('statusSection');
@@ -209,7 +319,7 @@
       statusSection.classList.remove('hidden');
       downloadContainer.classList.add('hidden');
       statusBadge.innerText = "Dispatching...";
-      statusMsg.innerText = "Triggering runner with style: " + selectedStyle.toUpperCase();
+      statusMsg.innerText = "Contacting runner with selected framing & caption styles...";
 
       try {
         await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
@@ -222,7 +332,7 @@
         });
 
         statusBadge.innerText = "Encoding Video...";
-        statusMsg.innerText = "Downloading video, transcribing with Whisper, and rendering 9:16 vertical short...";
+        statusMsg.innerText = "Downloading video, transcribing with Whisper, framing faces & rendering 9:16 short...";
 
         const interval = setInterval(async () => {
           const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
@@ -234,15 +344,15 @@
           if (run && run.status === "completed") {
             clearInterval(interval);
             if (run.conclusion === "success") {
-              statusBadge.className = "text-xs px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 font-mono border border-emerald-500/30";
-              statusBadge.innerText = "Complete ✓";
-              statusMsg.innerText = "Your vertical short is finished and ready!";
+              statusBadge.className = "text-xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-mono border border-emerald-300 font-medium";
+              statusBadge.innerText = "Mastered ✓";
+              statusMsg.innerText = "Your 9:16 short has finished rendering!";
               downloadLink.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
               downloadContainer.classList.remove('hidden');
             } else {
-              statusBadge.className = "text-xs px-2.5 py-1 rounded bg-red-500/10 text-red-400 font-mono";
+              statusBadge.className = "text-xs px-3 py-1 rounded-full bg-rose-50 text-rose-700 font-mono border border-rose-200 font-medium";
               statusBadge.innerText = "Failed ✕";
-              statusMsg.innerText = "Encoding failed. Check python worker logs.";
+              statusMsg.innerText = "Encoding failed. Check python runner logs.";
             }
           }
         }, 8000);
