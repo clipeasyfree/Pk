@@ -18,15 +18,17 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install FFmpeg
+      - name: Install FFmpeg and Deno (JS Runtime)
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-liberation
+          curl -fsSL https://deno.land/install.sh | sh
+          echo "$HOME/.deno/bin" >> $GITHUB_PATH
 
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install --upgrade -r requirements.txt
 
       - name: Run Clipping Engine
         env:
@@ -41,3 +43,4 @@ jobs:
           name: autoclip-shorts
           path: output/*.mp4
           retention-days: 2
+
