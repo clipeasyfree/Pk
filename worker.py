@@ -33,23 +33,23 @@ if cookies_env and len(cookies_env) > 20:
         f.write("\n".join(sanitized_lines) + "\n")
     print("[*] Secure YouTube cookies loaded successfully.")
 else:
-    print("[!] Running without custom cookies.")
+    print("[*] No custom cookies found, using direct fallback.")
 
-# 2. Parse payload
+# 2. Parse job parameters
 payload_env = os.environ.get('JOB_PAYLOAD', '')
 payload = {}
 if payload_env and payload_env != 'null':
     try:
         payload = json.loads(payload_env)
     except Exception as e:
-        print(f"[!] Warning parsing payload JSON: {e}")
+        print(f"[!] Warning parsing JSON: {e}")
 
 url = payload.get('url') or (sys.argv[1] if len(sys.argv) > 1 else None)
 timestamps = payload.get('timestamps', [])
 style = payload.get('style', 'hormozi')
 
 if not url:
-    print("[!] No URL provided. Exiting.")
+    print("[!] Error: No URL supplied.")
     sys.exit(1)
 
 if "youtu.be/" in url:
@@ -77,9 +77,7 @@ STYLES = {
 active_cfg = STYLES.get(style, STYLES["hormozi"])
 
 print(f"[*] Target video: {url}")
-print(f"[*] Processing {len(timestamps)} clips with preset: {style}")
-
-print("[*] Loading AI Whisper model...")
+print(f"[*] Loading AI Whisper model...")
 model = WhisperModel("base.en", device="cpu", compute_type="int8")
 
 for idx, item in enumerate(timestamps):
@@ -96,26 +94,39 @@ for idx, item in enumerate(timestamps):
 
     print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end})...")
     
-    # Force Android/iOS client to bypass web JS challenges completely
-    cmd_download = [
-        "yt-dlp",
-        "--extractor-args", "youtube:player_client=android,ios",
-        "--download-sections", f"*{start}-{end}",
-        "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
-        "--force-keyframes-at-cuts",
-        "--no-check-certificates",
-        "--geo-bypass"
-    ]
-    
+    # 1. Primary Strategy: Authenticated download with cookies (uses Deno JS runtime)
+    download_success = False
     if cookies_path and os.path.exists(cookies_path):
-        cmd_download.extend(["--cookies", cookies_path])
-        
-    cmd_download.extend([url, "-o", raw_mp4])
+        cmd_primary = [
+            "yt-dlp",
+            "--download-sections", f"*{start}-{end}",
+            "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
+            "--force-keyframes-at-cuts",
+            "--no-check-certificates",
+            "--cookies", cookies_path,
+            url, "-o", raw_mp4
+        ]
+        print("[*] Attempting download with authenticated cookies...")
+        res = subprocess.run(cmd_primary)
+        if res.returncode == 0 and os.path.exists(raw_mp4):
+            download_success = True
 
-    print(f"[*] Downloading slice...")
-    subprocess.run(cmd_download, check=True)
+    # 2. Fallback Strategy: Android client WITHOUT cookies (never triggers cookie warning)
+    if not download_success:
+        print("[*] Falling back to Android client download...")
+        cmd_fallback = [
+            "yt-dlp",
+            "--extractor-args", "youtube:player_client=android",
+            "--download-sections", f"*{start}-{end}",
+            "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
+            "--force-keyframes-at-cuts",
+            "--no-check-certificates",
+            "--geo-bypass",
+            url, "-o", raw_mp4
+        ]
+        subprocess.run(cmd_fallback, check=True)
 
-    print(f"[*] Transcribing audio with word timestamps...")
+    print(f"[*] Transcribing audio with word-level timestamps...")
     subprocess.run(["ffmpeg", "-y", "-i", raw_mp4, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
     segments, _ = model.transcribe(wav_path, word_timestamps=True)
 
@@ -134,7 +145,7 @@ for idx, item in enumerate(timestamps):
                 if word_clean:
                     f.write(f"Dialogue: 0,{fmt(w.start)},{fmt(w.end)},Default,,0,0,0,,{{\\c{active_cfg['highlight']}}}{word_clean}{{\\c{active_cfg['primary']}}}\n")
 
-    print(f"[*] Rendering vertical 9:16 short...")
+    print(f"[*] Rendering vertical 9:16 video...")
     cmd_render = [
         "ffmpeg", "-y", "-i", raw_mp4,
         "-vf", f"crop=ih*(9/16):ih,subtitles={ass_file}",
@@ -143,6 +154,6 @@ for idx, item in enumerate(timestamps):
         final_mp4
     ]
     subprocess.run(cmd_render, check=True)
-    print(f"[✓] Clip #{clip_id} complete: {final_mp4}")
+    print(f"[✓] Finished Clip #{clip_id}: {final_mp4}")
 
-print("[*] All tasks finished successfully!")
+print("[*] All jobs finished successfully!")
