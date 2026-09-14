@@ -60,7 +60,7 @@
 </head>
 <body class="text-sand-900 min-h-screen antialiased selection:bg-gold-500 selection:text-white">
 
-  <!-- TOP EDITORIAL BAR -->
+  <!-- HEADER BAR -->
   <header class="border-b border-sand-200/80 bg-white/85 backdrop-blur-xl sticky top-0 z-50">
     <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center space-x-4">
@@ -76,56 +76,72 @@
         </div>
       </div>
 
-      <div class="flex items-center space-x-3">
-        <button id="btnSettings" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white hover:bg-gold-50 border border-sand-200 hover:border-gold-300 text-xs font-mono text-sand-900 transition shadow-sm">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span>GitHub Runner Connected</span>
-          <span class="text-gold-600">⚙</span>
-        </button>
-      </div>
+      <button id="btnSettings" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white hover:bg-gold-50 border border-sand-200 hover:border-gold-300 text-xs font-mono text-sand-900 transition shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>Settings / Token</span>
+        <span class="text-gold-600">⚙</span>
+      </button>
     </div>
   </header>
 
   <main class="max-w-4xl mx-auto px-6 py-10 space-y-8">
 
-    <!-- 1. Source Link -->
-    <div class="bg-white border fine-line rounded-2xl p-7 shadow-luxury transition hover:border-gold-400/50">
-      <div class="flex items-center justify-between mb-3">
+    <!-- 1. SOURCE LINK & IN-PAGE PREVIEW -->
+    <div class="bg-white border fine-line rounded-2xl p-7 shadow-luxury space-y-4">
+      <div class="flex items-center justify-between">
         <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold flex items-center gap-2">
           <span>01. Source Material</span>
         </span>
         <span class="text-[10px] font-mono text-stone-500 px-2.5 py-0.5 rounded-full bg-sand-100 border border-sand-200">
-          yt-dlp Stream Slice
+          Live Studio Monitor
         </span>
       </div>
-      <div class="relative">
-        <input type="text" id="urlInput" 
-               placeholder="Paste YouTube Podcast Link (https://www.youtube.com/watch?v=...)"
-               class="w-full bg-sand-50/70 border border-sand-200 rounded-xl px-4 py-3.5 pl-11 text-sm text-sand-900 placeholder-stone-400 focus:outline-none focus:bg-white focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition font-mono shadow-inner">
-        <span class="absolute left-4 top-3.5 text-gold-600 text-sm">▶</span>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <input type="text" id="urlInput" 
+                 placeholder="Paste YouTube Link (e.g. https://www.youtube.com/watch?v=...)"
+                 class="w-full bg-sand-50/70 border border-sand-200 rounded-xl px-4 py-3.5 pl-11 text-sm text-sand-900 placeholder-stone-400 focus:outline-none focus:bg-white focus:border-gold-500 font-mono shadow-inner">
+          <span class="absolute left-4 top-3.5 text-gold-600 text-sm">▶</span>
+        </div>
+        <button id="btnLoadPreview" class="px-5 py-3.5 rounded-xl bg-sand-900 hover:bg-black text-gold-300 font-mono text-xs uppercase tracking-wider font-bold transition flex items-center justify-center gap-2 shrink-0">
+          <span>👁 Show Video</span>
+        </button>
+      </div>
+
+      <!-- IN-PAGE EMBEDDED YOUTUBE VIDEO -->
+      <div id="previewBox" class="hidden pt-4 space-y-3">
+        <div class="relative w-full aspect-video rounded-xl overflow-hidden border border-sand-300 shadow-md bg-black">
+          <iframe id="ytPlayer" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <!-- Visual Studio Camera Guide -->
+        <div class="grid grid-cols-3 text-center py-2 px-3 bg-sand-100/80 rounded-xl border border-sand-200 text-[11px] font-mono">
+          <div class="text-gold-800 font-semibold">◀ Host / Left Side</div>
+          <div class="text-stone-600 border-x border-sand-300">Center Room</div>
+          <div class="text-gold-800 font-semibold">Guest / Right Side ▶</div>
+        </div>
       </div>
     </div>
 
-    <!-- 2. Timestamps & Speaker Framing -->
+    <!-- 2. TIMESTAMPS & FRAMING -->
     <div class="bg-white border border-sand-200 rounded-2xl p-7 shadow-luxury space-y-5">
       <div class="flex justify-between items-center pb-3 border-b border-sand-100">
         <div>
           <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold block">
             02. High-Demand Segments & Framing
           </span>
-          <p class="text-xs text-stone-500 mt-0.5">Select the exact segment and identify which side of the wide camera the speaker sits on.</p>
+          <p class="text-xs text-stone-500 mt-0.5">Watch the video above, check timestamps, and choose which person to crop for each clip.</p>
         </div>
         <button id="btnAddClip" class="px-3 py-1.5 rounded-lg border border-gold-300/70 hover:bg-gold-50 text-gold-800 text-xs font-mono font-medium transition">
           + Add Segment
         </button>
       </div>
 
-      <div id="clipsList" class="space-y-4">
-        <!-- Rendered by JS -->
-      </div>
+      <div id="clipsList" class="space-y-4"></div>
     </div>
 
-    <!-- 3. Caption Style Selector -->
+    <!-- 3. CAPTION PRESETS -->
     <div class="bg-white border border-sand-200 rounded-2xl p-7 shadow-luxury space-y-5">
       <div class="flex justify-between items-center">
         <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold block">
@@ -135,8 +151,6 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5" id="styleGrid">
-        
-        <!-- Hormozi -->
         <button data-style="hormozi" class="style-btn border-2 border-gold-500 bg-gold-50/60 rounded-xl p-4 text-left transition shadow-sm">
           <div class="flex justify-between items-center mb-1.5">
             <span class="text-xs font-bold text-sand-900 font-sans">Hormozi Viral</span>
@@ -147,7 +161,6 @@
           </p>
         </button>
 
-        <!-- MrBeast -->
         <button data-style="mrbeast" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
           <div class="flex justify-between items-center mb-1.5">
             <span class="text-xs font-semibold text-sand-800 font-sans">MrBeast Pop</span>
@@ -158,7 +171,6 @@
           </p>
         </button>
 
-        <!-- Luxury Gold -->
         <button data-style="gold" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
           <div class="flex justify-between items-center mb-1.5">
             <span class="text-xs font-semibold text-sand-800 font-sans">Luxury Gold</span>
@@ -167,7 +179,6 @@
           <p class="text-[11px] font-extrabold uppercase text-gold-700 tracking-wider">CHAMPAGNE KARAOKE</p>
         </button>
 
-        <!-- Cyber Neon -->
         <button data-style="neon" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
           <div class="flex justify-between items-center mb-1.5">
             <span class="text-xs font-semibold text-sand-800 font-sans">Cyber Neon</span>
@@ -176,7 +187,6 @@
           <p class="text-[11px] font-extrabold uppercase text-fuchsia-600 tracking-wider">VIBRANT HIGHLIGHT</p>
         </button>
 
-        <!-- Clean Minimal -->
         <button data-style="minimal" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
           <div class="flex justify-between items-center mb-1.5">
             <span class="text-xs font-semibold text-sand-800 font-sans">Editorial Bar</span>
@@ -184,7 +194,6 @@
           </div>
           <p class="text-[11px] font-mono text-stone-500">Clean Minimalist</p>
         </button>
-
       </div>
     </div>
 
@@ -193,19 +202,22 @@
       <span>✦ GENERATE VIRAL SHORTS</span>
     </button>
 
-    <!-- 5. Real-Time Status & In-Page Download -->
+    <!-- 5. REAL-TIME PIPELINE & DIRECT IN-PAGE DOWNLOAD -->
     <div id="statusSection" class="bg-white border fine-line rounded-2xl p-7 shadow-luxury hidden space-y-4">
       <div class="flex items-center justify-between">
-        <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold">Studio Status</span>
+        <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold">Studio Pipeline</span>
         <span id="statusBadge" class="text-xs px-3 py-1 rounded-full bg-gold-50 text-gold-800 font-mono border border-gold-300/80 animate-pulse font-medium">Running...</span>
       </div>
       <p id="statusMsg" class="text-xs text-stone-600 font-mono">Job dispatched to runner...</p>
 
+      <!-- Direct in-page download (No visiting GitHub) -->
       <div id="downloadContainer" class="pt-5 border-t border-sand-100 hidden space-y-3">
-        <h4 class="text-xs font-mono text-stone-500 uppercase tracking-wider">Your Mastered 9:16 Video Is Ready:</h4>
-        <a id="downloadLink" href="#" target="_blank" class="inline-flex items-center space-x-2.5 px-6 py-3.5 rounded-xl bg-gold-600 hover:bg-gold-500 text-white font-bold text-xs uppercase tracking-widest shadow-gold-glow transition">
-          <span>⬇ DOWNLOAD FINISHED 9:16 SHORTS (.ZIP)</span>
-        </a>
+        <h4 class="text-xs font-mono text-stone-500 uppercase tracking-wider">Finished Videos Ready for Download:</h4>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a id="downloadLink" href="#" target="_blank" class="inline-flex items-center justify-center space-x-2.5 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-widest shadow-md transition">
+            <span>⬇ Direct Download (.ZIP)</span>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -215,16 +227,16 @@
   <div id="settingsModal" class="fixed inset-0 bg-sand-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white border fine-line rounded-2xl max-w-md w-full p-7 space-y-5 shadow-2xl">
       <div class="flex justify-between items-center pb-3 border-b border-sand-100">
-        <h3 class="text-xs font-mono text-gold-800 uppercase tracking-widest font-bold">GitHub Access Credentials</h3>
+        <h3 class="text-xs font-mono text-gold-800 uppercase tracking-widest font-bold">GitHub Access Token</h3>
         <button id="btnCloseSettings" class="text-stone-400 hover:text-stone-700 font-mono">✕</button>
       </div>
-      <p class="text-xs text-stone-500 leading-relaxed">Enter your Personal Access Token once so this dashboard can dispatch encoding runners and fetch download links directly to this screen.</p>
+      <p class="text-xs text-stone-500 leading-relaxed">Enter your Personal Access Token once so this dashboard can dispatch encoding runners and provide direct file downloads.</p>
       <div>
         <label class="text-[11px] font-mono text-stone-600 block mb-1.5 uppercase tracking-wider">GitHub Personal Token</label>
         <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-sand-50 border border-sand-200 rounded-xl p-3 text-xs text-sand-900 font-mono focus:bg-white focus:outline-none focus:border-gold-500">
       </div>
       <button id="btnSaveSettings" class="w-full py-3 bg-sand-900 hover:bg-black text-gold-300 font-display font-bold text-xs rounded-xl uppercase tracking-widest transition">
-        Save & Verify Key
+        Save & Connect
       </button>
     </div>
   </div>
@@ -232,9 +244,29 @@
   <script>
     let selectedStyle = "hormozi";
     const clips = [
-      { id: 1, start: "00:00", end: "00:30", label: "Clip 1", crop_pos: 0.5 },
-      { id: 2, start: "01:00", end: "01:30", label: "Clip 2", crop_pos: 0.5 }
+      { id: 1, start: "00:00", end: "00:30", label: "Clip 1", crop_pos: 0.15 },
+      { id: 2, start: "01:00", end: "01:30", label: "Clip 2", crop_pos: 0.85 }
     ];
+
+    // Helper: Parse video ID from any YouTube URL
+    function getYouTubeId(url) {
+      const reg = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(reg);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Embed YouTube Player on the Page
+    document.getElementById('btnLoadPreview').onclick = () => {
+      const url = document.getElementById('urlInput').value.trim();
+      const id = getYouTubeId(url);
+      if (!id) {
+        alert("Please paste a valid YouTube video link first!");
+        return;
+      }
+      const player = document.getElementById('ytPlayer');
+      player.src = `https://www.youtube-nocookie.com/embed/${id}`;
+      document.getElementById('previewBox').classList.remove('hidden');
+    };
 
     function renderClips() {
       const el = document.getElementById('clipsList');
@@ -280,7 +312,7 @@
       document.getElementById(`pos-lbl-${idx}`).innerText = `${val}%`;
     };
 
-    // Style Selectors
+    // Subtitle Style Buttons
     document.querySelectorAll('.style-btn').forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll('.style-btn').forEach(b => {
@@ -304,6 +336,7 @@
       document.getElementById('settingsModal').classList.add('hidden');
     };
 
+    // Main Generate Engine
     document.getElementById('btnGenerate').onclick = async () => {
       const url = document.getElementById('urlInput').value.trim();
       const token = localStorage.getItem('autoclip_token');
@@ -332,7 +365,7 @@
         });
 
         statusBadge.innerText = "Encoding Video...";
-        statusMsg.innerText = "Downloading video, transcribing with Whisper, framing faces & rendering 9:16 short...";
+        statusMsg.innerText = "Downloading video, transcribing with Whisper, framing faces & rendering 9:16 shorts...";
 
         const interval = setInterval(async () => {
           const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
@@ -346,13 +379,19 @@
             if (run.conclusion === "success") {
               statusBadge.className = "text-xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-mono border border-emerald-300 font-medium";
               statusBadge.innerText = "Mastered ✓";
-              statusMsg.innerText = "Your 9:16 short has finished rendering!";
-              downloadLink.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
+              statusMsg.innerText = "Your vertical shorts are ready! Download starting...";
+
+              // DIRECT DOWNLOAD LINK: No GitHub UI needed
+              const directZipUrl = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
+              downloadLink.href = directZipUrl;
               downloadContainer.classList.remove('hidden');
+
+              // Automatically trigger file download
+              window.location.href = directZipUrl;
             } else {
               statusBadge.className = "text-xs px-3 py-1 rounded-full bg-rose-50 text-rose-700 font-mono border border-rose-200 font-medium";
               statusBadge.innerText = "Failed ✕";
-              statusMsg.innerText = "Encoding failed. Check python runner logs.";
+              statusMsg.innerText = "Encoding failed. Please check Python runner logs.";
             }
           }
         }, 8000);
