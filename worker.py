@@ -5,8 +5,19 @@ import subprocess
 from faster_whisper import WhisperModel
 
 print("[*] Starting Clip Studio Engine...")
-payload_env = os.environ.get('JOB_PAYLOAD', '')
 
+# 1. Setup cookies from GitHub Secrets
+cookies_path = None
+cookies_env = os.environ.get('COOKIES_DATA', '').strip()
+if cookies_env:
+    cookies_path = "temp/youtube_cookies.txt"
+    os.makedirs('temp', exist_ok=True)
+    with open(cookies_path, "w", encoding="utf-8") as f:
+        f.write(cookies_env)
+    print("[*] Secure YouTube cookies loaded successfully.")
+
+# 2. Parse job inputs
+payload_env = os.environ.get('JOB_PAYLOAD', '')
 payload = {}
 if payload_env and payload_env != 'null':
     try:
@@ -16,11 +27,19 @@ if payload_env and payload_env != 'null':
 
 url = payload.get('url') or (sys.argv[1] if len(sys.argv) > 1 else None)
 timestamps = payload.get('timestamps', [])
-style = payload.get('style', 'gold')
+style = payload.get('style', 'hormozi')
 
 if not url:
     print("[!] No URL provided. Exiting.")
     sys.exit(1)
+
+# Clean URL parameters
+if "youtu.be/" in url:
+    video_id = url.split("youtu.be/")[1].split("?")[0]
+    url = f"https://www.youtube.com/watch?v={video_id}"
+elif "watch?v=" in url:
+    video_id = url.split("watch?v=")[1].split("&")[0]
+    url = f"https://www.youtube.com/watch?v={video_id}"
 
 if not timestamps:
     timestamps = [{"start": "00:00", "end": "00:30", "label": "Clip 1"}]
@@ -28,8 +47,7 @@ if not timestamps:
 os.makedirs('output', exist_ok=True)
 os.makedirs('temp', exist_ok=True)
 
-# 5 Trending Caption Presets (ASS Subtitle Styling)
-# Primary, Outline, Active Highlight Colors
+# 5 Trending Caption Presets
 STYLES = {
     "gold": {"primary": "&HFFFFFF&", "highlight": "&H00D7FF&", "font": "Arial", "size": "65", "bold": "-1", "border": "4"},
     "hormozi": {"primary": "&H00FFFF&", "highlight": "&H00FF00&", "font": "Impact", "size": "75", "bold": "-1", "border": "6"},
@@ -38,10 +56,12 @@ STYLES = {
     "minimal": {"primary": "&HFFFFFF&", "highlight": "&H888888&", "font": "Arial", "size": "50", "bold": "0", "border": "2"}
 }
 
-active_cfg = STYLES.get(style, STYLES["gold"])
+active_cfg = STYLES.get(style, STYLES["hormozi"])
 
-print(f"[*] Processing {len(timestamps)} clips with caption style: {style}")
-print("[*] Loading faster-whisper (base.en, int8)...")
+print(f"[*] Target video: {url}")
+print(f"[*] Processing {len(timestamps)} clips with preset: {style}")
+
+print("[*] Loading AI Whisper model...")
 model = WhisperModel("base.en", device="cpu", compute_type="int8")
 
 for idx, item in enumerate(timestamps):
@@ -56,23 +76,25 @@ for idx, item in enumerate(timestamps):
     ass_file = f"temp/sub_{clip_id}.ass"
     final_mp4 = f"output/{clip_id}_{clean_label}.mp4"
 
-    print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end}) from {url}...")
+    print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end})...")
     cmd_download = [
         "yt-dlp",
         "--download-sections", f"*{start}-{end}",
-        "-f", "bv*[height<=1080]+ba/b",
+        "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
         "--force-keyframes-at-cuts",
-        "--no-check-certificates",
-        url,
-        "-o", raw_mp4
+        "--no-check-certificates"
     ]
+    if cookies_path:
+        cmd_download.extend(["--cookies", cookies_path])
+    cmd_download.extend([url, "-o", raw_mp4])
+
     subprocess.run(cmd_download, check=True)
 
-    print(f"[*] Transcribing audio with word-level timestamps...")
+    print(f"[*] Transcribing audio for Clip #{clip_id}...")
     subprocess.run(["ffmpeg", "-y", "-i", raw_mp4, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
     segments, _ = model.transcribe(wav_path, word_timestamps=True)
 
-    print(f"[*] Generating {style.upper()} karaoke subtitles...")
+    print(f"[*] Creating {style.upper()} animated captions...")
     with open(ass_file, "w", encoding="utf-8") as f:
         f.write("[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\n\n")
         f.write("[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Italic, Alignment, MarginV, Outline\n")
@@ -87,7 +109,7 @@ for idx, item in enumerate(timestamps):
                 if word_clean:
                     f.write(f"Dialogue: 0,{fmt(w.start)},{fmt(w.end)},Default,,0,0,0,,{{\\c{active_cfg['highlight']}}}{word_clean}{{\\c{active_cfg['primary']}}}\n")
 
-    print(f"[*] Encoding 9:16 vertical video with burned captions...")
+    print(f"[*] Rendering vertical 9:16 video...")
     cmd_render = [
         "ffmpeg", "-y", "-i", raw_mp4,
         "-vf", f"crop=ih*(9/16):ih,subtitles={ass_file}",
@@ -96,6 +118,6 @@ for idx, item in enumerate(timestamps):
         final_mp4
     ]
     subprocess.run(cmd_render, check=True)
-    print(f"[✓] Finished: {final_mp4}")
+    print(f"[✓] Clip #{clip_id} complete: {final_mp4}")
 
-print("[*] All jobs finished successfully.")
+print("[*] All tasks finished successfully!")
