@@ -61,7 +61,7 @@ elif "watch?v=" in url:
     url = f"https://www.youtube.com/watch?v={video_id}"
 
 if not timestamps:
-    timestamps = [{"start": "00:00", "end": "00:30", "label": "Clip 1"}]
+    timestamps = [{"start": "00:00", "end": "00:30", "label": "Clip 1", "crop_pos": 0.5}]
 
 os.makedirs('output', exist_ok=True)
 os.makedirs('temp', exist_ok=True)
@@ -88,12 +88,16 @@ for idx, item in enumerate(timestamps):
     label = item.get('label', f'Clip {clip_id}')
     clean_label = "".join(c if c.isalnum() else "_" for c in label)
 
+    # Face / Speaker Position: 0.0 (far left) to 1.0 (far right). Default: 0.5 (center)
+    crop_pos = float(item.get('crop_pos', 0.5))
+    crop_pos = max(0.0, min(1.0, crop_pos))
+
     out_template = f"temp/raw_{clip_id}.%(ext)s"
     wav_path = f"temp/audio_{clip_id}.wav"
     ass_file = f"temp/sub_{clip_id}.ass"
     final_mp4 = f"output/{clip_id}_{clean_label}.mp4"
 
-    print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end})...")
+    print(f"\n[*] Slicing Clip #{clip_id} ({start} -> {end}) [Focus: {int(crop_pos*100)}%]...")
     
     cmd_download = [
         "yt-dlp",
@@ -111,16 +115,13 @@ for idx, item in enumerate(timestamps):
         
     cmd_download.extend([url, "-o", out_template])
 
-    print(f"[*] Downloading slice with yt-dlp...")
     subprocess.run(cmd_download, check=True)
 
-    # Automatically detect whatever file yt-dlp actually created (.mp4, .webm, .mkv)
     downloaded_files = glob.glob(f"temp/raw_{clip_id}.*")
     valid_raw_files = [f for f in downloaded_files if not f.endswith(".part") and not f.endswith(".ytdl")]
     if not valid_raw_files:
         raise FileNotFoundError(f"Could not find downloaded file for clip {clip_id}")
     actual_raw_video = valid_raw_files[0]
-    print(f"[*] Downloaded source file verified: {actual_raw_video}")
 
     print(f"[*] Transcribing audio with word-level timestamps...")
     subprocess.run(["ffmpeg", "-y", "-i", actual_raw_video, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
@@ -141,10 +142,13 @@ for idx, item in enumerate(timestamps):
                 if word_clean:
                     f.write(f"Dialogue: 0,{fmt(w.start)},{fmt(w.end)},Default,,0,0,0,,{{\\c{active_cfg['highlight']}}}{word_clean}{{\\c{active_cfg['primary']}}}\n")
 
-    print(f"[*] Rendering vertical 9:16 video...")
+    print(f"[*] Rendering vertical 9:16 short with Face Offset ({int(crop_pos*100)}%)...")
+    # Dynamically places the 9:16 frame directly over the speaker's face
+    crop_filter = f"crop=ih*(9/16):ih:(iw-ih*(9/16))*{crop_pos}:0"
+    
     cmd_render = [
         "ffmpeg", "-y", "-i", actual_raw_video,
-        "-vf", f"crop=ih*(9/16):ih,subtitles={ass_file}",
+        "-vf", f"{crop_filter},subtitles={ass_file}",
         "-c:v", "libx264", "-preset", "fast", "-crf", "22",
         "-c:a", "aac", "-b:a", "128k",
         final_mp4
