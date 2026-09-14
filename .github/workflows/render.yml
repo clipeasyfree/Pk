@@ -31,6 +31,7 @@ jobs:
       - name: Run Clipping Engine
         env:
           JOB_PAYLOAD: ${{ toJson(github.event.client_payload) }}
+          COOKIES_DATA: ${{ secrets.YT_COOKIES }}
         run: |
           python worker.py
 
