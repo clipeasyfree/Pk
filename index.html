@@ -11,12 +11,11 @@
   <style>
     body { background-color: #FBFBF9; -webkit-tap-highlight-color: transparent; }
     .gold-line { border: 1px solid rgba(184, 144, 71, 0.25); }
-    .target-ring { border: 2px dashed #D4AF37; box-shadow: 0 0 25px rgba(212, 175, 55, 0.6); }
+    .target-ring { border: 2px dashed #D4AF37; box-shadow: 0 0 25px rgba(212, 175, 55, 0.65); }
   </style>
 </head>
 <body class="text-stone-900 min-h-screen font-sans antialiased selection:bg-amber-400">
 
-  <!-- Mobile Luxury Header -->
   <header class="border-b border-stone-200 bg-white/95 sticky top-0 z-50 px-4 h-16 flex items-center justify-between">
     <div class="flex items-center space-x-2">
       <div class="w-8 h-8 rounded-lg bg-stone-900 text-amber-300 font-serif font-bold text-sm flex items-center justify-center">✦</div>
@@ -29,62 +28,67 @@
 
   <main class="max-w-xl mx-auto px-4 py-6 space-y-5">
 
-    <!-- 01. SOURCE & AUTO-TIMESTAMPS -->
+    <!-- 1. Video URL & YouTube Video Screen -->
     <div class="bg-white border gold-line rounded-2xl p-5 shadow-sm space-y-3">
-      <span class="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold block">01. Video URL & Auto-Timestamps</span>
-      <input type="text" id="urlInput" placeholder="Paste YouTube Link..." class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 text-xs font-mono focus:bg-white focus:outline-none focus:border-amber-500">
-      
+      <span class="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold block">01. Source YouTube Video</span>
       <div class="flex gap-2">
-        <button id="btnAutoTimestamps" class="flex-1 py-2.5 bg-stone-900 text-amber-300 text-xs font-mono font-bold rounded-xl active:scale-95 transition">
-          ⚡ Auto-Add Timestamps
+        <input type="text" id="urlInput" placeholder="Paste YouTube Link..." class="flex-1 bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 text-xs font-mono focus:bg-white focus:outline-none focus:border-amber-500">
+        <button id="btnShowVideo" class="px-4 py-2.5 bg-stone-900 hover:bg-black text-amber-300 font-mono text-xs uppercase font-bold rounded-xl shrink-0">
+          👁 Show
+        </button>
+      </div>
+
+      <!-- Video Player with Touch-Enabled Face Reticle -->
+      <div id="playerStage" class="hidden pt-2 space-y-2">
+        <div class="flex items-center justify-between text-xs font-mono">
+          <span class="text-stone-500">Scrub video & place face target:</span>
+          <span id="posIndicator" class="font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Face: 50%</span>
+        </div>
+
+        <!-- The Video Screen -->
+        <div id="videoContainer" class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-stone-300 select-none">
+          <!-- Real Interactive YouTube Player -->
+          <iframe id="ytIframe" class="w-full h-full pointer-events-auto" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+          <!-- Non-Blocking Reticle Layer: Let touches through to the video -->
+          <div id="reticleLayer" class="absolute inset-0 pointer-events-none z-20">
+            <!-- Movable Target Ring (Only the ring captures touch) -->
+            <div id="targetCircle" class="target-ring absolute w-16 h-16 rounded-full bg-amber-400/30 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-move flex flex-col items-center justify-center touch-none" style="left: 50%; top: 40%;">
+              <div class="w-2 h-2 rounded-full bg-white mb-0.5 pointer-events-none"></div>
+              <span class="text-[8px] font-mono font-black text-white bg-black/70 px-1 rounded pointer-events-none">FACE</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-[11px] font-mono text-stone-500 text-center">Play/scrub the video with your finger, then drag the gold circle onto the person's face.</p>
+      </div>
+    </div>
+
+    <!-- 2. Timestamps Setup -->
+    <div class="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold">02. Clip Timestamps</span>
+        <button id="btnAutoHook" class="px-2.5 py-1 bg-amber-100 text-amber-800 font-mono text-[11px] font-bold rounded-lg hover:bg-amber-200">
+          ⚡ Auto-Hook (00:04)
         </button>
       </div>
 
       <div class="flex items-center justify-between bg-stone-50 p-2.5 rounded-xl border border-stone-200 text-xs font-mono">
         <div class="flex items-center space-x-1">
           <span class="text-stone-500">START:</span>
-          <input type="text" id="startTime" value="00:04" class="w-14 text-center bg-white border rounded font-bold">
+          <input type="text" id="startTime" value="00:04" class="w-16 text-center bg-white border rounded font-bold py-1">
         </div>
         <span class="text-stone-400">➔</span>
         <div class="flex items-center space-x-1">
           <span class="text-stone-500">END:</span>
-          <input type="text" id="endTime" value="00:35" class="w-14 text-center bg-white border rounded font-bold">
+          <input type="text" id="endTime" value="00:35" class="w-16 text-center bg-white border rounded font-bold py-1">
         </div>
       </div>
     </div>
 
-    <!-- 02. DOWNLOAD SLICE BUTTON -->
-    <button id="btnDownloadSlice" class="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-stone-900 font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow active:scale-95 transition">
-      ⬇ Step 1: Download Clip to Inspect Faces
-    </button>
-
-    <!-- 03. INSPECTION MONITOR (ACTUAL VIDEO) -->
-    <div id="inspectorStage" class="bg-white border gold-line rounded-2xl p-5 shadow-sm space-y-3 hidden">
-      <div class="flex justify-between items-center">
-        <span class="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold">02. Inspect & Tap Face Target</span>
-        <span id="posIndicator" class="text-xs font-mono font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Face: 50%</span>
-      </div>
-
-      <!-- Real HTML5 Video Player -->
-      <div id="videoContainer" class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-stone-300 select-none">
-        <video id="nativeVideo" controls playsinline class="w-full h-full object-contain"></video>
-
-        <!-- Tap-To-Position Target Overlay -->
-        <div id="touchTargetOverlay" class="absolute inset-0 bg-transparent cursor-crosshair">
-          <!-- The Golden Reticle Circle -->
-          <div id="reticleCircle" class="target-ring absolute w-16 h-16 rounded-full bg-amber-400/30 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all duration-75 flex flex-col items-center justify-center" style="left: 50%; top: 50%;">
-            <div class="w-2 h-2 rounded-full bg-white mb-0.5"></div>
-            <span class="text-[8px] font-mono font-black text-white bg-black/70 px-1 rounded">FACE</span>
-          </div>
-        </div>
-      </div>
-      <p class="text-[11px] font-mono text-stone-500 text-center">Tap anywhere on the video screen to lock the circle onto the speaker's face.</p>
-    </div>
-
-    <!-- 04. CAPTIONS.AI SUBTITLE STYLES -->
+    <!-- 3. Captions.ai Preset Selector -->
     <div class="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-3">
-      <span class="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold block">03. Captions.ai Subtitle Presets</span>
-      <div class="grid grid-cols-2 gap-2" id="presetGrid">
+      <span class="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold block">03. Captions.ai Style Presets</span>
+      <div class="grid grid-cols-2 gap-2.5" id="presetGrid">
         <button data-style="captions_pill" class="style-btn border-2 border-amber-500 bg-amber-50 p-3 rounded-xl text-left">
           <span class="text-xs font-bold block">Captions.ai Pill</span>
           <span class="text-[10px] font-mono text-emerald-600 font-bold">MATTE BOX + NEON</span>
@@ -104,22 +108,22 @@
       </div>
     </div>
 
-    <!-- 05. FINAL RENDER BUTTON -->
-    <button id="btnRenderFinal" class="w-full py-4 bg-stone-900 hover:bg-black text-amber-300 font-serif font-bold text-xs uppercase tracking-widest rounded-xl shadow-lg active:scale-95 transition">
-      ✦ Step 2: Render 9:16 Short
+    <!-- 4. Render Button -->
+    <button id="btnRender" class="w-full py-4 bg-stone-900 hover:bg-black text-amber-300 font-serif font-bold text-xs uppercase tracking-widest rounded-xl shadow-lg active:scale-95 transition">
+      ✦ RENDER 9:16 VIRAL SHORT
     </button>
 
-    <!-- STATUS & DIRECT DOWNLOAD -->
+    <!-- 5. Status & Direct Mobile Download -->
     <div id="statusSection" class="bg-white border gold-line rounded-2xl p-5 shadow-sm hidden space-y-3">
       <div class="flex justify-between items-center">
-        <span class="text-xs font-mono uppercase text-amber-700 font-bold">Pipeline Status:</span>
-        <span id="statusBadge" class="text-xs font-mono bg-amber-50 px-2 py-0.5 rounded text-amber-800 animate-pulse font-bold">Running...</span>
+        <span class="text-xs font-mono uppercase text-amber-700 font-bold">Status:</span>
+        <span id="statusBadge" class="text-xs font-mono bg-amber-50 px-2.5 py-0.5 rounded text-amber-800 animate-pulse font-bold">Encoding...</span>
       </div>
-      <p id="statusMsg" class="text-xs font-mono text-stone-600">Processing...</p>
+      <p id="statusMsg" class="text-xs font-mono text-stone-600">Slicing clip and applying subtitles...</p>
       
       <div id="downloadContainer" class="hidden pt-3 border-t border-stone-100">
-        <a id="downloadLink" href="#" target="_blank" class="w-full py-3.5 bg-emerald-600 text-white font-mono text-xs font-bold uppercase rounded-xl flex items-center justify-center gap-2 shadow">
-          <span>⬇ Download Finished Short (.ZIP)</span>
+        <a id="downloadLink" href="#" target="_blank" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold uppercase rounded-xl flex items-center justify-center gap-2 shadow">
+          <span>⬇ Download Finished Video (.ZIP)</span>
         </a>
       </div>
     </div>
@@ -129,7 +133,7 @@
   <!-- Settings Modal -->
   <div id="settingsModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-xl">
-      <h3 class="text-xs font-mono font-bold text-amber-800 uppercase">GitHub Token</h3>
+      <h3 class="text-xs font-mono font-bold text-amber-800 uppercase">GitHub Personal Token</h3>
       <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" class="w-full bg-stone-50 border border-stone-200 rounded-lg p-2.5 text-xs font-mono">
       <button id="btnSaveToken" class="w-full py-2.5 bg-stone-900 text-amber-300 text-xs font-mono font-bold rounded-lg">Save</button>
     </div>
@@ -139,7 +143,11 @@
     let chosenPos = 0.5;
     let chosenStyle = "captions_pill";
 
-    // Format 1000 -> 10:00
+    function getYouTubeId(url) {
+      const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
     function formatTime(str) {
       let digits = str.replace(/[^0-9]/g, '');
       if (digits.length === 3) digits = "0" + digits;
@@ -151,11 +159,17 @@
     document.getElementById('startTime').onblur = function() { this.value = formatTime(this.value); };
     document.getElementById('endTime').onblur = function() { this.value = formatTime(this.value); };
 
-    // Auto-Timestamps
-    document.getElementById('btnAutoTimestamps').onclick = () => {
+    // Embed Video
+    document.getElementById('btnShowVideo').onclick = () => {
+      const id = getYouTubeId(document.getElementById('urlInput').value.trim());
+      if (!id) return alert("Please paste a valid YouTube video link!");
+      document.getElementById('ytIframe').src = `https://www.youtube-nocookie.com/embed/${id}`;
+      document.getElementById('playerStage').classList.remove('hidden');
+    };
+
+    document.getElementById('btnAutoHook').onclick = () => {
       document.getElementById('startTime').value = "00:04";
       document.getElementById('endTime').value = "00:35";
-      alert("Added top viral hook: (00:04 -> 00:35)!");
     };
 
     // Subtitle Style Preset Pickers
@@ -167,19 +181,25 @@
       };
     });
 
-    // Touch/Tap on Video to Place Circle
-    const overlay = document.getElementById('touchTargetOverlay');
-    overlay.onclick = (e) => {
-      const rect = overlay.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const reticle = document.getElementById('reticleCircle');
-      reticle.style.left = `${x}px`;
-      reticle.style.top = `${y}px`;
+    // Touch Dragging Logic for the Circle (Does NOT block video scrubbing)
+    const circle = document.getElementById('targetCircle');
+    const container = document.getElementById('videoContainer');
+    let isTouching = false;
 
+    function moveCircle(clientX) {
+      const rect = container.getBoundingClientRect();
+      let x = clientX - rect.left;
+      x = Math.max(20, Math.min(rect.width - 20, x));
+      circle.style.left = `${x}px`;
       chosenPos = Math.max(0.0, Math.min(1.0, x / rect.width));
       document.getElementById('posIndicator').innerText = `Face: ${Math.round(chosenPos * 100)}%`;
-    };
+    }
+
+    circle.addEventListener('touchstart', () => { isTouching = true; }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      if (isTouching && e.touches[0]) moveCircle(e.touches[0].clientX);
+    }, { passive: true });
+    window.addEventListener('touchend', () => { isTouching = false; });
 
     // Settings Modal
     document.getElementById('btnSettings').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
@@ -188,89 +208,63 @@
       document.getElementById('settingsModal').classList.add('hidden');
     };
 
-    // Trigger GitHub Workflow Helper
-    async function dispatchJob(payload, statusText) {
+    // Render Short
+    document.getElementById('btnRender').onclick = async () => {
+      const url = document.getElementById('urlInput').value.trim();
+      const start = document.getElementById('startTime').value.trim();
+      const end = document.getElementById('endTime').value.trim();
       const token = localStorage.getItem('autoclip_token');
-      if (!token) {
-        document.getElementById('settingsModal').classList.remove('hidden');
-        throw new Error("Token missing");
-      }
+
+      if (!url) return alert("Please enter a YouTube URL.");
+      if (!token) return document.getElementById('settingsModal').classList.remove('hidden');
+
       const sec = document.getElementById('statusSection');
       const badge = document.getElementById('statusBadge');
       const msg = document.getElementById('statusMsg');
+      const dlBox = document.getElementById('downloadContainer');
+      const dlLink = document.getElementById('downloadLink');
+
       sec.classList.remove('hidden');
+      dlBox.classList.add('hidden');
       badge.innerText = "Dispatching...";
-      msg.innerText = statusText;
+      msg.innerText = "Dispatching cloud runner with Captions.ai styling...";
 
-      await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
-        method: "POST",
-        headers: { "Accept": "application/vnd.github.v3+json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify({ event_type: "start-render", client_payload: payload })
-      });
-    }
-
-    // Step 1: Download Slice
-    document.getElementById('btnDownloadSlice').onclick = async () => {
-      const url = document.getElementById('urlInput').value.trim();
-      const start = document.getElementById('startTime').value.trim();
-      const end = document.getElementById('endTime').value.trim();
-      if (!url) return alert("Please paste a YouTube link first.");
-
-      await dispatchJob({ action: "slice", url, start, end }, "Downloading slice in the cloud...");
-
-      const token = localStorage.getItem('autoclip_token');
-      const interval = setInterval(async () => {
-        const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
-          headers: { "Authorization": `Bearer ${token}` }
+      try {
+        await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
+          method: "POST",
+          headers: { "Accept": "application/vnd.github.v3+json", "Authorization": `Bearer ${token}` },
+          body: JSON.stringify({
+            event_type: "start-render",
+            client_payload: { url, start, end, style: chosenStyle, crop_pos: chosenPos }
+          })
         });
-        const data = await res.json();
-        const run = data.workflow_runs?.[0];
 
-        if (run && run.status === "completed" && run.conclusion === "success") {
-          clearInterval(interval);
-          document.getElementById('statusBadge').innerText = "Clip Ready ✓";
-          document.getElementById('statusMsg').innerText = "Clip downloaded! Inspect and tap the face below:";
-          
-          // Load downloaded video directly into native HTML5 video player
-          document.getElementById('inspectorStage').classList.remove('hidden');
-          const video = document.getElementById('nativeVideo');
-          video.src = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
-          document.getElementById('inspectorStage').scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 7000);
-    };
+        badge.innerText = "Encoding...";
+        msg.innerText = "Slicing segment, tracking face, and burning Captions.ai subtitles...";
 
-    // Step 2: Render Final 9:16 Short
-    document.getElementById('btnRenderFinal').onclick = async () => {
-      const url = document.getElementById('urlInput').value.trim();
-      const start = document.getElementById('startTime').value.trim();
-      const end = document.getElementById('endTime').value.trim();
-      if (!url) return alert("Please paste a YouTube link first.");
+        const interval = setInterval(async () => {
+          const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
+            headers: { "Authorization": `Bearer ${token}` }
+          });
+          const data = await res.json();
+          const run = data.workflow_runs?.[0];
 
-      await dispatchJob({
-        action: "render",
-        url, start, end,
-        style: chosenStyle,
-        crop_pos: chosenPos,
-        label: "Viral_Short"
-      }, "Burning Captions.ai subtitle preset and cropping to 9:16...");
-
-      const token = localStorage.getItem('autoclip_token');
-      const interval = setInterval(async () => {
-        const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
-        const data = await res.json();
-        const run = data.workflow_runs?.[0];
-
-        if (run && run.status === "completed" && run.conclusion === "success") {
-          clearInterval(interval);
-          document.getElementById('statusBadge').innerText = "Rendered ✓";
-          document.getElementById('statusMsg').innerText = "Your 9:16 vertical short is ready!";
-          document.getElementById('downloadLink').href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
-          document.getElementById('downloadContainer').classList.remove('hidden');
-        }
-      }, 7000);
+          if (run && run.status === "completed") {
+            clearInterval(interval);
+            if (run.conclusion === "success") {
+              badge.innerText = "Completed ✓";
+              msg.innerText = "Your 9:16 short has finished rendering!";
+              dlLink.href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
+              dlBox.classList.remove('hidden');
+            } else {
+              badge.innerText = "Failed ✕";
+              msg.innerText = "Encoding failed. Check GitHub Actions logs.";
+            }
+          }
+        }, 7000);
+      } catch (err) {
+        msg.innerText = "Error: " + err.message;
+      }
     };
   </script>
 </body>
