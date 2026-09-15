@@ -2,366 +2,572 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ATELIER CLIP // Captik Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>CAPTIK STUDIO // Mobile Video Editor</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { background-color: #0F0F12; color: #FFFFFF; -webkit-tap-highlight-color: transparent; }
-    .card-dark { background-color: #16161B; border: 1px solid #23232A; }
-    .card-dark:hover { border-color: #383844; }
-    .selected-card { border: 2px solid #FF5500 !important; background-color: #1C1917 !important; }
-    .target-ring { border: 2px dashed #FF7700; box-shadow: 0 0 25px rgba(255, 119, 0, 0.7); }
+    body {
+      background-color: #0A0A0E;
+      color: #FFFFFF;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .captik-orange { background-color: #FF8800; }
+    .captik-orange-hover:hover { background-color: #E67700; }
+    .captik-orange-text { color: #FF8800; }
+    .card-panel { background-color: #121217; border: 1px solid #1E1E26; }
+    .card-dark-item { background-color: #17171F; border: 1px solid #242430; }
+    .target-ring { border: 2px dashed #FF8800; box-shadow: 0 0 25px rgba(255, 136, 0, 0.7); }
+    .timeline-track { background: repeating-linear-gradient(90deg, #1C1C24, #1C1C24 4px, #262632 4px, #262632 8px); }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen font-sans antialiased selection:bg-orange-500">
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden select-none">
 
-  <!-- Mobile Luxury Header -->
-  <header class="border-b border-stone-800 bg-[#121216]/95 sticky top-0 z-50 px-4 h-16 flex items-center justify-between">
-    <div class="flex items-center space-x-2">
-      <div class="w-8 h-8 rounded-lg bg-orange-600 text-white font-serif font-bold text-sm flex items-center justify-center">✦</div>
-      <span class="font-bold tracking-wider text-sm">CAPTIK<span class="text-orange-500">STUDIO</span></span>
-    </div>
-    <button id="btnSettings" class="px-2.5 py-1 rounded-lg bg-stone-900 border border-stone-700 text-xs font-mono text-stone-300">
-      ⚙ Token
-    </button>
-  </header>
-
-  <main class="max-w-xl mx-auto px-4 py-6 space-y-6">
-
-    <!-- 01. Video URL & Embed Player -->
-    <div class="card-dark rounded-2xl p-5 shadow-lg space-y-3">
-      <span class="text-[10px] font-mono uppercase tracking-widest text-orange-400 font-bold block">01. Source YouTube Video</span>
-      <div class="flex gap-2">
-        <input type="text" id="urlInput" placeholder="Paste YouTube Link..." class="flex-1 bg-[#0F0F12] border border-stone-800 rounded-xl px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-orange-500">
-        <button id="btnShowVideo" class="px-4 py-2.5 bg-orange-600 hover:bg-orange-500 text-white font-mono text-xs uppercase font-bold rounded-xl shrink-0">
-          👁 Show
+  <!-- ==================== SCREEN 1: HOME / NEW PROJECT DASHBOARD ==================== -->
+  <div id="homeScreen" class="max-w-md mx-auto w-full min-h-screen p-5 flex flex-col justify-between">
+    <!-- Top Greeting -->
+    <div class="space-y-6 pt-4">
+      <div class="flex justify-between items-start">
+        <div>
+          <h1 class="text-2xl font-black tracking-tight text-white flex items-center gap-1.5">
+            Good to see you, <span class="text-white">Creator</span> 👋
+          </h1>
+          <p class="text-xs text-stone-400 mt-1">Create, manage and export your captioned videos</p>
+        </div>
+        <button id="btnSettingsHome" class="w-9 h-9 rounded-full card-dark-item flex items-center justify-center text-xs text-stone-300">
+          ⚙
         </button>
       </div>
 
-      <!-- Video Player with Touch-Enabled Face Reticle -->
-      <div id="playerStage" class="hidden pt-2 space-y-2">
-        <div class="flex items-center justify-between text-xs font-mono">
-          <span class="text-stone-400">Scrub video & place face target:</span>
-          <span id="posIndicator" class="font-bold text-orange-400 bg-orange-950/80 border border-orange-800 px-2 py-0.5 rounded">Face: 50%</span>
+      <!-- Orange New Project Banner -->
+      <button id="btnNewProject" class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#FF8800] to-[#FF6600] text-black font-extrabold text-sm uppercase tracking-wider flex items-center justify-between shadow-[0_8px_25px_rgba(255,136,0,0.35)] active:scale-[0.98] transition">
+        <span class="flex items-center gap-2">
+          <span class="text-lg">✦</span>
+          <span>Start New Video</span>
+        </span>
+        <span class="text-xs bg-black/20 px-3 py-1 rounded-full text-black font-mono">Fast AI</span>
+      </button>
+
+      <!-- Video Upload / Link Ingestion Card -->
+      <div class="card-panel rounded-3xl p-6 space-y-4 shadow-xl">
+        <span class="text-[11px] font-mono uppercase tracking-widest text-stone-400 font-bold block">
+          UPLOAD OR PASTE VIDEO
+        </span>
+
+        <!-- Drag & Drop Zone / Link Input -->
+        <div class="border-2 border-dashed border-stone-700/80 rounded-2xl p-6 text-center space-y-3 bg-[#0E0E14]/60">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-[#1A1A24] flex items-center justify-center text-stone-300 text-xl border border-stone-700">
+            ↑
+          </div>
+          <div>
+            <span class="text-sm font-bold text-white block">Drop your video here</span>
+            <p class="text-[11px] text-stone-400 mt-0.5">or paste YouTube URL. Up to 4K resolution</p>
+          </div>
+          <input type="text" id="ytUrlInput" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-[#0A0A0E] border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white placeholder-stone-600 focus:outline-none focus:border-[#FF8800]">
         </div>
 
-        <div id="videoContainer" class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-stone-800 select-none">
-          <iframe id="ytIframe" class="w-full h-full pointer-events-auto" src="" frameborder="0" allowfullscreen></iframe>
+        <div class="flex items-center justify-between pt-1">
+          <div class="flex items-center gap-1.5 text-xs text-stone-400 font-mono">
+            <span class="text-[#FF8800]">⚡</span>
+            <span>Transcription in ~30s</span>
+          </div>
+          <button id="btnOpenEditor" class="px-5 py-2.5 rounded-xl bg-[#22222E] hover:bg-[#2C2C3C] text-white font-bold text-xs font-mono transition">
+            Load Project
+          </button>
+        </div>
+      </div>
+    </div>
 
-          <!-- Non-Blocking Reticle Layer -->
-          <div id="reticleLayer" class="absolute inset-0 pointer-events-none z-20">
-            <div id="targetCircle" class="target-ring absolute w-16 h-16 rounded-full bg-orange-500/20 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-move flex flex-col items-center justify-center touch-none" style="left: 50%; top: 40%;">
+    <!-- Bottom App Footer -->
+    <div class="text-center py-4 border-t border-stone-900 text-[10px] font-mono text-stone-400">
+      CLIPSTUDIO ENGINE // 9:16 VERTICAL SUITE
+    </div>
+  </div>
+
+
+  <!-- ==================== SCREEN 2: THE 3-ZONE CAPTIK EDITOR ==================== -->
+  <div id="editorScreen" class="hidden flex-1 flex flex-col justify-between max-w-md mx-auto w-full min-h-screen pb-2">
+
+    <!-- TOP BAR: Navigation, Mode Timer & Export -->
+    <header class="px-4 py-3 flex items-center justify-between border-b border-stone-800 bg-[#0A0A0E]">
+      <button id="btnBackHome" class="w-8 h-8 rounded-lg card-dark-item flex items-center justify-center text-stone-300 text-sm">
+        ←
+      </button>
+
+      <div class="flex items-center gap-2">
+        <span id="videoTimeBadge" class="bg-[#1C1C24] border border-stone-700 px-3 py-1 rounded-full text-[11px] font-mono font-bold text-stone-300">
+          <span class="text-[#FF8800]">0:04</span> / 0:35
+        </span>
+      </div>
+
+      <!-- Orange Download Export Button -->
+      <button id="btnExportTop" class="h-9 px-4 rounded-xl bg-gradient-to-r from-[#FF8800] to-[#FF6600] text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-[0_4px_15px_rgba(255,136,0,0.3)] active:scale-95 transition">
+        <span>⬇</span>
+        <span>Export</span>
+      </button>
+    </header>
+
+    <!-- ZONE 1: UPPER STAGE (ASPECT BAR & CANVASES) -->
+    <div class="p-3 space-y-2.5">
+      <!-- Aspect Ratio Bar -->
+      <div class="flex items-center justify-center gap-2 text-[11px] font-mono">
+        <button data-aspect="original" class="aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition">Original</button>
+        <button data-aspect="9:16" class="aspect-btn px-3 py-1 rounded-full bg-[#FF8800] text-black font-bold transition">9:16</button>
+        <button data-aspect="16:9" class="aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition">16:9</button>
+        <button data-aspect="1:1" class="aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition">1:1</button>
+        <button data-aspect="4:5" class="aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition">4:5</button>
+      </div>
+
+      <!-- Video Canvas / Frame Stage with Face Reticle -->
+      <div class="relative w-full aspect-[9/10] sm:aspect-square bg-black rounded-2xl overflow-hidden border border-stone-800 flex items-center justify-center select-none" id="viewportContainer">
+        <!-- Interactive Player Embed -->
+        <iframe id="editorPlayer" class="w-full h-full pointer-events-auto" src="" frameborder="0" allowfullscreen></iframe>
+
+        <!-- 9:16 Framing Guide & Touch Reticle -->
+        <div id="reticleLayer" class="absolute inset-0 pointer-events-none flex items-center justify-center">
+          <!-- 9:16 Phone Bounding Mask -->
+          <div id="phoneMask" class="h-full border-2 border-[#FF8800]/60 pointer-events-none relative" style="width: 56.25%;">
+            <!-- Reticle Circle (User Draggable) -->
+            <div id="targetCircle" class="target-ring absolute w-16 h-16 rounded-full bg-[#FF8800]/25 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-move flex flex-col items-center justify-center touch-none" style="left: 50%; top: 40%;">
               <div class="w-2 h-2 rounded-full bg-white mb-0.5 pointer-events-none"></div>
               <span class="text-[8px] font-mono font-black text-white bg-black/80 px-1 rounded pointer-events-none">FACE</span>
             </div>
           </div>
         </div>
-        <p class="text-[11px] font-mono text-stone-400 text-center">Play/scrub video, then drag the orange circle onto the speaker's face.</p>
+
+        <!-- Position Tag Pill -->
+        <div class="absolute bottom-2.5 left-3 bg-black/80 border border-stone-800 px-2.5 py-1 rounded-lg text-[10px] font-mono text-[#FF8800]">
+          Offset: <span id="posIndicatorText">50%</span>
+        </div>
       </div>
     </div>
 
-    <!-- 02. Timestamps Setup -->
-    <div class="card-dark rounded-2xl p-5 shadow-lg space-y-3">
-      <div class="flex justify-between items-center">
-        <span class="text-[10px] font-mono uppercase tracking-widest text-orange-400 font-bold">02. Clip Timestamps</span>
-        <button id="btnAutoHook" class="px-2.5 py-1 bg-orange-950 text-orange-400 border border-orange-800 font-mono text-[11px] font-bold rounded-lg">
-          ⚡ Auto-Hook (00:04)
+    <!-- ZONE 2: CENTER TIMELINE & PLAYBACK DECK -->
+    <div class="px-4 py-2 space-y-2">
+      <!-- Transport Playback Controls -->
+      <div class="flex items-center justify-between px-2">
+        <div class="flex items-center gap-2">
+          <button id="btnSkipBack" class="w-8 h-8 rounded-full card-dark-item flex items-center justify-center text-xs text-stone-300">⏮</button>
+        </div>
+
+        <!-- Big Orange Circular Play/Pause -->
+        <button id="btnPlayPause" class="w-12 h-12 rounded-full bg-[#FF8800] text-black font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(255,136,0,0.4)] active:scale-90 transition">
+          ▶
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button id="btnSkipForward" class="w-8 h-8 rounded-full card-dark-item flex items-center justify-center text-xs text-stone-300">⏭</button>
+        </div>
+      </div>
+
+      <!-- Scrubber Track with Cut Handles -->
+      <div class="card-panel p-3 rounded-2xl space-y-1.5">
+        <div class="flex justify-between items-center text-[10px] font-mono text-stone-400 px-1">
+          <span>START: <strong id="lblStartTime" class="text-white">00:04</strong></span>
+          <span class="text-[#FF8800]">Clip Duration: 31s</span>
+          <span>END: <strong id="lblEndTime" class="text-white">00:35</strong></span>
+        </div>
+
+        <!-- Visual Timeline Strip -->
+        <div class="relative h-10 w-full rounded-xl timeline-track overflow-hidden border border-stone-700/60 flex items-center">
+          <!-- Clip Selection Range Box -->
+          <div class="absolute inset-y-0 bg-[#FF8800]/25 border-x-4 border-[#FF8800] rounded" style="left: 10%; right: 25%;"></div>
+          <!-- Playhead Needle -->
+          <div class="absolute inset-y-0 w-0.5 bg-white shadow" style="left: 35%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZONE 3: THE 3-TAB BOTTOM DRAWER -->
+    <div class="card-panel rounded-t-3xl border-b-0 p-4 space-y-3.5 shadow-2xl">
+      
+      <!-- Drawer Content Panels -->
+      <div id="drawerContent" class="max-h-60 overflow-y-auto no-scrollbar space-y-3">
+        
+        <!-- PANEL 1: EDIT (Face Positioning & Cut Timestamps) -->
+        <div id="tabEditPanel" class="space-y-3">
+          <span class="text-[11px] font-mono uppercase tracking-widest text-[#FF8800] font-bold block">
+            Face Framing & Segment
+          </span>
+
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="setFramingPreset(0.2)" class="py-2.5 card-dark-item rounded-xl text-xs font-mono text-stone-300 hover:border-[#FF8800]">
+              ◀ Left (Host)
+            </button>
+            <button onclick="setFramingPreset(0.5)" class="py-2.5 card-dark-item rounded-xl text-xs font-mono text-[#FF8800] border-[#FF8800]">
+              Center
+            </button>
+            <button onclick="setFramingPreset(0.8)" class="py-2.5 card-dark-item rounded-xl text-xs font-mono text-stone-300 hover:border-[#FF8800]">
+              Right (Guest) ▶
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between gap-3 bg-[#17171F] p-3 rounded-xl border border-stone-800 text-xs font-mono">
+            <div class="flex items-center gap-1.5">
+              <span class="text-stone-400">In:</span>
+              <input type="text" id="inputStart" value="00:04" class="w-16 bg-[#0E0E14] border border-stone-700 rounded px-2 py-1 text-center text-white font-bold">
+            </div>
+            <span>➔</span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-stone-400">Out:</span>
+              <input type="text" id="inputEnd" value="00:35" class="w-16 bg-[#0E0E14] border border-stone-700 rounded px-2 py-1 text-center text-white font-bold">
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 2: CAPTIONS (Direct Word Editor) -->
+        <div id="tabCaptionsPanel" class="hidden space-y-2.5">
+          <span class="text-[11px] font-mono uppercase tracking-widest text-[#FF8800] font-bold block">
+            Subtitles Script Review
+          </span>
+          <div class="space-y-2">
+            <div class="bg-[#17171F] p-2.5 rounded-xl border border-stone-800 flex items-center justify-between text-xs">
+              <span class="font-mono text-stone-400 w-12">00:04</span>
+              <input type="text" value="GLP-1 family of drugs are a remarkable advance" class="flex-1 bg-transparent text-white font-mono text-xs focus:outline-none">
+            </div>
+            <div class="bg-[#17171F] p-2.5 rounded-xl border border-stone-800 flex items-center justify-between text-xs">
+              <span class="font-mono text-stone-400 w-12">00:10</span>
+              <input type="text" value="However, there are some major downsides of GLP-1" class="flex-1 bg-transparent text-white font-mono text-xs focus:outline-none">
+            </div>
+            <div class="bg-[#17171F] p-2.5 rounded-xl border border-stone-800 flex items-center justify-between text-xs">
+              <span class="font-mono text-stone-400 w-12">00:17</span>
+              <input type="text" value="The biggest one is muscle loss. Up to 30% weight" class="flex-1 bg-transparent text-white font-mono text-xs focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 3: STYLE (The 9 Authentic Captik Templates) -->
+        <div id="tabStylePanel" class="hidden space-y-2.5">
+          <span class="text-[11px] font-mono uppercase tracking-widest text-[#FF8800] font-bold block">
+            Templates Presets (9)
+          </span>
+
+          <div class="grid grid-cols-1 gap-2.5" id="presetGallery">
+            <!-- 1. Captik Glow -->
+            <div data-style="neon_lime" class="style-card card-dark-item rounded-xl p-3 cursor-pointer border-[#FF8800] bg-[#221C16]">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Captik Glow</span>
+                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Popular</span>
+              </div>
+              <div class="text-center py-1">
+                <div class="text-[10px] text-stone-400">the quick</div>
+                <div class="text-xl font-black text-[#39FF14] tracking-wider drop-shadow-[0_0_12px_rgba(57,255,20,0.85)]">BROWN</div>
+                <div class="text-[10px] text-stone-400">fox jumps</div>
+              </div>
+            </div>
+
+            <!-- 2. Captik Shadow -->
+            <div data-style="bold_shadow" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Captik Shadow</span>
+                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
+              </div>
+              <div class="text-center py-1">
+                <div class="text-[10px] text-stone-400">the quick</div>
+                <div class="text-xl font-black text-white tracking-wider drop-shadow-[0_6px_8px_rgba(0,0,0,1)]">BROWN</div>
+                <div class="text-[10px] text-stone-400">fox jumps</div>
+              </div>
+            </div>
+
+            <!-- 3. Delhi -->
+            <div data-style="moonlight_serif" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Delhi</span>
+              <div class="text-center py-2 text-base font-serif text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]">
+                the <span class="italic font-normal">quick</span> fox
+              </div>
+            </div>
+
+            <!-- 4. Illusion -->
+            <div data-style="kinetic_scale" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Illusion</span>
+                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
+              </div>
+              <div class="text-center py-1">
+                <div class="text-[10px] text-stone-400">he had rented the</div>
+                <div class="text-2xl font-black text-white leading-tight">Biggest</div>
+                <div class="text-[10px] text-stone-400">apartment in town</div>
+              </div>
+            </div>
+
+            <!-- 5. Editor Masala -->
+            <div data-style="canary_punch" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Editor Masala</span>
+                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Smart</span>
+              </div>
+              <div class="text-center py-1">
+                <div class="text-[10px] text-stone-400 font-semibold">trust the</div>
+                <div class="text-2xl font-black text-[#FFE600] tracking-wider uppercase">PROCESS</div>
+              </div>
+            </div>
+
+            <!-- 6. Aura -->
+            <div data-style="sky_dual" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Aura</span>
+                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Editorial</span>
+              </div>
+              <div class="text-center py-1">
+                <div class="text-xl font-serif italic text-white leading-none">forget</div>
+                <div class="text-xl font-black text-[#66C2FF] tracking-wider uppercase leading-none mt-1">STATUS</div>
+              </div>
+            </div>
+
+            <!-- 7. Swiss -->
+            <div data-style="modernist_swiss" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Swiss</span>
+                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Editorial</span>
+              </div>
+              <div class="text-center py-1">
+                <div class="text-xl font-black text-white leading-none">focus</div>
+                <div class="text-xl font-black text-[#FFD700] uppercase leading-none mt-0.5">DEEPLY</div>
+              </div>
+            </div>
+
+            <!-- 8. The Big Red -->
+            <div data-style="crimson_cinematic" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">The Big Red</span>
+                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
+              </div>
+              <div class="text-center py-1 relative">
+                <div class="text-2xl font-serif font-black text-[#E63333] tracking-widest uppercase">SECOND</div>
+                <div class="text-xs font-serif text-white -mt-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">the quick fox</div>
+              </div>
+            </div>
+
+            <!-- 9. Clean Glow -->
+            <div data-style="ambient_white" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Clean Glow Style</span>
+              <div class="text-center py-2 text-sm font-semibold text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.85)]">
+                the quick brown fox jumps over
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation 3 Tabs (Edit / Captions / Style) -->
+      <div class="grid grid-cols-3 pt-2 border-t border-stone-800 text-center">
+        <button id="navTabEdit" class="py-1.5 text-xs font-bold text-[#FF8800] flex flex-col items-center gap-1">
+          <span class="text-sm">✂</span>
+          <span>Edit</span>
+        </button>
+        <button id="navTabCaptions" class="py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1">
+          <span class="text-sm">≡</span>
+          <span>Captions</span>
+        </button>
+        <button id="navTabStyle" class="py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1">
+          <span class="text-sm">🎨</span>
+          <span>Style</span>
         </button>
       </div>
 
-      <div class="flex items-center justify-between bg-[#0F0F12] p-2.5 rounded-xl border border-stone-800 text-xs font-mono">
-        <div class="flex items-center space-x-1">
-          <span class="text-stone-400">START:</span>
-          <input type="text" id="startTime" value="00:04" class="w-16 text-center bg-stone-900 border border-stone-700 text-white rounded font-bold py-1">
-        </div>
-        <span class="text-stone-500">➔</span>
-        <div class="flex items-center space-x-1">
-          <span class="text-stone-400">END:</span>
-          <input type="text" id="endTime" value="00:35" class="w-16 text-center bg-stone-900 border border-stone-700 text-white rounded font-bold py-1">
-        </div>
-      </div>
     </div>
 
-    <!-- 03. Authentic Captik Presets Gallery (From Screenshots) -->
-    <div class="card-dark rounded-2xl p-5 shadow-lg space-y-3">
-      <div class="flex justify-between items-center">
-        <span class="text-[10px] font-mono uppercase tracking-widest text-orange-400 font-bold block">03. Choose Captik Style</span>
-        <span class="text-[10px] font-mono text-stone-400">Word-by-Word Kinetic</span>
+  </div>
+
+
+  <!-- ==================== EXPORT PROGRESS / DIRECT DOWNLOAD MODAL ==================== -->
+  <div id="exportModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="card-panel rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
+      <div class="w-12 h-12 mx-auto rounded-2xl bg-[#FF8800]/20 border border-[#FF8800]/40 flex items-center justify-center text-[#FF8800] text-xl">
+        ⚡
+      </div>
+      <div>
+        <h3 class="text-sm font-mono font-bold uppercase tracking-wider text-white">Rendering Pipeline</h3>
+        <p id="exportStatusMsg" class="text-xs text-stone-400 mt-1">Dispatching cloud runner with selected style...</p>
       </div>
 
-      <div class="grid grid-cols-1 gap-3" id="presetGallery">
-
-        <!-- 1. Captik Glow -->
-        <div data-style="captik_glow" class="style-card selected-card card-dark rounded-xl p-4 cursor-pointer transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white font-mono">Captik Glow</span>
-            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">Popular</span>
-          </div>
-          <div class="text-center py-2">
-            <div class="text-[11px] text-stone-400">the quick</div>
-            <div class="text-2xl font-black text-[#39FF14] tracking-wider drop-shadow-[0_0_12px_rgba(57,255,20,0.8)]">BROWN</div>
-            <div class="text-[11px] text-stone-400">fox jumps</div>
-          </div>
-          <div class="flex gap-1.5 mt-1">
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Glow</span>
-          </div>
-        </div>
-
-        <!-- 2. Captik Shadow -->
-        <div data-style="captik_shadow" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white font-mono">Captik Shadow</span>
-            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">New</span>
-          </div>
-          <div class="text-center py-2">
-            <div class="text-[11px] text-stone-400">the quick</div>
-            <div class="text-2xl font-black text-white tracking-wider drop-shadow-[0_6px_10px_rgba(0,0,0,1)]">BROWN</div>
-            <div class="text-[11px] text-stone-400">fox jumps</div>
-          </div>
-          <div class="flex gap-1.5 mt-1">
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
-          </div>
-        </div>
-
-        <!-- 3. Delhi -->
-        <div data-style="delhi" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white font-mono">Delhi</span>
-          </div>
-          <div class="text-center py-3">
-            <div class="text-lg font-serif text-white tracking-wide drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
-              the <span class="italic font-normal">quick</span> fox
-            </div>
-          </div>
-          <div class="flex gap-1.5 mt-1">
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Editorial</span>
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Aura</span>
-          </div>
-        </div>
-
-        <!-- 4. Illusion -->
-        <div data-style="illusion" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white font-mono">Illusion</span>
-            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">New</span>
-          </div>
-          <div class="text-center py-2">
-            <div class="text-[11px] text-stone-300">he had rented the</div>
-            <div class="text-3xl font-extrabold text-white tracking-tight leading-none my-1">Biggest</div>
-            <div class="text-[11px] text-stone-300">apartment in town</div>
-          </div>
-          <div class="flex gap-1.5 mt-1">
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
-          </div>
-        </div>
-
-        <!-- 5. Editor Masala -->
-        <div data-style="editor_masala" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white font-mono">Editor Masala</span>
-            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">Smart</span>
-          </div>
-          <div class="text-center py-2">
-            <div class="text-[11px] text-stone-300 font-semibold">trust the</div>
-            <div class="text-3xl font-black text-[#FFE600] tracking-wider uppercase">PROCESS</div>
-          </div>
-          <div class="flex gap-1.5 mt-1">
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
-          </div>
-        </div>
-
-        <!-- 6. Aura -->
-        <div data-style="aura" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white font-mono">Aura</span>
-            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">Editorial</span>
-          </div>
-          <div class="text-center py-2">
-            <div class="text-2xl font-serif italic text-white tracking-wide leading-none">forget</div>
-            <div class="text-2xl font-black text-[#66C2FF] tracking-wider leading-none uppercase mt-0.5">STATUS</div>
-          </div>
-          <div class="flex gap-1.5 mt-1">
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
-          </div>
-        </div>
-
-        <!-- 7. Swiss -->
-        <div data-style="swiss" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white font-mono">Swiss</span>
-            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">Editorial</span>
-          </div>
-          <div class="text-center py-2">
-            <div class="text-2xl font-black text-white leading-none">focus</div>
-            <div class="text-2xl font-black text-[#FFD700] leading-none uppercase">DEEPLY</div>
-          </div>
-          <div class="flex gap-1.5 mt-1">
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
-          </div>
-        </div>
-
-        <!-- 8. The Big Red -->
-        <div data-style="the_big_red" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white font-mono">The Big Red</span>
-            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">New</span>
-          </div>
-          <div class="text-center py-2 relative flex items-center justify-center">
-            <div class="text-3xl font-serif font-black text-[#E63333] tracking-widest uppercase">SECOND</div>
-            <div class="absolute text-xs font-serif text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">the quick fox</div>
-          </div>
-          <div class="flex gap-1.5 mt-1">
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
-          </div>
-        </div>
-
-        <!-- 9. Clean Glow Style -->
-        <div data-style="clean_glow" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold text-white font-mono">Clean Glow Style</span>
-          </div>
-          <div class="text-center py-3">
-            <div class="text-sm font-semibold text-white tracking-wide drop-shadow-[0_0_12px_rgba(255,255,255,0.85)]">
-              the quick brown fox<br>jumps over
-            </div>
-          </div>
-          <div class="flex gap-1.5 mt-1">
-            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Shadow</span>
-          </div>
-        </div>
-
+      <div class="w-full bg-[#17171F] h-2 rounded-full overflow-hidden border border-stone-800">
+        <div id="exportProgressBar" class="h-full bg-[#FF8800] w-1/3 animate-pulse"></div>
       </div>
-    </div>
 
-    <!-- 04. Render Button -->
-    <button id="btnRender" class="w-full py-4 bg-orange-600 hover:bg-orange-500 text-white font-mono font-bold text-xs uppercase tracking-widest rounded-xl shadow-lg active:scale-95 transition">
-      ✦ RENDER CAPTIK 9:16 SHORT
-    </button>
-
-    <!-- 05. Status & Direct Mobile Download -->
-    <div id="statusSection" class="card-dark rounded-2xl p-5 shadow-lg hidden space-y-3">
-      <div class="flex justify-between items-center">
-        <span class="text-xs font-mono uppercase text-orange-400 font-bold">Status:</span>
-        <span id="statusBadge" class="text-xs font-mono bg-orange-950 border border-orange-800 px-2.5 py-0.5 rounded text-orange-400 animate-pulse font-bold">Encoding...</span>
-      </div>
-      <p id="statusMsg" class="text-xs font-mono text-stone-400">Slicing clip and applying Captik preset...</p>
-      
-      <div id="downloadContainer" class="hidden pt-3 border-t border-stone-800">
-        <a id="downloadLink" href="#" target="_blank" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold uppercase rounded-xl flex items-center justify-center gap-2 shadow">
-          <span>⬇ Download Finished Video (.ZIP)</span>
+      <!-- Download Link Container -->
+      <div id="downloadContainer" class="hidden pt-2">
+        <a id="btnDirectDownload" href="#" download="captik_short.mp4" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-black font-mono font-bold text-xs uppercase rounded-xl flex items-center justify-center gap-2 shadow-lg">
+          <span>⬇ Download Finished 9:16 Video</span>
         </a>
       </div>
-    </div>
 
-  </main>
-
-  <!-- Settings Modal -->
-  <div id="settingsModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-[#16161B] border border-stone-800 rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
-      <h3 class="text-xs font-mono font-bold text-orange-400 uppercase">GitHub Personal Token</h3>
-      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" class="w-full bg-[#0F0F12] border border-stone-700 rounded-lg p-2.5 text-xs font-mono text-white">
-      <button id="btnSaveToken" class="w-full py-2.5 bg-orange-600 text-white text-xs font-mono font-bold rounded-lg">Save</button>
+      <button id="btnCloseExport" class="text-xs font-mono text-stone-400 hover:text-white pt-2">
+        Close Window
+      </button>
     </div>
   </div>
 
-  <script>
-    let chosenPos = 0.5;
-    let chosenStyle = "captik_glow";
 
+  <!-- ==================== GITHUB TOKEN SETTINGS MODAL ==================== -->
+  <div id="tokenModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="card-panel rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+      <h3 class="text-xs font-mono font-bold text-[#FF8800] uppercase tracking-wider">GitHub Access Credentials</h3>
+      <p class="text-xs text-stone-400">Save your token once to trigger GitHub cloud renders directly from your mobile device.</p>
+      <input type="password" id="inputGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-[#0E0E14] border border-stone-700 rounded-xl p-3 text-xs font-mono text-white focus:outline-none focus:border-[#FF8800]">
+      <button id="btnSaveGithubToken" class="w-full py-3 bg-[#FF8800] text-black font-bold text-xs rounded-xl uppercase font-mono">
+        Save & Connect
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ==================== FRONTEND JAVASCRIPT ==================== -->
+  <script>
+    let currentStyle = "neon_lime";
+    let cropPosition = 0.5;
+    let isDraggingReticle = false;
+
+    // Helper: Extract YouTube ID
     function getYouTubeId(url) {
       const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
       return (match && match[2].length === 11) ? match[2] : null;
     }
 
-    function formatTime(str) {
-      let digits = str.replace(/[^0-9]/g, '');
-      if (digits.length === 3) digits = "0" + digits;
-      if (digits.length === 4) return `${digits.slice(0, 2)}:${digits.slice(2, 4)}`;
-      if (digits.length >= 6) return `${digits.slice(0, 2)}:${digits.slice(2, 4)}:${digits.slice(4, 6)}`;
-      return str;
-    }
-
-    document.getElementById('startTime').onblur = function() { this.value = formatTime(this.value); };
-    document.getElementById('endTime').onblur = function() { this.value = formatTime(this.value); };
-
-    // Embed Video
-    document.getElementById('btnShowVideo').onclick = () => {
-      const id = getYouTubeId(document.getElementById('urlInput').value.trim());
-      if (!id) return alert("Please paste a valid YouTube video link!");
-      document.getElementById('ytIframe').src = `https://www.youtube-nocookie.com/embed/${id}`;
-      document.getElementById('playerStage').classList.remove('hidden');
+    // Screen Switching: Home <-> Editor
+    document.getElementById('btnNewProject').onclick = () => {
+      document.getElementById('ytUrlInput').focus();
     };
 
-    document.getElementById('btnAutoHook').onclick = () => {
-      document.getElementById('startTime').value = "00:04";
-      document.getElementById('endTime').value = "00:35";
+    document.getElementById('btnOpenEditor').onclick = () => {
+      const url = document.getElementById('ytUrlInput').value.trim();
+      const id = getYouTubeId(url) || "MHRUnJ0Gf8s"; // fallback to recent video
+      document.getElementById('editorPlayer').src = `https://www.youtube-nocookie.com/embed/${id}`;
+      document.getElementById('homeScreen').classList.add('hidden');
+      document.getElementById('editorScreen').classList.remove('hidden');
     };
 
-    // Style Card Selection
-    document.querySelectorAll('.style-card').forEach(card => {
-      card.onclick = () => {
-        document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected-card'));
-        card.classList.add('selected-card');
-        chosenStyle = card.dataset.style;
+    document.getElementById('btnBackHome').onclick = () => {
+      document.getElementById('editorScreen').classList.add('hidden');
+      document.getElementById('homeScreen').classList.remove('hidden');
+    };
+
+    // Aspect Ratio Switching
+    document.querySelectorAll('.aspect-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.aspect-btn').forEach(b => {
+          b.className = "aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition";
+        });
+        btn.className = "aspect-btn px-3 py-1 rounded-full bg-[#FF8800] text-black font-bold transition";
+
+        const mask = document.getElementById('phoneMask');
+        const aspect = btn.dataset.aspect;
+        if (aspect === "9:16") mask.style.width = "56.25%";
+        else if (aspect === "1:1") mask.style.width = "100%";
+        else if (aspect === "4:5") mask.style.width = "80%";
+        else mask.style.width = "100%";
       };
     });
 
-    // Touch Dragging Logic for the Circle
+    // Touch Dragging Logic for the Face Reticle
     const circle = document.getElementById('targetCircle');
-    const container = document.getElementById('videoContainer');
-    let isTouching = false;
+    const container = document.getElementById('viewportContainer');
 
-    function moveCircle(clientX) {
+    function updateReticlePos(clientX) {
       const rect = container.getBoundingClientRect();
       let x = clientX - rect.left;
-      x = Math.max(20, Math.min(rect.width - 20, x));
+      x = Math.max(30, Math.min(rect.width - 30, x));
       circle.style.left = `${x}px`;
-      chosenPos = Math.max(0.0, Math.min(1.0, x / rect.width));
-      document.getElementById('posIndicator').innerText = `Face: ${Math.round(chosenPos * 100)}%`;
+      cropPosition = Math.max(0.0, Math.min(1.0, x / rect.width));
+      document.getElementById('posIndicatorText').innerText = `${Math.round(cropPosition * 100)}%`;
     }
 
-    circle.addEventListener('touchstart', () => { isTouching = true; }, { passive: true });
+    circle.addEventListener('touchstart', () => { isDraggingReticle = true; }, { passive: true });
     window.addEventListener('touchmove', (e) => {
-      if (isTouching && e.touches[0]) moveCircle(e.touches[0].clientX);
+      if (isDraggingReticle && e.touches[0]) updateReticlePos(e.touches[0].clientX);
     }, { passive: true });
-    window.addEventListener('touchend', () => { isTouching = false; });
+    window.addEventListener('touchend', () => { isDraggingReticle = false; });
 
-    // Settings Modal
-    document.getElementById('btnSettings').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
-    document.getElementById('btnSaveToken').onclick = () => {
-      localStorage.setItem('autoclip_token', document.getElementById('tokenInput').value.trim());
-      document.getElementById('settingsModal').classList.add('hidden');
+    window.setFramingPreset = (pos) => {
+      cropPosition = pos;
+      const rect = container.getBoundingClientRect();
+      circle.style.left = `${rect.width * pos}px`;
+      document.getElementById('posIndicatorText').innerText = `${Math.round(pos * 100)}%`;
     };
 
-    // Render Short
-    document.getElementById('btnRender').onclick = async () => {
-      const url = document.getElementById('urlInput').value.trim();
-      const start = document.getElementById('startTime').value.trim();
-      const end = document.getElementById('endTime').value.trim();
+    // Bottom Drawer Tabs
+    const tabEdit = document.getElementById('navTabEdit');
+    const tabCaptions = document.getElementById('navTabCaptions');
+    const tabStyle = document.getElementById('navTabStyle');
+
+    const panelEdit = document.getElementById('tabEditPanel');
+    const panelCaptions = document.getElementById('tabCaptionsPanel');
+    const panelStyle = document.getElementById('tabStylePanel');
+
+    function resetTabs() {
+      tabEdit.className = "py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1";
+      tabCaptions.className = "py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1";
+      tabStyle.className = "py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1";
+
+      panelEdit.classList.add('hidden');
+      panelCaptions.classList.add('hidden');
+      panelStyle.classList.add('hidden');
+    }
+
+    tabEdit.onclick = () => {
+      resetTabs();
+      tabEdit.className = "py-1.5 text-xs font-bold text-[#FF8800] flex flex-col items-center gap-1";
+      panelEdit.classList.remove('hidden');
+    };
+
+    tabCaptions.onclick = () => {
+      resetTabs();
+      tabCaptions.className = "py-1.5 text-xs font-bold text-[#FF8800] flex flex-col items-center gap-1";
+      panelCaptions.classList.remove('hidden');
+    };
+
+    tabStyle.onclick = () => {
+      resetTabs();
+      tabStyle.className = "py-1.5 text-xs font-bold text-[#FF8800] flex flex-col items-center gap-1";
+      panelStyle.classList.remove('hidden');
+    };
+
+    // Style Cards Picker
+    document.querySelectorAll('.style-card').forEach(card => {
+      card.onclick = () => {
+        document.querySelectorAll('.style-card').forEach(c => {
+          c.classList.remove('border-[#FF8800]', 'bg-[#221C16]');
+        });
+        card.classList.add('border-[#FF8800]', 'bg-[#221C16]');
+        currentStyle = card.dataset.style;
+      };
+    });
+
+    // Token Modal Logic
+    document.getElementById('btnSettingsHome').onclick = () => {
+      document.getElementById('tokenModal').classList.remove('hidden');
+    };
+    document.getElementById('btnSaveGithubToken').onclick = () => {
+      localStorage.setItem('autoclip_token', document.getElementById('inputGithubToken').value.trim());
+      document.getElementById('tokenModal').classList.add('hidden');
+    };
+
+    // Export Trigger
+    document.getElementById('btnExportTop').onclick = async () => {
+      const url = document.getElementById('ytUrlInput').value.trim() || "https://www.youtube.com/watch?v=MHRUnJ0Gf8s";
+      const start = document.getElementById('inputStart').value.trim() || "00:04";
+      const end = document.getElementById('inputEnd').value.trim() || "00:35";
       const token = localStorage.getItem('autoclip_token');
 
-      if (!url) return alert("Please enter a YouTube URL.");
-      if (!token) return document.getElementById('settingsModal').classList.remove('hidden');
+      if (!token) {
+        document.getElementById('tokenModal').classList.remove('hidden');
+        return;
+      }
 
-      const sec = document.getElementById('statusSection');
-      const badge = document.getElementById('statusBadge');
-      const msg = document.getElementById('statusMsg');
+      const modal = document.getElementById('exportModal');
+      const msg = document.getElementById('exportStatusMsg');
       const dlBox = document.getElementById('downloadContainer');
-      const dlLink = document.getElementById('downloadLink');
+      const dlBtn = document.getElementById('btnDirectDownload');
 
-      sec.classList.remove('hidden');
+      modal.classList.remove('hidden');
       dlBox.classList.add('hidden');
-      badge.innerText = "Dispatching...";
-      msg.innerText = `Dispatching runner with ${chosenStyle.replace('_', ' ').toUpperCase()} preset...`;
+      msg.innerText = "Dispatching cloud runner with " + currentStyle.toUpperCase() + "...";
 
       try {
         await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
@@ -369,14 +575,18 @@
           headers: { "Accept": "application/vnd.github.v3+json", "Authorization": `Bearer ${token}` },
           body: JSON.stringify({
             event_type: "start-render",
-            client_payload: { url, start, end, style: chosenStyle, crop_pos: chosenPos }
+            client_payload: {
+              action: "render",
+              url,
+              clips: [{ id: 1, start, end, crop_pos: cropPosition }],
+              style: currentStyle
+            }
           })
         });
 
-        badge.innerText = "Encoding...";
-        msg.innerText = "Slicing segment, tracking face, and burning Captik subtitles...";
+        msg.innerText = "Encoding 9:16 vertical short with Whisper AI subtitles...";
 
-        const interval = setInterval(async () => {
+        const poll = setInterval(async () => {
           const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
             headers: { "Authorization": `Bearer ${token}` }
           });
@@ -384,22 +594,26 @@
           const run = data.workflow_runs?.[0];
 
           if (run && run.status === "completed") {
-            clearInterval(interval);
+            clearInterval(poll);
             if (run.conclusion === "success") {
-              badge.innerText = "Completed ✓";
-              msg.innerText = "Your 9:16 short has finished rendering!";
-              dlLink.href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
+              msg.innerText = "Your 9:16 Short is ready!";
+              dlBtn.href = `https://github.com/clipeasyfree/Pk/releases/download/preview/short_1.mp4?t=${Date.now()}`;
               dlBox.classList.remove('hidden');
             } else {
-              badge.innerText = "Failed ✕";
-              msg.innerText = "Encoding failed. Check GitHub Actions logs.";
+              msg.innerText = "Render failed. Check GitHub Actions logs.";
             }
           }
         }, 7000);
-      } catch (err) {
-        msg.innerText = "Error: " + err.message;
+
+      } catch (e) {
+        msg.innerText = "Error: " + e.message;
       }
+    };
+
+    document.getElementById('btnCloseExport').onclick = () => {
+      document.getElementById('exportModal').classList.add('hidden');
     };
   </script>
 </body>
 </html>
+
