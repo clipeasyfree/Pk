@@ -66,18 +66,26 @@ if not timestamps:
 os.makedirs('output', exist_ok=True)
 os.makedirs('temp', exist_ok=True)
 
-# 5 Trending Caption Presets
+# 6 Paid-Grade Professional Caption Presets
 STYLES = {
-    "gold": {"primary": "&HFFFFFF&", "highlight": "&H00D7FF&", "font": "Arial", "size": "65", "bold": "-1", "border": "4"},
-    "hormozi": {"primary": "&H00FFFF&", "highlight": "&H00FF00&", "font": "Impact", "size": "75", "bold": "-1", "border": "6"},
-    "mrbeast": {"primary": "&HFFFFFF&", "highlight": "&H00FFFF&", "font": "Impact", "size": "72", "bold": "-1", "border": "5"},
-    "neon": {"primary": "&HFFFFFF&", "highlight": "&HFF00FF&", "font": "Arial", "size": "68", "bold": "-1", "border": "4"},
-    "minimal": {"primary": "&HFFFFFF&", "highlight": "&H888888&", "font": "Arial", "size": "50", "bold": "0", "border": "2"}
+    # 1. Hormozi Kinetic: Bold Impact, thick black border, lime & gold highlight
+    "hormozi": {"primary": "&H00FFFFFF&", "highlight": "&H0024FF00&", "font": "Impact", "size": "72", "bold": "-1", "border": "6", "back": "&H00000000&"},
+    # 2. Iman Gadzhi Silk & Gold: Italicized serif luxury, champagne highlight
+    "gold": {"primary": "&H00FFFFFF&", "highlight": "&H00D4AF37&", "font": "Georgia", "size": "64", "bold": "-1", "border": "4", "back": "&H80000000&"},
+    # 3. Ali Abdaal Minimal Matte Box: Clean educational typography
+    "minimal": {"primary": "&H00FFFFFF&", "highlight": "&H00E2DFD6&", "font": "Arial", "size": "56", "bold": "-1", "border": "3", "back": "&HCC000000&"},
+    # 4. MrBeast Hyper-Punch: Comic pop, bright cyan
+    "mrbeast": {"primary": "&H0000FFFF&", "highlight": "&H00FFFF00&", "font": "Impact", "size": "75", "bold": "-1", "border": "7", "back": "&H00000000&"},
+    # 5. Cyber Neon Glow: Hot magenta & deep shadow
+    "neon": {"primary": "&H00FFFFFF&", "highlight": "&H00FF007F&", "font": "Arial", "size": "68", "bold": "-1", "border": "5", "back": "&H80000000&"},
+    # 6. Vogue Monochrome: Crisp high-fashion silver/white
+    "vogue": {"primary": "&H00EEEEEE&", "highlight": "&H00FFFFFF&", "font": "Arial", "size": "54", "bold": "0", "border": "2", "back": "&H60000000&"}
 }
 
 active_cfg = STYLES.get(style, STYLES["hormozi"])
 
 print(f"[*] Target video: {url}")
+print(f"[*] Processing {len(timestamps)} clips with preset: {style}")
 print("[*] Loading AI Whisper model...")
 model = WhisperModel("base.en", device="cpu", compute_type="int8")
 
@@ -85,10 +93,9 @@ for idx, item in enumerate(timestamps):
     clip_id = idx + 1
     start = item.get('start', '00:00')
     end = item.get('end', '00:30')
-    label = item.get('label', f'Clip {clip_id}')
+    label = item.get('label', f'Clip_{clip_id}')
     clean_label = "".join(c if c.isalnum() else "_" for c in label)
 
-    # Face / Speaker Position: 0.0 (far left) to 1.0 (far right). Default: 0.5 (center)
     crop_pos = float(item.get('crop_pos', 0.5))
     crop_pos = max(0.0, min(1.0, crop_pos))
 
@@ -114,7 +121,6 @@ for idx, item in enumerate(timestamps):
         cmd_download.extend(["--cookies", cookies_path])
         
     cmd_download.extend([url, "-o", out_template])
-
     subprocess.run(cmd_download, check=True)
 
     downloaded_files = glob.glob(f"temp/raw_{clip_id}.*")
@@ -127,11 +133,12 @@ for idx, item in enumerate(timestamps):
     subprocess.run(["ffmpeg", "-y", "-i", actual_raw_video, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
     segments, _ = model.transcribe(wav_path, word_timestamps=True)
 
-    print(f"[*] Generating {style.upper()} subtitles...")
+    print(f"[*] Generating {style.upper()} professional subtitles...")
+    italic_flag = "-1" if style == "gold" else "0"
     with open(ass_file, "w", encoding="utf-8") as f:
         f.write("[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\n\n")
         f.write("[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Italic, Alignment, MarginV, Outline\n")
-        f.write(f"Style: Default,{active_cfg['font']},{active_cfg['size']},{active_cfg['primary']},&H000000&,&H80000000,{active_cfg['bold']},0,2,240,{active_cfg['border']}\n\n")
+        f.write(f"Style: Default,{active_cfg['font']},{active_cfg['size']},{active_cfg['primary']},&H000000&,{active_cfg['back']},{active_cfg['bold']},{italic_flag},2,260,{active_cfg['border']}\n\n")
         f.write("[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
         
         for seg in segments:
@@ -143,7 +150,6 @@ for idx, item in enumerate(timestamps):
                     f.write(f"Dialogue: 0,{fmt(w.start)},{fmt(w.end)},Default,,0,0,0,,{{\\c{active_cfg['highlight']}}}{word_clean}{{\\c{active_cfg['primary']}}}\n")
 
     print(f"[*] Rendering vertical 9:16 short with Face Offset ({int(crop_pos*100)}%)...")
-    # Dynamically places the 9:16 frame directly over the speaker's face
     crop_filter = f"crop=ih*(9/16):ih:(iw-ih*(9/16))*{crop_pos}:0"
     
     cmd_render = [
