@@ -3,37 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ATELIER CLIP // Captions Studio</title>
+  <title>ATELIER CLIP // Captik Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { background-color: #FBFBF9; -webkit-tap-highlight-color: transparent; }
-    .gold-line { border: 1px solid rgba(184, 144, 71, 0.25); }
-    .target-ring { border: 2px dashed #D4AF37; box-shadow: 0 0 25px rgba(212, 175, 55, 0.65); }
+    body { background-color: #0F0F12; color: #FFFFFF; -webkit-tap-highlight-color: transparent; }
+    .card-dark { background-color: #16161B; border: 1px solid #23232A; }
+    .card-dark:hover { border-color: #383844; }
+    .selected-card { border: 2px solid #FF5500 !important; background-color: #1C1917 !important; }
+    .target-ring { border: 2px dashed #FF7700; box-shadow: 0 0 25px rgba(255, 119, 0, 0.7); }
   </style>
 </head>
-<body class="text-stone-900 min-h-screen font-sans antialiased selection:bg-amber-400">
+<body class="min-h-screen font-sans antialiased selection:bg-orange-500">
 
-  <header class="border-b border-stone-200 bg-white/95 sticky top-0 z-50 px-4 h-16 flex items-center justify-between">
+  <!-- Mobile Luxury Header -->
+  <header class="border-b border-stone-800 bg-[#121216]/95 sticky top-0 z-50 px-4 h-16 flex items-center justify-between">
     <div class="flex items-center space-x-2">
-      <div class="w-8 h-8 rounded-lg bg-stone-900 text-amber-300 font-serif font-bold text-sm flex items-center justify-center">✦</div>
-      <span class="font-serif font-bold tracking-wider text-sm">ATELIER<span class="text-amber-600">CAPTION</span></span>
+      <div class="w-8 h-8 rounded-lg bg-orange-600 text-white font-serif font-bold text-sm flex items-center justify-center">✦</div>
+      <span class="font-bold tracking-wider text-sm">CAPTIK<span class="text-orange-500">STUDIO</span></span>
     </div>
-    <button id="btnSettings" class="px-2.5 py-1 rounded-lg bg-stone-50 border border-stone-200 text-xs font-mono">
+    <button id="btnSettings" class="px-2.5 py-1 rounded-lg bg-stone-900 border border-stone-700 text-xs font-mono text-stone-300">
       ⚙ Token
     </button>
   </header>
 
-  <main class="max-w-xl mx-auto px-4 py-6 space-y-5">
+  <main class="max-w-xl mx-auto px-4 py-6 space-y-6">
 
-    <!-- 1. Video URL & YouTube Video Screen -->
-    <div class="bg-white border gold-line rounded-2xl p-5 shadow-sm space-y-3">
-      <span class="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold block">01. Source YouTube Video</span>
+    <!-- 01. Video URL & Embed Player -->
+    <div class="card-dark rounded-2xl p-5 shadow-lg space-y-3">
+      <span class="text-[10px] font-mono uppercase tracking-widest text-orange-400 font-bold block">01. Source YouTube Video</span>
       <div class="flex gap-2">
-        <input type="text" id="urlInput" placeholder="Paste YouTube Link..." class="flex-1 bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 text-xs font-mono focus:bg-white focus:outline-none focus:border-amber-500">
-        <button id="btnShowVideo" class="px-4 py-2.5 bg-stone-900 hover:bg-black text-amber-300 font-mono text-xs uppercase font-bold rounded-xl shrink-0">
+        <input type="text" id="urlInput" placeholder="Paste YouTube Link..." class="flex-1 bg-[#0F0F12] border border-stone-800 rounded-xl px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-orange-500">
+        <button id="btnShowVideo" class="px-4 py-2.5 bg-orange-600 hover:bg-orange-500 text-white font-mono text-xs uppercase font-bold rounded-xl shrink-0">
           👁 Show
         </button>
       </div>
@@ -41,87 +44,218 @@
       <!-- Video Player with Touch-Enabled Face Reticle -->
       <div id="playerStage" class="hidden pt-2 space-y-2">
         <div class="flex items-center justify-between text-xs font-mono">
-          <span class="text-stone-500">Scrub video & place face target:</span>
-          <span id="posIndicator" class="font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Face: 50%</span>
+          <span class="text-stone-400">Scrub video & place face target:</span>
+          <span id="posIndicator" class="font-bold text-orange-400 bg-orange-950/80 border border-orange-800 px-2 py-0.5 rounded">Face: 50%</span>
         </div>
 
-        <!-- The Video Screen -->
-        <div id="videoContainer" class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-stone-300 select-none">
-          <!-- Real Interactive YouTube Player -->
-          <iframe id="ytIframe" class="w-full h-full pointer-events-auto" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div id="videoContainer" class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-stone-800 select-none">
+          <iframe id="ytIframe" class="w-full h-full pointer-events-auto" src="" frameborder="0" allowfullscreen></iframe>
 
-          <!-- Non-Blocking Reticle Layer: Let touches through to the video -->
+          <!-- Non-Blocking Reticle Layer -->
           <div id="reticleLayer" class="absolute inset-0 pointer-events-none z-20">
-            <!-- Movable Target Ring (Only the ring captures touch) -->
-            <div id="targetCircle" class="target-ring absolute w-16 h-16 rounded-full bg-amber-400/30 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-move flex flex-col items-center justify-center touch-none" style="left: 50%; top: 40%;">
+            <div id="targetCircle" class="target-ring absolute w-16 h-16 rounded-full bg-orange-500/20 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-move flex flex-col items-center justify-center touch-none" style="left: 50%; top: 40%;">
               <div class="w-2 h-2 rounded-full bg-white mb-0.5 pointer-events-none"></div>
-              <span class="text-[8px] font-mono font-black text-white bg-black/70 px-1 rounded pointer-events-none">FACE</span>
+              <span class="text-[8px] font-mono font-black text-white bg-black/80 px-1 rounded pointer-events-none">FACE</span>
             </div>
           </div>
         </div>
-        <p class="text-[11px] font-mono text-stone-500 text-center">Play/scrub the video with your finger, then drag the gold circle onto the person's face.</p>
+        <p class="text-[11px] font-mono text-stone-400 text-center">Play/scrub video, then drag the orange circle onto the speaker's face.</p>
       </div>
     </div>
 
-    <!-- 2. Timestamps Setup -->
-    <div class="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-3">
+    <!-- 02. Timestamps Setup -->
+    <div class="card-dark rounded-2xl p-5 shadow-lg space-y-3">
       <div class="flex justify-between items-center">
-        <span class="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold">02. Clip Timestamps</span>
-        <button id="btnAutoHook" class="px-2.5 py-1 bg-amber-100 text-amber-800 font-mono text-[11px] font-bold rounded-lg hover:bg-amber-200">
+        <span class="text-[10px] font-mono uppercase tracking-widest text-orange-400 font-bold">02. Clip Timestamps</span>
+        <button id="btnAutoHook" class="px-2.5 py-1 bg-orange-950 text-orange-400 border border-orange-800 font-mono text-[11px] font-bold rounded-lg">
           ⚡ Auto-Hook (00:04)
         </button>
       </div>
 
-      <div class="flex items-center justify-between bg-stone-50 p-2.5 rounded-xl border border-stone-200 text-xs font-mono">
+      <div class="flex items-center justify-between bg-[#0F0F12] p-2.5 rounded-xl border border-stone-800 text-xs font-mono">
         <div class="flex items-center space-x-1">
-          <span class="text-stone-500">START:</span>
-          <input type="text" id="startTime" value="00:04" class="w-16 text-center bg-white border rounded font-bold py-1">
+          <span class="text-stone-400">START:</span>
+          <input type="text" id="startTime" value="00:04" class="w-16 text-center bg-stone-900 border border-stone-700 text-white rounded font-bold py-1">
         </div>
-        <span class="text-stone-400">➔</span>
+        <span class="text-stone-500">➔</span>
         <div class="flex items-center space-x-1">
-          <span class="text-stone-500">END:</span>
-          <input type="text" id="endTime" value="00:35" class="w-16 text-center bg-white border rounded font-bold py-1">
+          <span class="text-stone-400">END:</span>
+          <input type="text" id="endTime" value="00:35" class="w-16 text-center bg-stone-900 border border-stone-700 text-white rounded font-bold py-1">
         </div>
       </div>
     </div>
 
-    <!-- 3. Captions.ai Preset Selector -->
-    <div class="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-3">
-      <span class="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold block">03. Captions.ai Style Presets</span>
-      <div class="grid grid-cols-2 gap-2.5" id="presetGrid">
-        <button data-style="captions_pill" class="style-btn border-2 border-amber-500 bg-amber-50 p-3 rounded-xl text-left">
-          <span class="text-xs font-bold block">Captions.ai Pill</span>
-          <span class="text-[10px] font-mono text-emerald-600 font-bold">MATTE BOX + NEON</span>
-        </button>
-        <button data-style="luxury_gold" class="style-btn border border-stone-200 bg-white p-3 rounded-xl text-left">
-          <span class="text-xs font-bold block">Iman Gadzhi Silk</span>
-          <span class="text-[10px] font-serif text-amber-700 font-bold">CHAMPAGNE GOLD</span>
-        </button>
-        <button data-style="hormozi" class="style-btn border border-stone-200 bg-white p-3 rounded-xl text-left">
-          <span class="text-xs font-bold block">Hormozi Kinetic</span>
-          <span class="text-[10px] font-black text-lime-600">HEAVY POP</span>
-        </button>
-        <button data-style="cyber_glow" class="style-btn border border-stone-200 bg-white p-3 rounded-xl text-left">
-          <span class="text-xs font-bold block">Cyber Glow</span>
-          <span class="text-[10px] font-mono text-fuchsia-600 font-bold">HOT MAGENTA</span>
-        </button>
+    <!-- 03. Authentic Captik Presets Gallery (From Screenshots) -->
+    <div class="card-dark rounded-2xl p-5 shadow-lg space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="text-[10px] font-mono uppercase tracking-widest text-orange-400 font-bold block">03. Choose Captik Style</span>
+        <span class="text-[10px] font-mono text-stone-400">Word-by-Word Kinetic</span>
+      </div>
+
+      <div class="grid grid-cols-1 gap-3" id="presetGallery">
+
+        <!-- 1. Captik Glow -->
+        <div data-style="captik_glow" class="style-card selected-card card-dark rounded-xl p-4 cursor-pointer transition">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-white font-mono">Captik Glow</span>
+            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">Popular</span>
+          </div>
+          <div class="text-center py-2">
+            <div class="text-[11px] text-stone-400">the quick</div>
+            <div class="text-2xl font-black text-[#39FF14] tracking-wider drop-shadow-[0_0_12px_rgba(57,255,20,0.8)]">BROWN</div>
+            <div class="text-[11px] text-stone-400">fox jumps</div>
+          </div>
+          <div class="flex gap-1.5 mt-1">
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Glow</span>
+          </div>
+        </div>
+
+        <!-- 2. Captik Shadow -->
+        <div data-style="captik_shadow" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-white font-mono">Captik Shadow</span>
+            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">New</span>
+          </div>
+          <div class="text-center py-2">
+            <div class="text-[11px] text-stone-400">the quick</div>
+            <div class="text-2xl font-black text-white tracking-wider drop-shadow-[0_6px_10px_rgba(0,0,0,1)]">BROWN</div>
+            <div class="text-[11px] text-stone-400">fox jumps</div>
+          </div>
+          <div class="flex gap-1.5 mt-1">
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
+          </div>
+        </div>
+
+        <!-- 3. Delhi -->
+        <div data-style="delhi" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-white font-mono">Delhi</span>
+          </div>
+          <div class="text-center py-3">
+            <div class="text-lg font-serif text-white tracking-wide drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
+              the <span class="italic font-normal">quick</span> fox
+            </div>
+          </div>
+          <div class="flex gap-1.5 mt-1">
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Editorial</span>
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Aura</span>
+          </div>
+        </div>
+
+        <!-- 4. Illusion -->
+        <div data-style="illusion" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-white font-mono">Illusion</span>
+            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">New</span>
+          </div>
+          <div class="text-center py-2">
+            <div class="text-[11px] text-stone-300">he had rented the</div>
+            <div class="text-3xl font-extrabold text-white tracking-tight leading-none my-1">Biggest</div>
+            <div class="text-[11px] text-stone-300">apartment in town</div>
+          </div>
+          <div class="flex gap-1.5 mt-1">
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
+          </div>
+        </div>
+
+        <!-- 5. Editor Masala -->
+        <div data-style="editor_masala" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-white font-mono">Editor Masala</span>
+            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">Smart</span>
+          </div>
+          <div class="text-center py-2">
+            <div class="text-[11px] text-stone-300 font-semibold">trust the</div>
+            <div class="text-3xl font-black text-[#FFE600] tracking-wider uppercase">PROCESS</div>
+          </div>
+          <div class="flex gap-1.5 mt-1">
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
+          </div>
+        </div>
+
+        <!-- 6. Aura -->
+        <div data-style="aura" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-white font-mono">Aura</span>
+            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">Editorial</span>
+          </div>
+          <div class="text-center py-2">
+            <div class="text-2xl font-serif italic text-white tracking-wide leading-none">forget</div>
+            <div class="text-2xl font-black text-[#66C2FF] tracking-wider leading-none uppercase mt-0.5">STATUS</div>
+          </div>
+          <div class="flex gap-1.5 mt-1">
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
+          </div>
+        </div>
+
+        <!-- 7. Swiss -->
+        <div data-style="swiss" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-white font-mono">Swiss</span>
+            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">Editorial</span>
+          </div>
+          <div class="text-center py-2">
+            <div class="text-2xl font-black text-white leading-none">focus</div>
+            <div class="text-2xl font-black text-[#FFD700] leading-none uppercase">DEEPLY</div>
+          </div>
+          <div class="flex gap-1.5 mt-1">
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
+          </div>
+        </div>
+
+        <!-- 8. The Big Red -->
+        <div data-style="the_big_red" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-white font-mono">The Big Red</span>
+            <span class="bg-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full text-white font-mono uppercase">New</span>
+          </div>
+          <div class="text-center py-2 relative flex items-center justify-center">
+            <div class="text-3xl font-serif font-black text-[#E63333] tracking-widest uppercase">SECOND</div>
+            <div class="absolute text-xs font-serif text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">the quick fox</div>
+          </div>
+          <div class="flex gap-1.5 mt-1">
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Bold</span>
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Kinetic</span>
+          </div>
+        </div>
+
+        <!-- 9. Clean Glow Style -->
+        <div data-style="clean_glow" class="style-card card-dark rounded-xl p-4 cursor-pointer transition">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-white font-mono">Clean Glow Style</span>
+          </div>
+          <div class="text-center py-3">
+            <div class="text-sm font-semibold text-white tracking-wide drop-shadow-[0_0_12px_rgba(255,255,255,0.85)]">
+              the quick brown fox<br>jumps over
+            </div>
+          </div>
+          <div class="flex gap-1.5 mt-1">
+            <span class="text-[9px] bg-black/60 px-2 py-0.5 rounded text-stone-400 font-mono">Shadow</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- 4. Render Button -->
-    <button id="btnRender" class="w-full py-4 bg-stone-900 hover:bg-black text-amber-300 font-serif font-bold text-xs uppercase tracking-widest rounded-xl shadow-lg active:scale-95 transition">
-      ✦ RENDER 9:16 VIRAL SHORT
+    <!-- 04. Render Button -->
+    <button id="btnRender" class="w-full py-4 bg-orange-600 hover:bg-orange-500 text-white font-mono font-bold text-xs uppercase tracking-widest rounded-xl shadow-lg active:scale-95 transition">
+      ✦ RENDER CAPTIK 9:16 SHORT
     </button>
 
-    <!-- 5. Status & Direct Mobile Download -->
-    <div id="statusSection" class="bg-white border gold-line rounded-2xl p-5 shadow-sm hidden space-y-3">
+    <!-- 05. Status & Direct Mobile Download -->
+    <div id="statusSection" class="card-dark rounded-2xl p-5 shadow-lg hidden space-y-3">
       <div class="flex justify-between items-center">
-        <span class="text-xs font-mono uppercase text-amber-700 font-bold">Status:</span>
-        <span id="statusBadge" class="text-xs font-mono bg-amber-50 px-2.5 py-0.5 rounded text-amber-800 animate-pulse font-bold">Encoding...</span>
+        <span class="text-xs font-mono uppercase text-orange-400 font-bold">Status:</span>
+        <span id="statusBadge" class="text-xs font-mono bg-orange-950 border border-orange-800 px-2.5 py-0.5 rounded text-orange-400 animate-pulse font-bold">Encoding...</span>
       </div>
-      <p id="statusMsg" class="text-xs font-mono text-stone-600">Slicing clip and applying subtitles...</p>
+      <p id="statusMsg" class="text-xs font-mono text-stone-400">Slicing clip and applying Captik preset...</p>
       
-      <div id="downloadContainer" class="hidden pt-3 border-t border-stone-100">
+      <div id="downloadContainer" class="hidden pt-3 border-t border-stone-800">
         <a id="downloadLink" href="#" target="_blank" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold uppercase rounded-xl flex items-center justify-center gap-2 shadow">
           <span>⬇ Download Finished Video (.ZIP)</span>
         </a>
@@ -131,17 +265,17 @@
   </main>
 
   <!-- Settings Modal -->
-  <div id="settingsModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-xl">
-      <h3 class="text-xs font-mono font-bold text-amber-800 uppercase">GitHub Personal Token</h3>
-      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" class="w-full bg-stone-50 border border-stone-200 rounded-lg p-2.5 text-xs font-mono">
-      <button id="btnSaveToken" class="w-full py-2.5 bg-stone-900 text-amber-300 text-xs font-mono font-bold rounded-lg">Save</button>
+  <div id="settingsModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#16161B] border border-stone-800 rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+      <h3 class="text-xs font-mono font-bold text-orange-400 uppercase">GitHub Personal Token</h3>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" class="w-full bg-[#0F0F12] border border-stone-700 rounded-lg p-2.5 text-xs font-mono text-white">
+      <button id="btnSaveToken" class="w-full py-2.5 bg-orange-600 text-white text-xs font-mono font-bold rounded-lg">Save</button>
     </div>
   </div>
 
   <script>
     let chosenPos = 0.5;
-    let chosenStyle = "captions_pill";
+    let chosenStyle = "captik_glow";
 
     function getYouTubeId(url) {
       const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
@@ -172,16 +306,16 @@
       document.getElementById('endTime').value = "00:35";
     };
 
-    // Subtitle Style Preset Pickers
-    document.querySelectorAll('.style-btn').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.style-btn').forEach(b => b.className = "style-btn border border-stone-200 bg-white p-3 rounded-xl text-left");
-        btn.className = "style-btn border-2 border-amber-500 bg-amber-50 p-3 rounded-xl text-left";
-        chosenStyle = btn.dataset.style;
+    // Style Card Selection
+    document.querySelectorAll('.style-card').forEach(card => {
+      card.onclick = () => {
+        document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected-card'));
+        card.classList.add('selected-card');
+        chosenStyle = card.dataset.style;
       };
     });
 
-    // Touch Dragging Logic for the Circle (Does NOT block video scrubbing)
+    // Touch Dragging Logic for the Circle
     const circle = document.getElementById('targetCircle');
     const container = document.getElementById('videoContainer');
     let isTouching = false;
@@ -227,7 +361,7 @@
       sec.classList.remove('hidden');
       dlBox.classList.add('hidden');
       badge.innerText = "Dispatching...";
-      msg.innerText = "Dispatching cloud runner with Captions.ai styling...";
+      msg.innerText = `Dispatching runner with ${chosenStyle.replace('_', ' ').toUpperCase()} preset...`;
 
       try {
         await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
@@ -240,7 +374,7 @@
         });
 
         badge.innerText = "Encoding...";
-        msg.innerText = "Slicing segment, tracking face, and burning Captions.ai subtitles...";
+        msg.innerText = "Slicing segment, tracking face, and burning Captik subtitles...";
 
         const interval = setInterval(async () => {
           const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
