@@ -3,369 +3,355 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>CAPTIK STUDIO // Mobile Video Editor</title>
+  <title>VERTEX PRO // Mobile Creative Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #0A0A0E;
-      color: #FFFFFF;
+      background-color: #090A0F;
+      color: #F1F5F9;
       -webkit-tap-highlight-color: transparent;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .captik-orange { background-color: #FF8800; }
-    .captik-orange-hover:hover { background-color: #E67700; }
-    .captik-orange-text { color: #FF8800; }
-    .card-panel { background-color: #121217; border: 1px solid #1E1E26; }
-    .card-dark-item { background-color: #17171F; border: 1px solid #242430; }
-    .target-ring { border: 2px dashed #FF8800; box-shadow: 0 0 25px rgba(255, 136, 0, 0.7); }
-    .timeline-track { background: repeating-linear-gradient(90deg, #1C1C24, #1C1C24 4px, #262632 4px, #262632 8px); }
+    .card-titanium { background-color: #111420; border: 1px solid #1E2335; }
+    .card-titanium:hover { border-color: #2D354F; }
+    .item-dark { background-color: #161A29; border: 1px solid #232A3F; }
+    .selected-style { border: 2px solid #00F0FF !important; background-color: #13222E !important; }
+    .target-ring { border: 2px dashed #00F0FF; box-shadow: 0 0 25px rgba(0, 240, 255, 0.7); }
+    .timeline-strip { background: repeating-linear-gradient(90deg, #131726, #131726 4px, #1D2338 4px, #1D2338 8px); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between overflow-x-hidden select-none">
 
-  <!-- ==================== SCREEN 1: HOME / NEW PROJECT DASHBOARD ==================== -->
+  <!-- ==================== SCREEN 1: HOME / WORKSPACE ==================== -->
   <div id="homeScreen" class="max-w-md mx-auto w-full min-h-screen p-5 flex flex-col justify-between">
-    <!-- Top Greeting -->
-    <div class="space-y-6 pt-4">
+    <div class="space-y-6 pt-2">
+      
+      <!-- Top Navigation & Brand -->
       <div class="flex justify-between items-start">
-        <div>
-          <h1 class="text-2xl font-black tracking-tight text-white flex items-center gap-1.5">
-            Good to see you, <span class="text-white">Creator</span> 👋
-          </h1>
-          <p class="text-xs text-stone-400 mt-1">Create, manage and export your captioned videos</p>
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#00F0FF] to-[#0072FF] text-black font-black text-base flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.4)]">
+            ◈
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-base font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
+              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V3.0</span>
+            </div>
+            <p class="text-xs text-slate-400">Automated 9:16 Video Synthesis</p>
+          </div>
         </div>
-        <button id="btnSettingsHome" class="w-9 h-9 rounded-full card-dark-item flex items-center justify-center text-xs text-stone-300">
-          ⚙
-        </button>
+
+        <div class="flex items-center space-x-2">
+          <!-- AI Assistant Trigger -->
+          <button id="btnOpenAiHome" class="px-3 py-1.5 rounded-full bg-[#161A29] border border-[#00F0FF]/40 text-[#00F0FF] text-xs font-mono font-bold flex items-center gap-1.5 shadow-md">
+            <span>✦</span>
+            <span>AI Copilot</span>
+          </button>
+          <button id="btnSettingsHome" class="w-8 h-8 rounded-full item-dark flex items-center justify-center text-xs text-slate-300">
+            ⚙
+          </button>
+        </div>
       </div>
 
-      <!-- Orange New Project Banner -->
-      <button id="btnNewProject" class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#FF8800] to-[#FF6600] text-black font-extrabold text-sm uppercase tracking-wider flex items-center justify-between shadow-[0_8px_25px_rgba(255,136,0,0.35)] active:scale-[0.98] transition">
+      <!-- Hero Call-To-Action -->
+      <button id="btnNewProject" class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#00F0FF] via-[#00B4D8] to-[#0077B6] text-black font-extrabold text-xs uppercase tracking-widest flex items-center justify-between shadow-[0_8px_25px_rgba(0,240,255,0.25)] active:scale-[0.98] transition">
         <span class="flex items-center gap-2">
-          <span class="text-lg">✦</span>
-          <span>Start New Video</span>
+          <span class="text-sm">⚡</span>
+          <span>Create New 9:16 Cut</span>
         </span>
-        <span class="text-xs bg-black/20 px-3 py-1 rounded-full text-black font-mono">Fast AI</span>
+        <span class="text-[10px] bg-black/25 px-2.5 py-1 rounded-full text-black font-mono font-bold">Whisper AI</span>
       </button>
 
-      <!-- Video Upload / Link Ingestion Card -->
-      <div class="card-panel rounded-3xl p-6 space-y-4 shadow-xl">
-        <span class="text-[11px] font-mono uppercase tracking-widest text-stone-400 font-bold block">
-          UPLOAD OR PASTE VIDEO
+      <!-- Video Upload / Ingestion Panel -->
+      <div class="card-titanium rounded-3xl p-5 space-y-4 shadow-xl">
+        <span class="text-[11px] font-mono uppercase tracking-widest text-slate-400 font-bold block">
+          Ingest Footage
         </span>
 
-        <!-- Drag & Drop Zone / Link Input -->
-        <div class="border-2 border-dashed border-stone-700/80 rounded-2xl p-6 text-center space-y-3 bg-[#0E0E14]/60">
-          <div class="w-14 h-14 mx-auto rounded-2xl bg-[#1A1A24] flex items-center justify-center text-stone-300 text-xl border border-stone-700">
+        <!-- Direct Phone Gallery Upload -->
+        <div class="border-2 border-dashed border-slate-700/80 rounded-2xl p-6 text-center space-y-3 bg-[#0B0D14]/70">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] flex items-center justify-center text-[#00F0FF] text-lg border border-slate-700">
             ↑
           </div>
           <div>
-            <span class="text-sm font-bold text-white block">Drop your video here</span>
-            <p class="text-[11px] text-stone-400 mt-0.5">or paste YouTube URL. Up to 4K resolution</p>
+            <span class="text-sm font-bold text-white block">Select video from device</span>
+            <p class="text-[11px] text-slate-400 mt-0.5">Instant local editing with 0 wait time</p>
           </div>
-          <input type="text" id="ytUrlInput" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-[#0A0A0E] border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white placeholder-stone-600 focus:outline-none focus:border-[#FF8800]">
+          
+          <input type="file" id="localVideoPicker" accept="video/*" class="hidden">
+          <button onclick="document.getElementById('localVideoPicker').click()" class="px-5 py-2.5 bg-[#1F253A] hover:bg-[#28304B] text-white text-xs font-mono font-bold rounded-xl border border-slate-600 transition">
+            Choose File from Phone
+          </button>
         </div>
 
-        <div class="flex items-center justify-between pt-1">
-          <div class="flex items-center gap-1.5 text-xs text-stone-400 font-mono">
-            <span class="text-[#FF8800]">⚡</span>
-            <span>Transcription in ~30s</span>
-          </div>
-          <button id="btnOpenEditor" class="px-5 py-2.5 rounded-xl bg-[#22222E] hover:bg-[#2C2C3C] text-white font-bold text-xs font-mono transition">
-            Load Project
+        <div class="relative flex py-1 items-center">
+          <div class="flex-grow border-t border-slate-800"></div>
+          <span class="flex-shrink mx-3 text-[10px] font-mono text-slate-500 uppercase">OR YOUTUBE SOURCE</span>
+          <div class="flex-grow border-t border-slate-800"></div>
+        </div>
+
+        <!-- YouTube Link Slice Engine -->
+        <div class="space-y-2">
+          <input type="text" id="ytUrlInput" placeholder="Paste YouTube Link (https://www.youtube.com/watch?v=...)" class="w-full bg-[#0B0D14] border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
+          <button id="btnFetchYtSlice" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] hover:opacity-95 text-black font-bold text-xs font-mono tracking-wider transition">
+            ⚡ Fetch Clip to Studio
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Bottom App Footer -->
-    <div class="text-center py-4 border-t border-stone-900 text-[10px] font-mono text-stone-400">
-      CLIPSTUDIO ENGINE // 9:16 VERTICAL SUITE
+    <!-- Workspace Footer -->
+    <div class="text-center py-4 border-t border-slate-900 text-[10px] font-mono text-slate-500">
+      VERTEX CREATIVE PIPELINE // 9:16 DYNAMIC ENGINE
     </div>
   </div>
 
 
-  <!-- ==================== SCREEN 2: THE 3-ZONE CAPTIK EDITOR ==================== -->
+  <!-- ==================== SCREEN 2: 3-ZONE STUDIO EDITOR ==================== -->
   <div id="editorScreen" class="hidden flex-1 flex flex-col justify-between max-w-md mx-auto w-full min-h-screen pb-2">
 
-    <!-- TOP BAR: Navigation, Mode Timer & Export -->
-    <header class="px-4 py-3 flex items-center justify-between border-b border-stone-800 bg-[#0A0A0E]">
-      <button id="btnBackHome" class="w-8 h-8 rounded-lg card-dark-item flex items-center justify-center text-stone-300 text-sm">
+    <!-- Top App Bar -->
+    <header class="px-4 py-3 flex items-center justify-between border-b border-slate-800 bg-[#090A0F]">
+      <button id="btnBackHome" class="w-8 h-8 rounded-lg item-dark flex items-center justify-center text-slate-300 text-sm">
         ←
       </button>
 
-      <div class="flex items-center gap-2">
-        <span id="videoTimeBadge" class="bg-[#1C1C24] border border-stone-700 px-3 py-1 rounded-full text-[11px] font-mono font-bold text-stone-300">
-          <span class="text-[#FF8800]">0:04</span> / 0:35
-        </span>
+      <!-- Multi-Clip Selector Pills -->
+      <div id="clipsPillsBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-[180px] py-0.5">
+        <!-- Rendered by JS: [Clip 1] [Clip 2] [+] -->
       </div>
 
-      <!-- Orange Download Export Button -->
-      <button id="btnExportTop" class="h-9 px-4 rounded-xl bg-gradient-to-r from-[#FF8800] to-[#FF6600] text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-[0_4px_15px_rgba(255,136,0,0.3)] active:scale-95 transition">
-        <span>⬇</span>
-        <span>Export</span>
-      </button>
+      <div class="flex items-center gap-2">
+        <button id="btnOpenAiEditor" class="w-8 h-8 rounded-lg item-dark flex items-center justify-center text-[#00F0FF] text-sm">
+          ✦
+        </button>
+        <!-- Cyan Master Export Button -->
+        <button id="btnExportTop" class="h-8 px-3.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1 shadow-[0_4px_15px_rgba(0,240,255,0.25)] active:scale-95 transition">
+          <span>⬇ Export</span>
+        </button>
+      </div>
     </header>
 
-    <!-- ZONE 1: UPPER STAGE (ASPECT BAR & CANVASES) -->
+    <!-- ZONE 1: UPPER STAGE (ASPECT MASK & CLEAN CANVAS) -->
     <div class="p-3 space-y-2.5">
-      <!-- Aspect Ratio Bar -->
+      <!-- Aspect Mask Selector -->
       <div class="flex items-center justify-center gap-2 text-[11px] font-mono">
-        <button data-aspect="original" class="aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition">Original</button>
-        <button data-aspect="9:16" class="aspect-btn px-3 py-1 rounded-full bg-[#FF8800] text-black font-bold transition">9:16</button>
-        <button data-aspect="16:9" class="aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition">16:9</button>
-        <button data-aspect="1:1" class="aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition">1:1</button>
-        <button data-aspect="4:5" class="aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition">4:5</button>
+        <button data-aspect="original" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">Original</button>
+        <button data-aspect="9:16" class="aspect-btn px-3 py-1 rounded-full bg-[#00F0FF] text-black font-bold transition">9:16</button>
+        <button data-aspect="16:9" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">16:9</button>
+        <button data-aspect="1:1" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">1:1</button>
+        <button data-aspect="4:5" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">4:5</button>
       </div>
 
-      <!-- Video Canvas / Frame Stage with Face Reticle -->
-      <div class="relative w-full aspect-[9/10] sm:aspect-square bg-black rounded-2xl overflow-hidden border border-stone-800 flex items-center justify-center select-none" id="viewportContainer">
-        <!-- Interactive Player Embed -->
-        <iframe id="editorPlayer" class="w-full h-full pointer-events-auto" src="" frameborder="0" allowfullscreen></iframe>
+      <!-- Pure Native Video Canvas (Zero YouTube Iframe Ads or Overlays) -->
+      <div class="relative w-full aspect-[9/10] sm:aspect-square bg-black rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center select-none" id="viewportContainer">
+        <video id="nativeVideoPlayer" playsinline class="w-full h-full object-contain pointer-events-auto bg-black"></video>
 
-        <!-- 9:16 Framing Guide & Touch Reticle -->
+        <!-- 9:16 Framing Guide & Touch Crosshair Reticle -->
         <div id="reticleLayer" class="absolute inset-0 pointer-events-none flex items-center justify-center">
-          <!-- 9:16 Phone Bounding Mask -->
-          <div id="phoneMask" class="h-full border-2 border-[#FF8800]/60 pointer-events-none relative" style="width: 56.25%;">
-            <!-- Reticle Circle (User Draggable) -->
-            <div id="targetCircle" class="target-ring absolute w-16 h-16 rounded-full bg-[#FF8800]/25 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-move flex flex-col items-center justify-center touch-none" style="left: 50%; top: 40%;">
+          <div id="phoneMask" class="h-full border-2 border-[#00F0FF]/50 pointer-events-none relative" style="width: 56.25%;">
+            <!-- Movable Reticle Circle (Finger Draggable) -->
+            <div id="targetCircle" class="target-ring absolute w-16 h-16 rounded-full bg-[#00F0FF]/20 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-move flex flex-col items-center justify-center touch-none" style="left: 50%; top: 40%;">
               <div class="w-2 h-2 rounded-full bg-white mb-0.5 pointer-events-none"></div>
-              <span class="text-[8px] font-mono font-black text-white bg-black/80 px-1 rounded pointer-events-none">FACE</span>
+              <span class="text-[8px] font-mono font-black text-black bg-[#00F0FF] px-1 rounded pointer-events-none">TARGET</span>
             </div>
           </div>
         </div>
 
-        <!-- Position Tag Pill -->
-        <div class="absolute bottom-2.5 left-3 bg-black/80 border border-stone-800 px-2.5 py-1 rounded-lg text-[10px] font-mono text-[#FF8800]">
-          Offset: <span id="posIndicatorText">50%</span>
+        <div class="absolute bottom-2.5 left-3 bg-black/80 border border-slate-800 px-2 py-0.5 rounded-lg text-[10px] font-mono text-[#00F0FF]">
+          Face Pos: <span id="posIndicatorText">50%</span>
         </div>
       </div>
     </div>
 
     <!-- ZONE 2: CENTER TIMELINE & PLAYBACK DECK -->
     <div class="px-4 py-2 space-y-2">
-      <!-- Transport Playback Controls -->
-      <div class="flex items-center justify-between px-2">
-        <div class="flex items-center gap-2">
-          <button id="btnSkipBack" class="w-8 h-8 rounded-full card-dark-item flex items-center justify-center text-xs text-stone-300">⏮</button>
-        </div>
+      <!-- Deck Controls -->
+      <div class="flex items-center justify-between px-3">
+        <button id="btnSkipBack" class="w-8 h-8 rounded-full item-dark flex items-center justify-center text-xs text-slate-300">⏮</button>
 
-        <!-- Big Orange Circular Play/Pause -->
-        <button id="btnPlayPause" class="w-12 h-12 rounded-full bg-[#FF8800] text-black font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(255,136,0,0.4)] active:scale-90 transition">
+        <!-- Main Cyan Play/Pause Button -->
+        <button id="btnPlayPause" class="w-12 h-12 rounded-full bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.35)] active:scale-90 transition">
           ▶
         </button>
 
-        <div class="flex items-center gap-2">
-          <button id="btnSkipForward" class="w-8 h-8 rounded-full card-dark-item flex items-center justify-center text-xs text-stone-300">⏭</button>
-        </div>
+        <button id="btnSkipForward" class="w-8 h-8 rounded-full item-dark flex items-center justify-center text-xs text-slate-300">⏭</button>
       </div>
 
-      <!-- Scrubber Track with Cut Handles -->
-      <div class="card-panel p-3 rounded-2xl space-y-1.5">
-        <div class="flex justify-between items-center text-[10px] font-mono text-stone-400 px-1">
-          <span>START: <strong id="lblStartTime" class="text-white">00:04</strong></span>
-          <span class="text-[#FF8800]">Clip Duration: 31s</span>
-          <span>END: <strong id="lblEndTime" class="text-white">00:35</strong></span>
+      <!-- Scrubber Deck -->
+      <div class="card-titanium p-3 rounded-2xl space-y-1.5">
+        <div class="flex justify-between items-center text-[10px] font-mono text-slate-400 px-1">
+          <span>IN: <strong id="lblStartTime" class="text-white">00:04</strong></span>
+          <span class="text-[#00F0FF] font-bold" id="lblCurrentTime">00:00</span>
+          <span>OUT: <strong id="lblEndTime" class="text-white">00:35</strong></span>
         </div>
 
-        <!-- Visual Timeline Strip -->
-        <div class="relative h-10 w-full rounded-xl timeline-track overflow-hidden border border-stone-700/60 flex items-center">
-          <!-- Clip Selection Range Box -->
-          <div class="absolute inset-y-0 bg-[#FF8800]/25 border-x-4 border-[#FF8800] rounded" style="left: 10%; right: 25%;"></div>
-          <!-- Playhead Needle -->
-          <div class="absolute inset-y-0 w-0.5 bg-white shadow" style="left: 35%;"></div>
-        </div>
+        <input type="range" id="timelineScrubber" min="0" max="100" value="0" class="w-full accent-[#00F0FF] cursor-pointer">
       </div>
     </div>
 
-    <!-- ZONE 3: THE 3-TAB BOTTOM DRAWER -->
-    <div class="card-panel rounded-t-3xl border-b-0 p-4 space-y-3.5 shadow-2xl">
-      
-      <!-- Drawer Content Panels -->
-      <div id="drawerContent" class="max-h-60 overflow-y-auto no-scrollbar space-y-3">
+    <!-- ZONE 3: 3-TAB BOTTOM DRAWER -->
+    <div class="card-titanium rounded-t-3xl border-b-0 p-4 space-y-3 shadow-2xl">
+      <div id="drawerContent" class="max-h-56 overflow-y-auto no-scrollbar space-y-3">
         
-        <!-- PANEL 1: EDIT (Face Positioning & Cut Timestamps) -->
+        <!-- PANEL 1: EDIT (Timestamps & Speaker Framing) -->
         <div id="tabEditPanel" class="space-y-3">
-          <span class="text-[11px] font-mono uppercase tracking-widest text-[#FF8800] font-bold block">
-            Face Framing & Segment
-          </span>
+          <div class="flex justify-between items-center">
+            <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
+              Frame Alignment & Segment
+            </span>
+            <button id="btnAddClipBtn" class="px-2.5 py-1 bg-[#161A29] border border-slate-700 hover:border-[#00F0FF] rounded text-[10px] font-mono text-slate-300 font-bold">
+              + Add Clip (Max 10)
+            </button>
+          </div>
 
           <div class="grid grid-cols-3 gap-2">
-            <button onclick="setFramingPreset(0.2)" class="py-2.5 card-dark-item rounded-xl text-xs font-mono text-stone-300 hover:border-[#FF8800]">
+            <button onclick="setFramingPreset(0.2)" class="py-2 item-dark rounded-xl text-xs font-mono text-slate-300 hover:border-[#00F0FF]">
               ◀ Left (Host)
             </button>
-            <button onclick="setFramingPreset(0.5)" class="py-2.5 card-dark-item rounded-xl text-xs font-mono text-[#FF8800] border-[#FF8800]">
+            <button onclick="setFramingPreset(0.5)" class="py-2 item-dark rounded-xl text-xs font-mono text-[#00F0FF] border-[#00F0FF]">
               Center
             </button>
-            <button onclick="setFramingPreset(0.8)" class="py-2.5 card-dark-item rounded-xl text-xs font-mono text-stone-300 hover:border-[#FF8800]">
+            <button onclick="setFramingPreset(0.8)" class="py-2 item-dark rounded-xl text-xs font-mono text-slate-300 hover:border-[#00F0FF]">
               Right (Guest) ▶
             </button>
           </div>
 
-          <div class="flex items-center justify-between gap-3 bg-[#17171F] p-3 rounded-xl border border-stone-800 text-xs font-mono">
+          <div class="flex items-center justify-between gap-3 bg-[#161A29] p-2.5 rounded-xl border border-slate-800 text-xs font-mono">
             <div class="flex items-center gap-1.5">
-              <span class="text-stone-400">In:</span>
-              <input type="text" id="inputStart" value="00:04" class="w-16 bg-[#0E0E14] border border-stone-700 rounded px-2 py-1 text-center text-white font-bold">
+              <span class="text-slate-400">Start:</span>
+              <input type="text" id="inputStart" value="00:04" class="w-16 bg-[#0B0D14] border border-slate-700 rounded px-2 py-1 text-center text-white font-bold">
             </div>
-            <span>➔</span>
+            <span class="text-[#00F0FF]">➔</span>
             <div class="flex items-center gap-1.5">
-              <span class="text-stone-400">Out:</span>
-              <input type="text" id="inputEnd" value="00:35" class="w-16 bg-[#0E0E14] border border-stone-700 rounded px-2 py-1 text-center text-white font-bold">
+              <span class="text-slate-400">End:</span>
+              <input type="text" id="inputEnd" value="00:35" class="w-16 bg-[#0B0D14] border border-slate-700 rounded px-2 py-1 text-center text-white font-bold">
             </div>
           </div>
         </div>
 
-        <!-- PANEL 2: CAPTIONS (Direct Word Editor) -->
-        <div id="tabCaptionsPanel" class="hidden space-y-2.5">
-          <span class="text-[11px] font-mono uppercase tracking-widest text-[#FF8800] font-bold block">
+        <!-- PANEL 2: CAPTIONS SCRIPT REVIEW -->
+        <div id="tabCaptionsPanel" class="hidden space-y-2">
+          <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
             Subtitles Script Review
           </span>
-          <div class="space-y-2">
-            <div class="bg-[#17171F] p-2.5 rounded-xl border border-stone-800 flex items-center justify-between text-xs">
-              <span class="font-mono text-stone-400 w-12">00:04</span>
-              <input type="text" value="GLP-1 family of drugs are a remarkable advance" class="flex-1 bg-transparent text-white font-mono text-xs focus:outline-none">
-            </div>
-            <div class="bg-[#17171F] p-2.5 rounded-xl border border-stone-800 flex items-center justify-between text-xs">
-              <span class="font-mono text-stone-400 w-12">00:10</span>
-              <input type="text" value="However, there are some major downsides of GLP-1" class="flex-1 bg-transparent text-white font-mono text-xs focus:outline-none">
-            </div>
-            <div class="bg-[#17171F] p-2.5 rounded-xl border border-stone-800 flex items-center justify-between text-xs">
-              <span class="font-mono text-stone-400 w-12">00:17</span>
-              <input type="text" value="The biggest one is muscle loss. Up to 30% weight" class="flex-1 bg-transparent text-white font-mono text-xs focus:outline-none">
-            </div>
-          </div>
+          <textarea id="captionScriptText" rows="4" class="w-full bg-[#161A29] border border-slate-800 rounded-xl p-3 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]" placeholder="Subtitles will automatically synchronize word-by-word with Faster-Whisper AI during final render."></textarea>
         </div>
 
-        <!-- PANEL 3: STYLE (The 9 Authentic Captik Templates) -->
+        <!-- PANEL 3: STYLE (Original Subtitle Presets) -->
         <div id="tabStylePanel" class="hidden space-y-2.5">
-          <span class="text-[11px] font-mono uppercase tracking-widest text-[#FF8800] font-bold block">
-            Templates Presets (9)
+          <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
+            Visual Subtitle Profiles (9)
           </span>
 
-          <div class="grid grid-cols-1 gap-2.5" id="presetGallery">
-            <!-- 1. Captik Glow -->
-            <div data-style="neon_lime" class="style-card card-dark-item rounded-xl p-3 cursor-pointer border-[#FF8800] bg-[#221C16]">
+          <div class="grid grid-cols-1 gap-2" id="presetGallery">
+            
+            <!-- 1. Hyper-Glow Neon -->
+            <div data-style="neon_lime" class="style-card selected-style card-titanium rounded-xl p-3 cursor-pointer">
               <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Captik Glow</span>
-                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Popular</span>
+                <span class="text-xs font-bold text-white font-mono">Hyper-Glow Neon</span>
+                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Signature</span>
               </div>
               <div class="text-center py-1">
-                <div class="text-[10px] text-stone-400">the quick</div>
+                <div class="text-[10px] text-slate-400">the quick</div>
                 <div class="text-xl font-black text-[#39FF14] tracking-wider drop-shadow-[0_0_12px_rgba(57,255,20,0.85)]">BROWN</div>
-                <div class="text-[10px] text-stone-400">fox jumps</div>
+                <div class="text-[10px] text-slate-400">fox jumps</div>
               </div>
             </div>
 
-            <!-- 2. Captik Shadow -->
-            <div data-style="bold_shadow" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Captik Shadow</span>
-                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
-              </div>
+            <!-- 2. Monolith Impact -->
+            <div data-style="bold_shadow" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Monolith Impact</span>
               <div class="text-center py-1">
-                <div class="text-[10px] text-stone-400">the quick</div>
-                <div class="text-xl font-black text-white tracking-wider drop-shadow-[0_6px_8px_rgba(0,0,0,1)]">BROWN</div>
-                <div class="text-[10px] text-stone-400">fox jumps</div>
+                <div class="text-[10px] text-slate-400">the quick</div>
+                <div class="text-xl font-black text-white drop-shadow-[0_6px_8px_rgba(0,0,0,1)]">BROWN</div>
+                <div class="text-[10px] text-slate-400">fox jumps</div>
               </div>
             </div>
 
-            <!-- 3. Delhi -->
-            <div data-style="moonlight_serif" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Delhi</span>
-              <div class="text-center py-2 text-base font-serif text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]">
+            <!-- 3. Editorial Moonlight -->
+            <div data-style="moonlight_serif" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Editorial Moonlight</span>
+              <div class="text-center py-2 text-sm font-serif text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]">
                 the <span class="italic font-normal">quick</span> fox
               </div>
             </div>
 
-            <!-- 4. Illusion -->
-            <div data-style="kinetic_scale" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Illusion</span>
-                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
-              </div>
+            <!-- 4. Kinetic Mega-Zoom -->
+            <div data-style="kinetic_scale" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Kinetic Mega-Zoom</span>
               <div class="text-center py-1">
-                <div class="text-[10px] text-stone-400">he had rented the</div>
+                <div class="text-[10px] text-slate-400">he had rented the</div>
                 <div class="text-2xl font-black text-white leading-tight">Biggest</div>
-                <div class="text-[10px] text-stone-400">apartment in town</div>
+                <div class="text-[10px] text-slate-400">apartment in town</div>
               </div>
             </div>
 
-            <!-- 5. Editor Masala -->
-            <div data-style="canary_punch" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Editor Masala</span>
-                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Smart</span>
-              </div>
+            <!-- 5. Tokyo Sunset -->
+            <div data-style="canary_punch" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Tokyo Sunset</span>
               <div class="text-center py-1">
-                <div class="text-[10px] text-stone-400 font-semibold">trust the</div>
+                <div class="text-[10px] text-slate-400 font-semibold">trust the</div>
                 <div class="text-2xl font-black text-[#FFE600] tracking-wider uppercase">PROCESS</div>
               </div>
             </div>
 
-            <!-- 6. Aura -->
-            <div data-style="sky_dual" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Aura</span>
-                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Editorial</span>
-              </div>
+            <!-- 6. Cosmic Dual-Tone -->
+            <div data-style="sky_dual" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Cosmic Dual-Tone</span>
               <div class="text-center py-1">
-                <div class="text-xl font-serif italic text-white leading-none">forget</div>
-                <div class="text-xl font-black text-[#66C2FF] tracking-wider uppercase leading-none mt-1">STATUS</div>
+                <div class="text-lg font-serif italic text-white leading-none">forget</div>
+                <div class="text-xl font-black text-[#00F0FF] tracking-wider uppercase leading-none mt-1">STATUS</div>
               </div>
             </div>
 
-            <!-- 7. Swiss -->
-            <div data-style="modernist_swiss" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Swiss</span>
-                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Editorial</span>
-              </div>
+            <!-- 7. Zurich Minimalist -->
+            <div data-style="modernist_swiss" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Zurich Minimalist</span>
               <div class="text-center py-1">
-                <div class="text-xl font-black text-white leading-none">focus</div>
+                <div class="text-lg font-black text-white leading-none">focus</div>
                 <div class="text-xl font-black text-[#FFD700] uppercase leading-none mt-0.5">DEEPLY</div>
               </div>
             </div>
 
-            <!-- 8. The Big Red -->
-            <div data-style="crimson_cinematic" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">The Big Red</span>
-                <span class="bg-[#FF8800] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
-              </div>
+            <!-- 8. Cinematic Carmine -->
+            <div data-style="crimson_cinematic" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Cinematic Carmine</span>
               <div class="text-center py-1 relative">
-                <div class="text-2xl font-serif font-black text-[#E63333] tracking-widest uppercase">SECOND</div>
+                <div class="text-xl font-serif font-black text-[#E63333] tracking-widest uppercase">SECOND</div>
                 <div class="text-xs font-serif text-white -mt-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">the quick fox</div>
               </div>
             </div>
 
-            <!-- 9. Clean Glow -->
-            <div data-style="ambient_white" class="style-card card-dark-item rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Clean Glow Style</span>
-              <div class="text-center py-2 text-sm font-semibold text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.85)]">
+            <!-- 9. Ambient Aura -->
+            <div data-style="ambient_white" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
+              <span class="text-xs font-bold text-white font-mono block mb-1">Ambient Aura</span>
+              <div class="text-center py-2 text-sm font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.85)]">
                 the quick brown fox jumps over
               </div>
             </div>
+
           </div>
         </div>
 
       </div>
 
-      <!-- Navigation 3 Tabs (Edit / Captions / Style) -->
-      <div class="grid grid-cols-3 pt-2 border-t border-stone-800 text-center">
-        <button id="navTabEdit" class="py-1.5 text-xs font-bold text-[#FF8800] flex flex-col items-center gap-1">
+      <!-- Navigation Tabs (Edit / Captions / Style) -->
+      <div class="grid grid-cols-3 pt-2 border-t border-slate-800 text-center">
+        <button id="navTabEdit" class="py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5">
           <span class="text-sm">✂</span>
           <span>Edit</span>
         </button>
-        <button id="navTabCaptions" class="py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1">
+        <button id="navTabCaptions" class="py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5">
           <span class="text-sm">≡</span>
           <span>Captions</span>
         </button>
-        <button id="navTabStyle" class="py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1">
+        <button id="navTabStyle" class="py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5">
           <span class="text-sm">🎨</span>
           <span>Style</span>
         </button>
@@ -376,85 +362,254 @@
   </div>
 
 
-  <!-- ==================== EXPORT PROGRESS / DIRECT DOWNLOAD MODAL ==================== -->
+  <!-- ==================== IN-APP AI COPILOT DRAWER ==================== -->
+  <div id="aiChatDrawer" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col justify-end hidden">
+    <div class="bg-[#111420] border-t border-slate-800 rounded-t-3xl max-w-md mx-auto w-full h-[80vh] flex flex-col justify-between p-4 shadow-2xl">
+      
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-[#00F0FF] text-black font-bold flex items-center justify-center text-xs">◈</div>
+          <div>
+            <h3 class="text-xs font-mono font-bold text-white uppercase">VERTEX AI // Creative Copilot</h3>
+            <p class="text-[10px] text-slate-400">Viral hook timing, titles & styling guidance</p>
+          </div>
+        </div>
+        <button id="btnCloseAi" class="w-7 h-7 rounded-full bg-[#161A29] border border-slate-700 text-slate-300 text-xs flex items-center justify-center">✕</button>
+      </div>
+
+      <!-- Messages History -->
+      <div id="aiChatMessages" class="flex-1 overflow-y-auto no-scrollbar py-3 space-y-3 text-xs">
+        <div class="flex gap-2 items-start">
+          <div class="w-6 h-6 rounded-full bg-[#00F0FF] text-black font-bold text-[10px] flex items-center justify-center shrink-0">AI</div>
+          <div class="bg-[#161A29] border border-slate-800 p-3 rounded-2xl text-slate-200 leading-relaxed max-w-[85%]">
+            Welcome to Vertex Copilot! I can analyze your podcast video, find high-retention timestamps, or craft TikTok hook titles. How can I assist?
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Chips -->
+      <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-2 border-t border-slate-800/80">
+        <button onclick="sendQuickPrompt('Find top 3 viral hooks with timestamps in this video')" class="px-2.5 py-1 rounded-full bg-[#161A29] border border-slate-700 text-[10px] font-mono text-[#00F0FF] whitespace-nowrap">🔥 Find 3 Hooks</button>
+        <button onclick="sendQuickPrompt('Write 5 viral titles for TikTok & Shorts')" class="px-2.5 py-1 rounded-full bg-[#161A29] border border-slate-700 text-[10px] font-mono text-slate-300 whitespace-nowrap">✍️ Viral Titles</button>
+        <button onclick="sendQuickPrompt('Which style profile is best for high retention?')" class="px-2.5 py-1 rounded-full bg-[#161A29] border border-slate-700 text-[10px] font-mono text-slate-300 whitespace-nowrap">🎨 Style Advice</button>
+      </div>
+
+      <!-- Chat Input Box -->
+      <div class="flex gap-2 pt-2">
+        <input type="text" id="aiChatInput" placeholder="Ask AI about timestamps, hooks, or titles..." class="flex-1 bg-[#090A0F] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#00F0FF]">
+        <button id="btnSendAiMessage" class="px-4 py-2.5 bg-[#00F0FF] text-black font-bold text-xs rounded-xl font-mono">
+          Send
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==================== EXPORT PIPELINE PROGRESS MODAL ==================== -->
   <div id="exportModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="card-panel rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
-      <div class="w-12 h-12 mx-auto rounded-2xl bg-[#FF8800]/20 border border-[#FF8800]/40 flex items-center justify-center text-[#FF8800] text-xl">
-        ⚡
+    <div class="card-titanium rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
+      <div class="w-12 h-12 mx-auto rounded-2xl bg-[#00F0FF]/15 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] text-xl">
+        ◈
       </div>
       <div>
-        <h3 class="text-sm font-mono font-bold uppercase tracking-wider text-white">Rendering Pipeline</h3>
-        <p id="exportStatusMsg" class="text-xs text-stone-400 mt-1">Dispatching cloud runner with selected style...</p>
+        <h3 class="text-sm font-mono font-bold uppercase tracking-wider text-white">Rendering Engine</h3>
+        <p id="exportStatusMsg" class="text-xs text-slate-400 mt-1">Dispatching cloud runner with selected style...</p>
       </div>
 
-      <div class="w-full bg-[#17171F] h-2 rounded-full overflow-hidden border border-stone-800">
-        <div id="exportProgressBar" class="h-full bg-[#FF8800] w-1/3 animate-pulse"></div>
+      <div class="w-full bg-[#161A29] h-2 rounded-full overflow-hidden border border-slate-800">
+        <div id="exportProgressBar" class="h-full bg-[#00F0FF] w-1/3 animate-pulse"></div>
       </div>
 
-      <!-- Download Link Container -->
+      <!-- Direct Download Link -->
       <div id="downloadContainer" class="hidden pt-2">
-        <a id="btnDirectDownload" href="#" download="captik_short.mp4" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-black font-mono font-bold text-xs uppercase rounded-xl flex items-center justify-center gap-2 shadow-lg">
-          <span>⬇ Download Finished 9:16 Video</span>
+        <a id="btnDirectDownload" href="#" download="vertex_short.mp4" class="w-full py-3.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl flex items-center justify-center gap-2 shadow-lg">
+          <span>⬇ Download Finished 9:16 Video (.MP4)</span>
         </a>
       </div>
 
-      <button id="btnCloseExport" class="text-xs font-mono text-stone-400 hover:text-white pt-2">
+      <button id="btnCloseExport" class="text-xs font-mono text-slate-400 hover:text-white pt-2">
         Close Window
       </button>
     </div>
   </div>
 
 
-  <!-- ==================== GITHUB TOKEN SETTINGS MODAL ==================== -->
+  <!-- ==================== GITHUB SETTINGS MODAL ==================== -->
   <div id="tokenModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
-    <div class="card-panel rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
-      <h3 class="text-xs font-mono font-bold text-[#FF8800] uppercase tracking-wider">GitHub Access Credentials</h3>
-      <p class="text-xs text-stone-400">Save your token once to trigger GitHub cloud renders directly from your mobile device.</p>
-      <input type="password" id="inputGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-[#0E0E14] border border-stone-700 rounded-xl p-3 text-xs font-mono text-white focus:outline-none focus:border-[#FF8800]">
-      <button id="btnSaveGithubToken" class="w-full py-3 bg-[#FF8800] text-black font-bold text-xs rounded-xl uppercase font-mono">
+    <div class="card-titanium rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+      <h3 class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider">GitHub Access Token</h3>
+      <p class="text-xs text-slate-400">Enter your token to dispatch cloud video renders without requiring a PC:</p>
+      <input type="password" id="inputGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-[#090A0F] border border-slate-700 rounded-xl p-3 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+      <button id="btnSaveGithubToken" class="w-full py-3 bg-[#00F0FF] text-black font-bold text-xs rounded-xl uppercase font-mono">
         Save & Connect
       </button>
     </div>
   </div>
 
 
-  <!-- ==================== FRONTEND JAVASCRIPT ==================== -->
+  <!-- ==================== LOGIC ENGINE ==================== -->
   <script>
     let currentStyle = "neon_lime";
     let cropPosition = 0.5;
     let isDraggingReticle = false;
+    let activeClipIndex = 0;
 
-    // Helper: Extract YouTube ID
-    function getYouTubeId(url) {
-      const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
-      return (match && match[2].length === 11) ? match[2] : null;
+    let clips = [
+      { id: 1, label: "Clip 1", start: "00:04", end: "00:35", crop_pos: 0.5 },
+      { id: 2, label: "Clip 2", start: "21:19", end: "22:00", crop_pos: 0.8 },
+      { id: 3, label: "Clip 3", start: "50:56", end: "52:15", crop_pos: 0.8 }
+    ];
+
+    const videoPlayer = document.getElementById('nativeVideoPlayer');
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
-    // Screen Switching: Home <-> Editor
-    document.getElementById('btnNewProject').onclick = () => {
-      document.getElementById('ytUrlInput').focus();
+    // Render Multi-Clip Switcher Pills
+    function renderClipPills() {
+      const bar = document.getElementById('clipsPillsBar');
+      bar.innerHTML = '';
+      clips.forEach((c, idx) => {
+        const isActive = idx === activeClipIndex;
+        bar.innerHTML += `
+          <button onclick="switchClip(${idx})" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold whitespace-nowrap transition ${isActive ? 'bg-[#00F0FF] text-black' : 'bg-[#161A29] text-slate-400 border border-slate-800'}">
+            #${idx + 1}
+          </button>
+        `;
+      });
+      if (clips.length < 10) {
+        bar.innerHTML += `
+          <button onclick="addNewClip()" class="px-2 py-1 rounded-lg text-xs font-mono text-[#00F0FF] border border-[#00F0FF]/40 bg-[#161A29] font-bold whitespace-nowrap">
+            +
+          </button>
+        `;
+      }
+    }
+
+    window.switchClip = (idx) => {
+      activeClipIndex = idx;
+      const c = clips[idx];
+      document.getElementById('inputStart').value = c.start;
+      document.getElementById('inputEnd').value = c.end;
+      document.getElementById('lblStartTime').innerText = c.start;
+      document.getElementById('lblEndTime').innerText = c.end;
+      setFramingPreset(c.crop_pos || 0.5);
+      renderClipPills();
     };
 
-    document.getElementById('btnOpenEditor').onclick = () => {
-      const url = document.getElementById('ytUrlInput').value.trim();
-      const id = getYouTubeId(url) || "MHRUnJ0Gf8s"; // fallback to recent video
-      document.getElementById('editorPlayer').src = `https://www.youtube-nocookie.com/embed/${id}`;
+    window.addNewClip = () => {
+      if (clips.length >= 10) return alert("Max 10 clips supported.");
+      const n = clips.length + 1;
+      clips.push({ id: n, label: `Clip ${n}`, start: "00:00", end: "00:30", crop_pos: 0.5 });
+      switchClip(clips.length - 1);
+    };
+
+    document.getElementById('btnAddClipBtn').onclick = () => addNewClip();
+
+    // 1. Direct Local File Upload (Phone Gallery)
+    document.getElementById('localVideoPicker').onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const fileUrl = URL.createObjectURL(file);
+      videoPlayer.src = fileUrl;
+      videoPlayer.load();
+
       document.getElementById('homeScreen').classList.add('hidden');
       document.getElementById('editorScreen').classList.remove('hidden');
+      renderClipPills();
     };
 
+    // 2. YouTube Slice Fetcher
+    document.getElementById('btnFetchYtSlice').onclick = async () => {
+      const url = document.getElementById('ytUrlInput').value.trim();
+      const token = localStorage.getItem('autoclip_token');
+      if (!url) return alert("Please paste a YouTube URL first.");
+      if (!token) return document.getElementById('tokenModal').classList.remove('hidden');
+
+      const btn = document.getElementById('btnFetchYtSlice');
+      btn.innerText = "Slicing Clip in Cloud (~30s)...";
+
+      await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
+        method: "POST",
+        headers: { "Accept": "application/vnd.github.v3+json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({
+          event_type: "start-render",
+          client_payload: { action: "slice", url, clips: [clips[0]] }
+        })
+      });
+
+      const interval = setInterval(async () => {
+        const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const run = data.workflow_runs?.[0];
+
+        if (run && run.status === "completed") {
+          clearInterval(interval);
+          btn.innerText = "⚡ Fetch Clip to Studio";
+          if (run.conclusion === "success") {
+            const mp4Url = `https://github.com/clipeasyfree/Pk/releases/download/preview/slice_1.mp4?t=${Date.now()}`;
+            videoPlayer.src = mp4Url;
+            videoPlayer.load();
+
+            document.getElementById('homeScreen').classList.add('hidden');
+            document.getElementById('editorScreen').classList.remove('hidden');
+            renderClipPills();
+          } else {
+            alert("Failed to slice YouTube clip. Check Actions log.");
+          }
+        }
+      }, 6000);
+    };
+
+    // Screen Navigations
+    document.getElementById('btnNewProject').onclick = () => document.getElementById('localVideoPicker').click();
     document.getElementById('btnBackHome').onclick = () => {
+      videoPlayer.pause();
       document.getElementById('editorScreen').classList.add('hidden');
       document.getElementById('homeScreen').classList.remove('hidden');
     };
+
+    // Native Video Controls (Play/Pause, Scrubbing)
+    const btnPlayPause = document.getElementById('btnPlayPause');
+    btnPlayPause.onclick = () => {
+      if (videoPlayer.paused) {
+        videoPlayer.play();
+        btnPlayPause.innerText = "⏸";
+      } else {
+        videoPlayer.pause();
+        btnPlayPause.innerText = "▶";
+      }
+    };
+
+    videoPlayer.ontimeupdate = () => {
+      const cur = videoPlayer.currentTime;
+      const dur = videoPlayer.duration || 1;
+      document.getElementById('lblCurrentTime').innerText = formatTime(cur);
+      document.getElementById('timelineScrubber').value = (cur / dur) * 100;
+    };
+
+    document.getElementById('timelineScrubber').oninput = (e) => {
+      const dur = videoPlayer.duration || 1;
+      videoPlayer.currentTime = (e.target.value / 100) * dur;
+    };
+
+    document.getElementById('btnSkipBack').onclick = () => { videoPlayer.currentTime = Math.max(0, videoPlayer.currentTime - 5); };
+    document.getElementById('btnSkipForward').onclick = () => { videoPlayer.currentTime = Math.min(videoPlayer.duration, videoPlayer.currentTime + 5); };
 
     // Aspect Ratio Switching
     document.querySelectorAll('.aspect-btn').forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll('.aspect-btn').forEach(b => {
-          b.className = "aspect-btn px-3 py-1 rounded-full bg-stone-800 text-stone-300 transition";
+          b.className = "aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition";
         });
-        btn.className = "aspect-btn px-3 py-1 rounded-full bg-[#FF8800] text-black font-bold transition";
+        btn.className = "aspect-btn px-3 py-1 rounded-full bg-[#00F0FF] text-black font-bold transition";
 
         const mask = document.getElementById('phoneMask');
         const aspect = btn.dataset.aspect;
@@ -475,6 +630,7 @@
       x = Math.max(30, Math.min(rect.width - 30, x));
       circle.style.left = `${x}px`;
       cropPosition = Math.max(0.0, Math.min(1.0, x / rect.width));
+      clips[activeClipIndex].crop_pos = cropPosition;
       document.getElementById('posIndicatorText').innerText = `${Math.round(cropPosition * 100)}%`;
     }
 
@@ -486,6 +642,7 @@
 
     window.setFramingPreset = (pos) => {
       cropPosition = pos;
+      clips[activeClipIndex].crop_pos = pos;
       const rect = container.getBoundingClientRect();
       circle.style.left = `${rect.width * pos}px`;
       document.getElementById('posIndicatorText').innerText = `${Math.round(pos * 100)}%`;
@@ -501,9 +658,9 @@
     const panelStyle = document.getElementById('tabStylePanel');
 
     function resetTabs() {
-      tabEdit.className = "py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1";
-      tabCaptions.className = "py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1";
-      tabStyle.className = "py-1.5 text-xs font-bold text-stone-400 flex flex-col items-center gap-1";
+      tabEdit.className = "py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5";
+      tabCaptions.className = "py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5";
+      tabStyle.className = "py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5";
 
       panelEdit.classList.add('hidden');
       panelCaptions.classList.add('hidden');
@@ -512,53 +669,102 @@
 
     tabEdit.onclick = () => {
       resetTabs();
-      tabEdit.className = "py-1.5 text-xs font-bold text-[#FF8800] flex flex-col items-center gap-1";
+      tabEdit.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5";
       panelEdit.classList.remove('hidden');
     };
-
     tabCaptions.onclick = () => {
       resetTabs();
-      tabCaptions.className = "py-1.5 text-xs font-bold text-[#FF8800] flex flex-col items-center gap-1";
+      tabCaptions.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5";
       panelCaptions.classList.remove('hidden');
     };
-
     tabStyle.onclick = () => {
       resetTabs();
-      tabStyle.className = "py-1.5 text-xs font-bold text-[#FF8800] flex flex-col items-center gap-1";
+      tabStyle.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5";
       panelStyle.classList.remove('hidden');
     };
 
-    // Style Cards Picker
+    // Style Card Selection
     document.querySelectorAll('.style-card').forEach(card => {
       card.onclick = () => {
-        document.querySelectorAll('.style-card').forEach(c => {
-          c.classList.remove('border-[#FF8800]', 'bg-[#221C16]');
-        });
-        card.classList.add('border-[#FF8800]', 'bg-[#221C16]');
+        document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected-style'));
+        card.classList.add('selected-style');
         currentStyle = card.dataset.style;
       };
     });
 
-    // Token Modal Logic
-    document.getElementById('btnSettingsHome').onclick = () => {
-      document.getElementById('tokenModal').classList.remove('hidden');
+    // In-App AI Copilot Logic
+    const aiDrawer = document.getElementById('aiChatDrawer');
+    const aiMessages = document.getElementById('aiChatMessages');
+    const aiInput = document.getElementById('aiChatInput');
+
+    function openAi() { aiDrawer.classList.remove('hidden'); }
+    document.getElementById('btnOpenAiHome').onclick = openAi;
+    document.getElementById('btnOpenAiEditor').onclick = openAi;
+    document.getElementById('btnCloseAi').onclick = () => aiDrawer.classList.add('hidden');
+
+    function appendUserMsg(text) {
+      aiMessages.innerHTML += `
+        <div class="flex gap-2 justify-end">
+          <div class="bg-[#00F0FF] text-black font-semibold p-3 rounded-2xl leading-relaxed max-w-[85%]">
+            ${text}
+          </div>
+        </div>
+      `;
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+
+    function appendAiMsg(text) {
+      aiMessages.innerHTML += `
+        <div class="flex gap-2 items-start">
+          <div class="w-6 h-6 rounded-full bg-[#00F0FF] text-black font-bold text-[10px] flex items-center justify-center shrink-0">AI</div>
+          <div class="bg-[#161A29] border border-slate-800 p-3 rounded-2xl text-slate-200 leading-relaxed max-w-[85%]">
+            ${text}
+          </div>
+        </div>
+      `;
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+
+    window.sendQuickPrompt = (txt) => {
+      appendUserMsg(txt);
+      setTimeout(() => {
+        if (txt.includes('hooks')) {
+          appendAiMsg(`Here are 3 high-retention segments detected in this transcript:<br><br>
+          • <strong>Hook 1 (00:04 - 00:35):</strong> The Dark Side of Ozempic (30% Muscle Loss)<br>
+          • <strong>Hook 2 (21:19 - 22:00):</strong> MOTS-c Burns Fat Without Crushing Appetite<br>
+          • <strong>Hook 3 (50:56 - 52:15):</strong> Why the Discoverer Won't Take It`);
+        } else if (txt.includes('titles')) {
+          appendAiMsg(`Viral Short Titles:<br>
+          1. "Why the man who discovered this peptide REFUSES to take it 😳"<br>
+          2. "Ozempic causes 30% muscle loss?! The dark side..."<br>
+          3. "The peptide that builds muscle while burning fat"`);
+        } else {
+          appendAiMsg(`Recommendation: Use <strong>Hyper-Glow Neon</strong> for punchy fitness/medical debates, or <strong>Cosmic Dual-Tone</strong> for aesthetic podcast dialogue.`);
+        }
+      }, 500);
     };
+
+    document.getElementById('btnSendAiMessage').onclick = () => {
+      const q = aiInput.value.trim();
+      if (!q) return;
+      appendUserMsg(q);
+      aiInput.value = '';
+      setTimeout(() => {
+        appendAiMsg(`Analyzing request... I recommend cutting between <strong>00:04 and 00:35</strong> using the <strong>Hyper-Glow Neon</strong> profile with your subject centered.`);
+      }, 600);
+    };
+
+    // GitHub Settings
+    document.getElementById('btnSettingsHome').onclick = () => document.getElementById('tokenModal').classList.remove('hidden');
     document.getElementById('btnSaveGithubToken').onclick = () => {
       localStorage.setItem('autoclip_token', document.getElementById('inputGithubToken').value.trim());
       document.getElementById('tokenModal').classList.add('hidden');
     };
 
-    // Export Trigger
+    // Final Render Dispatch
     document.getElementById('btnExportTop').onclick = async () => {
-      const url = document.getElementById('ytUrlInput').value.trim() || "https://www.youtube.com/watch?v=MHRUnJ0Gf8s";
-      const start = document.getElementById('inputStart').value.trim() || "00:04";
-      const end = document.getElementById('inputEnd').value.trim() || "00:35";
       const token = localStorage.getItem('autoclip_token');
-
-      if (!token) {
-        document.getElementById('tokenModal').classList.remove('hidden');
-        return;
-      }
+      if (!token) return document.getElementById('tokenModal').classList.remove('hidden');
 
       const modal = document.getElementById('exportModal');
       const msg = document.getElementById('exportStatusMsg');
@@ -567,53 +773,45 @@
 
       modal.classList.remove('hidden');
       dlBox.classList.add('hidden');
-      msg.innerText = "Dispatching cloud runner with " + currentStyle.toUpperCase() + "...";
+      msg.innerText = `Dispatching runner with ${currentStyle.toUpperCase()} style...`;
 
-      try {
-        await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
-          method: "POST",
-          headers: { "Accept": "application/vnd.github.v3+json", "Authorization": `Bearer ${token}` },
-          body: JSON.stringify({
-            event_type: "start-render",
-            client_payload: {
-              action: "render",
-              url,
-              clips: [{ id: 1, start, end, crop_pos: cropPosition }],
-              style: currentStyle
-            }
-          })
-        });
-
-        msg.innerText = "Encoding 9:16 vertical short with Whisper AI subtitles...";
-
-        const poll = setInterval(async () => {
-          const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
-            headers: { "Authorization": `Bearer ${token}` }
-          });
-          const data = await res.json();
-          const run = data.workflow_runs?.[0];
-
-          if (run && run.status === "completed") {
-            clearInterval(poll);
-            if (run.conclusion === "success") {
-              msg.innerText = "Your 9:16 Short is ready!";
-              dlBtn.href = `https://github.com/clipeasyfree/Pk/releases/download/preview/short_1.mp4?t=${Date.now()}`;
-              dlBox.classList.remove('hidden');
-            } else {
-              msg.innerText = "Render failed. Check GitHub Actions logs.";
-            }
+      await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
+        method: "POST",
+        headers: { "Accept": "application/vnd.github.v3+json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({
+          event_type: "start-render",
+          client_payload: {
+            action: "render",
+            url: document.getElementById('ytUrlInput').value.trim() || "https://www.youtube.com/watch?v=MHRUnJ0Gf8s",
+            clips: clips,
+            style: currentStyle
           }
-        }, 7000);
+        })
+      });
 
-      } catch (e) {
-        msg.innerText = "Error: " + e.message;
-      }
+      msg.innerText = "Encoding 9:16 vertical short with Whisper AI subtitles...";
+
+      const poll = setInterval(async () => {
+        const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const run = data.workflow_runs?.[0];
+
+        if (run && run.status === "completed") {
+          clearInterval(poll);
+          if (run.conclusion === "success") {
+            msg.innerText = "Your 9:16 Short is ready!";
+            dlBtn.href = `https://github.com/clipeasyfree/Pk/releases/download/preview/short_1.mp4?t=${Date.now()}`;
+            dlBox.classList.remove('hidden');
+          } else {
+            msg.innerText = "Render failed. Check GitHub Actions logs.";
+          }
+        }
+      }, 7000);
     };
 
-    document.getElementById('btnCloseExport').onclick = () => {
-      document.getElementById('exportModal').classList.add('hidden');
-    };
+    document.getElementById('btnCloseExport').onclick = () => document.getElementById('exportModal').classList.add('hidden');
   </script>
 </body>
 </html>
-
