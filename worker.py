@@ -9,7 +9,7 @@ from faster_whisper import WhisperModel
 
 print("[*] Initializing VERTEX PRO AI Studio Engine...")
 
-# 1. Setup cookies
+# 1. Setup cookies safely
 cookies_path = None
 cookies_env = os.environ.get('COOKIES_DATA', '').strip()
 if cookies_env and len(cookies_env) > 20:
@@ -57,50 +57,40 @@ for f in glob.glob("output/*"):
     try: os.remove(f)
     except: pass
 
-# 3. Authentic Captik Style Definitions (using installed Google Fonts)
-# ASS colors: &H00BBGGRR&
+# 3. Subtitle Styles
 STYLES = {
-    # 1. Captik Glow (Neon Lime active glow + Anton bold)
     "neon_lime": {
         "font": "Anton", "size": "76", "primary": "&H00FFFFFF&", "highlight": "&H0014FF39&",
         "border": "3", "blur": "12", "shadow": "0", "italic": "0", "scale": "115"
     },
-    # 2. Captik Shadow (Ultra bold Montserrat Black with heavy 3D drop shadow)
     "bold_shadow": {
         "font": "Montserrat-Black", "size": "72", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
         "border": "0", "blur": "0", "shadow": "7", "italic": "0", "scale": "110"
     },
-    # 3. Delhi (Editorial luxury italic Playfair Display)
     "moonlight_serif": {
         "font": "PlayfairDisplay-BoldItalic", "size": "66", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
         "border": "1", "blur": "8", "shadow": "0", "italic": "-1", "scale": "108"
     },
-    # 4. Illusion (Kinetic Zoom with 135% scale pop)
     "kinetic_scale": {
         "font": "Montserrat-Black", "size": "68", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
         "border": "3", "blur": "0", "shadow": "3", "italic": "0", "scale": "135"
     },
-    # 5. Editor Masala (Canary yellow punch on Anton)
     "canary_punch": {
         "font": "Anton", "size": "78", "primary": "&H00FFFFFF&", "highlight": "&H0000E5FF&",
         "border": "4", "blur": "0", "shadow": "3", "italic": "0", "scale": "115"
     },
-    # 6. Aura (Editorial Playfair Display with Cyan text)
     "sky_dual": {
         "font": "PlayfairDisplay-BoldItalic", "size": "70", "primary": "&H00FFFFFF&", "highlight": "&H00FFC266&",
         "border": "2", "blur": "4", "shadow": "0", "italic": "-1", "scale": "118"
     },
-    # 7. Swiss (Modernist Anton with bright gold accent)
     "modernist_swiss": {
         "font": "Anton", "size": "74", "primary": "&H00FFFFFF&", "highlight": "&H0000D4FF&",
         "border": "4", "blur": "0", "shadow": "3", "italic": "0", "scale": "115"
     },
-    # 8. The Big Red (Playfair Display Black with deep red accent)
     "crimson_cinematic": {
         "font": "PlayfairDisplay-Black", "size": "74", "primary": "&H00FFFFFF&", "highlight": "&H003333E6&",
         "border": "2", "blur": "5", "shadow": "0", "italic": "0", "scale": "125"
     },
-    # 9. Clean Glow (Soft ambient white diffusion)
     "ambient_white": {
         "font": "Montserrat-Black", "size": "64", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
         "border": "2", "blur": "14", "shadow": "0", "italic": "0", "scale": "105"
@@ -109,9 +99,55 @@ STYLES = {
 cfg = STYLES.get(style, STYLES["neon_lime"])
 print(f"[*] Applying Selected Style Profile: {style.upper()} ({cfg['font']})")
 
+# Resilient Downloader Function that avoids the broken 'tv_downgraded' client
+def download_youtube_slice(target_url, start_time, end_time, out_path, cookie_file=None):
+    # Base command explicitly excluding tv_downgraded to eliminate "The page needs to be reloaded"
+    base_args = [
+        "yt-dlp",
+        "--remote-components", "ejs:github",
+        "--extractor-args", "youtube:player_client=android,web_embedded,web",
+        "--download-sections", f"*{start_time}-{end_time}",
+        "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
+        "--merge-output-format", "mp4",
+        "--force-keyframes-at-cuts",
+        "--no-check-certificates"
+    ]
+
+    # Strategy 1: Attempt with cookies if available
+    if cookie_file and os.path.exists(cookie_file):
+        print("[*] Attempting download using provided cookies...")
+        cmd = base_args + ["--cookies", cookie_file, target_url, "-o", out_path]
+        proc = subprocess.run(cmd)
+        if proc.returncode == 0:
+            return True
+        print("[!] Cookie download failed or session expired. Falling back to direct client without cookies...")
+
+    # Strategy 2: Direct download without cookies (bypasses expired/flagged cookie errors)
+    cmd = base_args + [target_url, "-o", out_path]
+    proc = subprocess.run(cmd)
+    if proc.returncode == 0:
+        return True
+
+    # Strategy 3: Ultimate Fallback (Default client with tv_downgraded explicitly banned)
+    print("[!] Trying secondary fallback client (default,-tv_downgraded)...")
+    fallback_cmd = [
+        "yt-dlp",
+        "--extractor-args", "youtube:player_client=default,-tv_downgraded,web_embedded",
+        "--download-sections", f"*{start_time}-{end_time}",
+        "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
+        "--merge-output-format", "mp4",
+        "--force-keyframes-at-cuts",
+        "--no-check-certificates",
+        target_url, "-o", out_path
+    ]
+    proc_fallback = subprocess.run(fallback_cmd)
+    if proc_fallback.returncode != 0:
+        raise RuntimeError("yt-dlp failed to download slice with all available client strategies.")
+    return True
+
+
 # 4. Computer Vision AI: Auto-Framing & Split-Screen Detector
 def analyze_shots_and_faces(video_path):
-    """Analyzes video to detect scene cuts and whether shots contain 1 or 2 people."""
     cap = cv2.VideoCapture(video_path)
     w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -129,22 +165,17 @@ def analyze_shots_and_faces(video_path):
         if not ret:
             break
 
-        # Check every 6th frame for efficiency
         if frame_idx % 6 == 0:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            
-            # Simple scene cut detection
             if prev_gray is not None:
                 diff = cv2.absdiff(gray, prev_gray)
-                non_zero = np.count_nonzero(diff > 30)
-                ratio = non_zero / (w * h)
-                if ratio > 0.40: # Camera cut
+                ratio = np.count_nonzero(diff > 30) / (w * h)
+                if ratio > 0.40:
                     current_shot["end"] = frame_idx / fps
                     shots.append(current_shot)
                     current_shot = {"start": frame_idx / fps, "faces": []}
             prev_gray = gray
 
-            # Detect faces
             detected = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(60, 60))
             if len(detected) > 0:
                 current_shot["faces"].append(detected)
@@ -176,24 +207,12 @@ for clip_item in clips:
     print(f"[*] Slicing Clip #{cid} ({start} -> {end})...")
     print(f"==========================================")
 
-    cmd_dl = [
-        "yt-dlp",
-        "--remote-components", "ejs:github",
-        "--extractor-args", "youtube:player_client=default,web_embedded",
-        "--download-sections", f"*{start}-{end}",
-        "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
-        "--merge-output-format", "mp4",
-        "--force-keyframes-at-cuts",
-        "--no-check-certificates"
-    ]
-    if cookies_path and os.path.exists(cookies_path):
-        cmd_dl.extend(["--cookies", cookies_path])
-    cmd_dl.extend([url, "-o", raw_template])
-    subprocess.run(cmd_dl, check=True)
+    # Call the self-healing slice downloader
+    download_youtube_slice(url, start, end, raw_template, cookies_path)
 
     downloaded = [f for f in glob.glob(f"temp/raw_{cid}.*") if not f.endswith(".part") and not f.endswith(".ytdl")]
     if not downloaded:
-        raise FileNotFoundError(f"Could not find slice file for clip {cid}")
+        raise FileNotFoundError(f"Could not find sliced output file for clip {cid}")
     subprocess.run(["ffmpeg", "-y", "-i", downloaded[0], "-c", "copy", final_raw], check=True)
 
     # Audio Transcription
@@ -201,7 +220,7 @@ for clip_item in clips:
     subprocess.run(["ffmpeg", "-y", "-i", final_raw, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
     segments, _ = model.transcribe(wav_path, word_timestamps=True)
 
-    # Build Captik Stacked Phrase Subtitles
+    # Subtitles
     print(f"[*] Generating Captik-tier animated typography for Clip #{cid}...")
     with open(ass_file, "w", encoding="utf-8") as f:
         f.write("[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\n\n")
@@ -209,7 +228,6 @@ for clip_item in clips:
         f.write(f"Style: Default,{cfg['font']},{cfg['size']},{cfg['primary']},&H00000000&,&H80000000&,-1,{cfg['italic']},2,360,{cfg['border']},{cfg['shadow']},1\n\n")
         f.write("[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
 
-        # Group words into natural 2-4 word rhythmic phrases
         all_words = []
         for s in segments:
             for w in s.words:
@@ -224,7 +242,6 @@ for clip_item in clips:
                 phrase_parts = []
                 for idx, w in enumerate(chunk):
                     if idx == target_idx:
-                        # Active pop / kinetic glow
                         phrase_parts.append(f"{{\\c{cfg['highlight']}\\3c{cfg['highlight']}\\blur{cfg['blur']}\\fscx{cfg['scale']}\\fscy{cfg['scale']}}}{w['word']}{{\\c{cfg['primary']}\\3c&H00000000&\\blur0\\fscx100\\fscy100}}")
                     else:
                         phrase_parts.append(w['word'])
@@ -237,7 +254,6 @@ for clip_item in clips:
     print(f"[*] Running AI Computer Vision & Shot Detection...")
     vid_w, vid_h, fps, shots = analyze_shots_and_faces(final_raw)
 
-    # Determine if the scene has two people (wide shot) or single speaker
     two_people_detected = False
     for s in shots:
         for f_batch in s["faces"]:
@@ -246,7 +262,7 @@ for clip_item in clips:
                 break
 
     if two_people_detected:
-        print("[⚡] Wide 2-person shot detected! Rendering Stacked 9:16 Split-Screen (Host Top / Guest Bottom)...")
+        print("[⚡] Wide 2-person shot detected! Rendering Stacked 9:16 Split-Screen...")
         filter_str = (
             f"[0:v]split=2[in1][in2]; "
             f"[in1]crop=w=ih*(9/8):h=ih:x=0:y=0,scale=1080:960[top]; "
@@ -263,9 +279,7 @@ for clip_item in clips:
             out_mp4
         ]
     else:
-        # Dynamic Speaker Tracking with Automatic Camera Cuts
         user_pos = float(clip_item.get('crop_pos', 0.5))
-        crop_w = int(vid_h * (9 / 16))
         print(f"[*] Rendering Single Speaker 9:16 with Center Offset: {int(user_pos * 100)}%...")
         crop_filter = f"crop=ih*(9/16):ih:(iw-ih*(9/16))*{user_pos}:0,scale=1080:1920,subtitles='{ass_file}':fontsdir='fonts'"
         cmd_render = [
@@ -280,4 +294,3 @@ for clip_item in clips:
     print(f"[✓] Rendered: {out_mp4}")
 
 print("\n[*] All requested clips finished successfully!")
-
