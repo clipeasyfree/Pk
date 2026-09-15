@@ -19,7 +19,7 @@
     .card-titanium:hover { border-color: #2D354F; }
     .item-dark { background-color: #161A29; border: 1px solid #232A3F; }
     .selected-style { border: 2px solid #00F0FF !important; background-color: #13222E !important; }
-    .target-ring { border: 2px dashed #00F0FF; box-shadow: 0 0 25px rgba(0, 240, 255, 0.75); }
+    .target-ring { border: 2px dashed #00F0FF; box-shadow: 0 0 20px rgba(0, 240, 255, 0.7); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     input[type=range]::-webkit-slider-thumb {
@@ -47,7 +47,7 @@
           <div>
             <div class="flex items-center space-x-2">
               <span class="text-base font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V4.2</span>
+              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V4.5</span>
             </div>
             <p class="text-xs text-slate-400">Automated 9:16 Video Synthesis</p>
           </div>
@@ -64,7 +64,7 @@
         </div>
       </div>
 
-      <!-- Quick Action: Launch AI Virality Report -->
+      <!-- Virality Report Banner -->
       <button id="btnRunAiReport" class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#00F0FF] via-[#00B4D8] to-[#0077B6] text-black font-extrabold text-xs uppercase tracking-widest flex items-center justify-between shadow-[0_8px_25px_rgba(0,240,255,0.25)] active:scale-[0.98] transition">
         <span class="flex items-center gap-2">
           <span class="text-sm">🔥</span>
@@ -134,15 +134,16 @@
         <button id="btnOpenReportEditor" class="w-8 h-8 rounded-lg item-dark flex items-center justify-center text-[#00F0FF] text-sm">
           📊
         </button>
+        <!-- Master Export Button -->
         <button id="btnExportTop" class="h-8 px-3.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1 shadow-[0_4px_15px_rgba(0,240,255,0.25)] active:scale-95 transition">
           <span>⬇ Export</span>
         </button>
       </div>
     </header>
 
-    <!-- ZONE 1: UPPER STAGE (ASPECT MASK & VIDEO CANVAS) -->
+    <!-- ZONE 1: UPPER STAGE (ASPECT MASK & SLIDING VIEWFINDER RIG) -->
     <div class="p-3 space-y-2.5">
-      <!-- Aspect Mask Selector -->
+      <!-- Aspect Ratio Bar -->
       <div class="flex items-center justify-center gap-2 text-[11px] font-mono">
         <button data-aspect="original" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">Original</button>
         <button data-aspect="9:16" class="aspect-btn px-3 py-1 rounded-full bg-[#00F0FF] text-black font-bold transition">9:16</button>
@@ -151,7 +152,7 @@
         <button data-aspect="4:5" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">4:5</button>
       </div>
 
-      <!-- Studio Viewport -->
+      <!-- Studio Viewport with Sliding Viewfinder Rig -->
       <div class="relative w-full aspect-[9/10] sm:aspect-square bg-black rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center select-none" id="viewportContainer">
         
         <!-- Engine A: YouTube Embed Stream -->
@@ -160,14 +161,33 @@
         <!-- Engine B: Phone Gallery Native Video Player -->
         <video id="nativeVideoPlayer" playsinline webkit-playsinline class="w-full h-full object-contain pointer-events-none bg-black hidden"></video>
 
-        <!-- 9:16 Framing Guide & Real-Time Touch Reticle -->
-        <div id="reticleLayer" class="absolute inset-0 pointer-events-none flex items-center justify-center z-20">
-          <div id="phoneMask" class="h-full border-2 border-[#00F0FF]/60 pointer-events-none relative" style="width: 56.25%;">
-            <div id="targetCircle" class="target-ring absolute w-16 h-16 rounded-full bg-[#00F0FF]/25 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-move flex flex-col items-center justify-center" style="left: 50%; top: 40%; touch-action: none;">
-              <div class="w-2 h-2 rounded-full bg-white mb-0.5 pointer-events-none"></div>
-              <span class="text-[8px] font-mono font-black text-black bg-[#00F0FF] px-1 rounded pointer-events-none">TARGET</span>
+        <!-- Viewfinder Overlay Layer: Left Curtain, 9:16 Rig with Center Target, Right Curtain -->
+        <div id="reticleLayer" class="absolute inset-0 pointer-events-none z-20 overflow-hidden">
+          
+          <!-- Left Dimmed Curtain -->
+          <div id="maskLeftCurtain" class="absolute top-0 bottom-0 left-0 bg-black/55 backdrop-blur-[1px] pointer-events-none transition-all duration-75"></div>
+
+          <!-- UNIFIED 9:16 VIEWFINDER RIG -->
+          <div id="phoneMask" class="absolute top-0 bottom-0 border-2 border-[#00F0FF] bg-[#00F0FF]/10 pointer-events-auto cursor-move flex items-center justify-center transition-all duration-75 shadow-[0_0_35px_rgba(0,0,0,0.8)]" style="touch-action: none;">
+            
+            <!-- Safe Zone Crosshair Lines -->
+            <div class="absolute inset-x-0 top-1/3 border-b border-[#00F0FF]/25 pointer-events-none"></div>
+            <div class="absolute inset-x-0 top-2/3 border-b border-[#00F0FF]/25 pointer-events-none"></div>
+            
+            <!-- LOCKED TARGET CIRCLE (Permanently centered inside 9:16 frame) -->
+            <div id="targetCircle" class="target-ring w-16 h-16 rounded-full bg-[#00F0FF]/25 flex flex-col items-center justify-center pointer-events-none shadow-lg">
+              <div class="w-2 h-2 rounded-full bg-white mb-0.5 shadow"></div>
+              <span class="text-[8px] font-mono font-black text-black bg-[#00F0FF] px-1 rounded">TARGET</span>
+            </div>
+
+            <!-- Frame Label -->
+            <div class="absolute bottom-2 inset-x-0 mx-auto w-fit bg-black/85 border border-[#00F0FF]/40 px-2 py-0.5 rounded text-[9px] font-mono text-[#00F0FF] pointer-events-none">
+              9:16 CUT
             </div>
           </div>
+
+          <!-- Right Dimmed Curtain -->
+          <div id="maskRightCurtain" class="absolute top-0 bottom-0 right-0 bg-black/55 backdrop-blur-[1px] pointer-events-none transition-all duration-75"></div>
         </div>
 
         <div class="absolute bottom-2.5 left-3 bg-black/80 border border-slate-800 px-2 py-0.5 rounded-lg text-[10px] font-mono text-[#00F0FF] z-30">
@@ -176,9 +196,9 @@
       </div>
     </div>
 
-    <!-- ZONE 2: CENTER TIMELINE & PRECISE SECOND-BY-SECOND DECK -->
+    <!-- ZONE 2: CENTER TIMELINE & PRECISE DECK -->
     <div class="px-4 py-2 space-y-2.5">
-      <!-- Transport Deck with 1s and 5s Frame Steppers -->
+      <!-- Steppers & Transport Controls -->
       <div class="flex items-center justify-between px-1">
         <button id="btnStepBack5" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-slate-300 active:scale-90 transition">-5s</button>
         <button id="btnStepBack1" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-[#00F0FF] border border-[#00F0FF]/40 active:scale-90 transition">⏮ -1s</button>
@@ -192,7 +212,7 @@
         <button id="btnStepFwd5" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-slate-300 active:scale-90 transition">+5s</button>
       </div>
 
-      <!-- Scrubber Deck & Timestamp Setters -->
+      <!-- Scrubber Deck & Timestamp Markers -->
       <div class="card-titanium p-3 rounded-2xl space-y-2">
         <div class="flex justify-between items-center text-[10px] font-mono text-slate-400 px-1">
           <button id="btnSetInMarker" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-[#00F0FF] hover:text-black font-bold text-slate-200 transition">
@@ -224,13 +244,13 @@
           </div>
 
           <div class="grid grid-cols-3 gap-2">
-            <button onclick="setFramingPreset(0.2)" class="py-2 item-dark rounded-xl text-xs font-mono text-slate-300 hover:border-[#00F0FF]">
+            <button onclick="setFramingPreset(0.15)" class="py-2 item-dark rounded-xl text-xs font-mono text-slate-300 hover:border-[#00F0FF]">
               ◀ Left (Host)
             </button>
             <button onclick="setFramingPreset(0.5)" class="py-2 item-dark rounded-xl text-xs font-mono text-[#00F0FF] border-[#00F0FF]">
               Center
             </button>
-            <button onclick="setFramingPreset(0.8)" class="py-2 item-dark rounded-xl text-xs font-mono text-slate-300 hover:border-[#00F0FF]">
+            <button onclick="setFramingPreset(0.85)" class="py-2 item-dark rounded-xl text-xs font-mono text-slate-300 hover:border-[#00F0FF]">
               Right (Guest) ▶
             </button>
           </div>
@@ -373,36 +393,43 @@
   </div>
 
 
-  <!-- ==================== AI VIRALITY PROCESS REPORT MODAL ==================== -->
-  <div id="reportModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex flex-col justify-end hidden">
-    <div class="bg-[#111420] border-t border-slate-800 rounded-t-3xl max-w-md mx-auto w-full h-[85vh] flex flex-col justify-between p-4 shadow-2xl">
+  <!-- ==================== NEW: EXPORT CLIPS SELECTION CHECKLIST MODAL ==================== -->
+  <div id="exportSelectModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex flex-col justify-end hidden">
+    <div class="bg-[#111420] border-t border-slate-800 rounded-t-3xl max-w-md mx-auto w-full max-h-[85vh] flex flex-col justify-between p-5 shadow-2xl space-y-4">
       
-      <!-- Report Header -->
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#00F0FF] to-[#0072FF] text-black font-black flex items-center justify-center text-sm">
-            ◈
-          </div>
-          <div>
-            <h3 class="text-xs font-mono font-bold text-white uppercase">AI VIRALITY PROCESS REPORT</h3>
-            <p class="text-[10px] text-[#00F0FF]">5 High-Retention Hooks Detected</p>
-          </div>
+        <div>
+          <h3 class="text-sm font-mono font-bold text-white uppercase tracking-wider">SELECT CLIPS TO RENDER</h3>
+          <p class="text-[11px] text-slate-400">Choose which clips you want to export as 9:16 Shorts:</p>
         </div>
-        <button id="btnCloseReport" class="w-7 h-7 rounded-full bg-[#161A29] border border-slate-700 text-slate-300 text-xs flex items-center justify-center">✕</button>
+        <button id="btnCloseSelectExport" class="w-7 h-7 rounded-full bg-[#161A29] border border-slate-700 text-slate-300 text-xs flex items-center justify-center">✕</button>
       </div>
 
-      <!-- Report Body / Scrollable Cards -->
-      <div class="flex-1 overflow-y-auto no-scrollbar py-3 space-y-3" id="reportCardsList"></div>
-
-      <div class="pt-2 border-t border-slate-800 text-center">
-        <span class="text-[10px] font-mono text-slate-500">Tap "Load into Editor" to set segment timestamps instantly.</span>
+      <!-- Checklist Controls -->
+      <div class="flex justify-between items-center text-xs font-mono px-1">
+        <span id="selectedClipsSummary" class="text-[#00F0FF] font-bold">3 of 3 Selected</span>
+        <div class="flex gap-2">
+          <button id="btnSelectAllClips" class="text-slate-300 hover:text-white underline text-[11px]">Select All</button>
+          <span class="text-slate-600">|</span>
+          <button id="btnDeselectAllClips" class="text-slate-300 hover:text-white underline text-[11px]">Deselect</button>
+        </div>
       </div>
+
+      <!-- Checklist Items Container -->
+      <div id="exportClipsChecklist" class="flex-1 overflow-y-auto no-scrollbar space-y-2.5 py-1">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Confirm Render Trigger -->
+      <button id="btnConfirmRenderClips" class="w-full py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
+        <span>⚡ Start Cloud Render</span>
+      </button>
 
     </div>
   </div>
 
 
-  <!-- ==================== EXPORT PROGRESS & BULLETPROOF DOWNLOAD MODAL ==================== -->
+  <!-- ==================== EXPORT PROGRESS & VERIFIED DOWNLOAD MODAL ==================== -->
   <div id="exportModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
       <div class="w-12 h-12 mx-auto rounded-2xl bg-[#00F0FF]/15 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] text-xl">
@@ -434,6 +461,31 @@
   </div>
 
 
+  <!-- ==================== AI VIRALITY PROCESS REPORT MODAL ==================== -->
+  <div id="reportModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex flex-col justify-end hidden">
+    <div class="bg-[#111420] border-t border-slate-800 rounded-t-3xl max-w-md mx-auto w-full h-[85vh] flex flex-col justify-between p-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#00F0FF] to-[#0072FF] text-black font-black flex items-center justify-center text-sm">
+            ◈
+          </div>
+          <div>
+            <h3 class="text-xs font-mono font-bold text-white uppercase">AI VIRALITY PROCESS REPORT</h3>
+            <p class="text-[10px] text-[#00F0FF]">5 High-Retention Hooks Detected</p>
+          </div>
+        </div>
+        <button id="btnCloseReport" class="w-7 h-7 rounded-full bg-[#161A29] border border-slate-700 text-slate-300 text-xs flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto no-scrollbar py-3 space-y-3" id="reportCardsList"></div>
+
+      <div class="pt-2 border-t border-slate-800 text-center">
+        <span class="text-[10px] font-mono text-slate-500">Tap "Load into Editor" to set segment timestamps instantly.</span>
+      </div>
+    </div>
+  </div>
+
+
   <!-- ==================== GITHUB SETTINGS MODAL ==================== -->
   <div id="tokenModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
@@ -447,11 +499,11 @@
   </div>
 
 
-  <!-- ==================== LOGIC & SCRUBBING CONTROLLER ==================== -->
+  <!-- ==================== LOGIC & CONTROLLER ENGINE ==================== -->
   <script>
     let currentStyle = "neon_lime";
     let cropPosition = 0.5;
-    let isDraggingReticle = false;
+    let currentAspect = "9:16";
     let activeClipIndex = 0;
     let activeMode = "youtube";
     let isPlaying = false;
@@ -478,7 +530,7 @@
         score: 96,
         start: "50:56",
         end: "52:15",
-        crop_pos: 0.8,
+        crop_pos: 0.85,
         tiktokCaption: "At 69, Dr. Cohen loses 1kg muscle/yr. He discovered MOTS-c, but refuses to buy online. Here's why. 🧪\n\n#peptides #motsc #biohacker #longevity",
         igCaption: "Would you take the molecule you discovered if it wasn't FDA approved?\n\nDr. Cohen discovered MOTS-c but warns about gray-market impurities.\n\n#peptideprotocols #functionalmedicine #scientifictruth"
       },
@@ -489,7 +541,7 @@
         score: 93,
         start: "21:19",
         end: "22:00",
-        crop_pos: 0.8,
+        crop_pos: 0.85,
         tiktokCaption: "GLP-1 crushes hunger. MOTS-c shuttles calories from fat into muscle. 🥩\n\n#metabolism #musclebuilding #fatlosshelp",
         igCaption: "MOTS-c partitions energy away from fat cells and directly into muscle tissue.\n\n#metabolichealth #insulinresistance #gymmotivation"
       },
@@ -511,16 +563,16 @@
         score: 89,
         start: "01:13:04",
         end: "01:14:05",
-        crop_pos: 0.8,
+        crop_pos: 0.85,
         tiktokCaption: "20% of people carry this mutation spiking Alzheimer's risk by 50%. 🧠\n\n#alzheimers #brainhealth #neuroscience",
         igCaption: "Meet SHMOO—a mitochondrial peptide protecting neurons against amyloid beta toxicity.\n\n#neuroprotection #brainoptimization #genetics"
       }
     ];
 
     let clips = [
-      { id: 1, label: "Clip 1", start: "00:04", end: "00:35", crop_pos: 0.5 },
-      { id: 2, label: "Clip 2", start: "21:19", end: "22:00", crop_pos: 0.8 },
-      { id: 3, label: "Clip 3", start: "50:56", end: "52:15", crop_pos: 0.8 }
+      { id: 1, label: "Clip 1: The Hook", start: "00:04", end: "00:35", crop_pos: 0.5, selectedForExport: true },
+      { id: 2, label: "Clip 2: Key Insight", start: "21:19", end: "22:00", crop_pos: 0.85, selectedForExport: true },
+      { id: 3, label: "Clip 3: Big Story", start: "50:56", end: "52:15", crop_pos: 0.85, selectedForExport: true }
     ];
 
     const ytIframe = document.getElementById('ytIframePlayer');
@@ -528,6 +580,10 @@
     const btnPlayPause = document.getElementById('btnPlayPause');
     const lblCurrent = document.getElementById('lblCurrentTime');
     const scrubber = document.getElementById('timelineScrubber');
+    const container = document.getElementById('viewportContainer');
+    const phoneMask = document.getElementById('phoneMask');
+    const maskLeft = document.getElementById('maskLeftCurtain');
+    const maskRight = document.getElementById('maskRightCurtain');
 
     function extractYouTubeId(url) {
       const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
@@ -560,6 +616,90 @@
       }
     }
 
+    // ==================== ROCK-SOLID UNIFIED SLIDING RIG ====================
+    function updateFraming(pos) {
+      pos = Math.max(0.0, Math.min(1.0, pos));
+      cropPosition = pos;
+      if (clips[activeClipIndex]) {
+        clips[activeClipIndex].crop_pos = pos;
+      }
+      document.getElementById('posIndicatorText').innerText = `${Math.round(pos * 100)}%`;
+
+      if (!container || !phoneMask) return;
+      const cWidth = container.clientWidth;
+      const cHeight = container.clientHeight;
+
+      // Calculate 9:16 or selected aspect width
+      let maskWidth;
+      if (currentAspect === "9:16") {
+        maskWidth = cHeight * (9 / 16);
+      } else if (currentAspect === "1:1") {
+        maskWidth = Math.min(cWidth, cHeight);
+      } else if (currentAspect === "4:5") {
+        maskWidth = cHeight * (4 / 5);
+      } else {
+        maskWidth = cWidth;
+      }
+      maskWidth = Math.min(cWidth, maskWidth);
+
+      // Travel bounds
+      const maxLeft = Math.max(0, cWidth - maskWidth);
+      const leftPx = pos * maxLeft;
+
+      // Position sliding rig
+      phoneMask.style.width = `${maskWidth}px`;
+      phoneMask.style.left = `${leftPx}px`;
+
+      // Position side-curtains
+      if (maskLeft) {
+        maskLeft.style.width = `${leftPx}px`;
+      }
+      if (maskRight) {
+        const rightWidth = Math.max(0, cWidth - (leftPx + maskWidth));
+        maskRight.style.width = `${rightWidth}px`;
+      }
+    }
+
+    window.setFramingPreset = (pos) => {
+      updateFraming(pos);
+    };
+
+    // Viewport Touch/Drag Controller
+    let isDraggingRig = false;
+    function handleRigDrag(clientX) {
+      const rect = container.getBoundingClientRect();
+      const maskW = phoneMask.offsetWidth;
+      const maxTravel = Math.max(1, rect.width - maskW);
+      let targetLeft = clientX - rect.left - (maskW / 2);
+      let pos = targetLeft / maxTravel;
+      updateFraming(pos);
+    }
+
+    phoneMask.addEventListener('touchstart', (e) => { isDraggingRig = true; }, { passive: true });
+    container.addEventListener('touchstart', (e) => { isDraggingRig = true; handleRigDrag(e.touches[0].clientX); }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (isDraggingRig && e.touches[0]) handleRigDrag(e.touches[0].clientX);
+    }, { passive: true });
+    window.addEventListener('touchend', () => { isDraggingRig = false; });
+
+    window.addEventListener('resize', () => {
+      updateFraming(cropPosition);
+    });
+
+    // Aspect Ratio Switching
+    document.querySelectorAll('.aspect-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.aspect-btn').forEach(b => {
+          b.className = "aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition";
+        });
+        btn.className = "aspect-btn px-3 py-1 rounded-full bg-[#00F0FF] text-black font-bold transition";
+        currentAspect = btn.dataset.aspect;
+        updateFraming(cropPosition);
+      };
+    });
+
+    // Unified Media Player Controller
     const StudioEngine = {
       play() {
         isPlaying = true;
@@ -655,6 +795,7 @@
       document.getElementById('editorScreen').classList.remove('hidden');
       renderClipPills();
       StudioEngine.updateUI();
+      setTimeout(() => updateFraming(clips[activeClipIndex].crop_pos || 0.5), 100);
     };
 
     document.getElementById('localVideoPicker').onchange = (e) => {
@@ -679,6 +820,7 @@
       document.getElementById('homeScreen').classList.add('hidden');
       document.getElementById('editorScreen').classList.remove('hidden');
       renderClipPills();
+      setTimeout(() => updateFraming(clips[activeClipIndex].crop_pos || 0.5), 100);
     };
 
     document.getElementById('btnBackHome').onclick = () => {
@@ -687,6 +829,7 @@
       document.getElementById('homeScreen').classList.remove('hidden');
     };
 
+    // Multi-Clip Pills Controller
     function renderClipPills() {
       const bar = document.getElementById('clipsPillsBar');
       bar.innerHTML = '';
@@ -714,7 +857,9 @@
       document.getElementById('inputEnd').value = c.end;
       document.getElementById('lblStartTime').innerText = c.start;
       document.getElementById('lblEndTime').innerText = c.end;
-      setFramingPreset(c.crop_pos || 0.5);
+      
+      // Update framing & sync player seamlessly
+      updateFraming(c.crop_pos !== undefined ? c.crop_pos : 0.5);
       renderClipPills();
       StudioEngine.seekTo(timeToSeconds(c.start));
     };
@@ -722,60 +867,13 @@
     window.addNewClip = () => {
       if (clips.length >= 10) return alert("Max 10 clips supported.");
       const n = clips.length + 1;
-      clips.push({ id: n, label: `Clip ${n}`, start: "00:00", end: "00:30", crop_pos: 0.5 });
+      clips.push({ id: n, label: `Clip ${n}`, start: "00:00", end: "00:30", crop_pos: 0.5, selectedForExport: true });
       switchClip(clips.length - 1);
     };
 
     document.getElementById('btnAddClipBtn').onclick = () => addNewClip();
 
-    const circle = document.getElementById('targetCircle');
-    const container = document.getElementById('viewportContainer');
-    const phoneMask = document.getElementById('phoneMask');
-
-    function updateReticlePos(clientX) {
-      const rect = container.getBoundingClientRect();
-      let x = clientX - rect.left;
-      x = Math.max(20, Math.min(rect.width - 20, x));
-      circle.style.left = `${x}px`;
-      cropPosition = Math.max(0.0, Math.min(1.0, x / rect.width));
-      clips[activeClipIndex].crop_pos = cropPosition;
-      document.getElementById('posIndicatorText').innerText = `${Math.round(cropPosition * 100)}%`;
-
-      const maxShift = rect.width - phoneMask.offsetWidth;
-      phoneMask.style.transform = `translateX(${(cropPosition - 0.5) * maxShift}px)`;
-    }
-
-    circle.addEventListener('touchstart', () => { isDraggingReticle = true; }, { passive: true });
-    window.addEventListener('touchmove', (e) => {
-      if (isDraggingReticle && e.touches[0]) updateReticlePos(e.touches[0].clientX);
-    }, { passive: true });
-    window.addEventListener('touchend', () => { isDraggingReticle = false; });
-
-    window.setFramingPreset = (pos) => {
-      cropPosition = pos;
-      clips[activeClipIndex].crop_pos = pos;
-      const rect = container.getBoundingClientRect();
-      circle.style.left = `${rect.width * pos}px`;
-      document.getElementById('posIndicatorText').innerText = `${Math.round(pos * 100)}%`;
-      const maxShift = rect.width - phoneMask.offsetWidth;
-      phoneMask.style.transform = `translateX(${(cropPosition - 0.5) * maxShift}px)`;
-    };
-
-    document.querySelectorAll('.aspect-btn').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.aspect-btn').forEach(b => {
-          b.className = "aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition";
-        });
-        btn.className = "aspect-btn px-3 py-1 rounded-full bg-[#00F0FF] text-black font-bold transition";
-
-        const aspect = btn.dataset.aspect;
-        if (aspect === "9:16") phoneMask.style.width = "56.25%";
-        else if (aspect === "1:1") phoneMask.style.width = "100%";
-        else if (aspect === "4:5") phoneMask.style.width = "80%";
-        else phoneMask.style.width = "100%";
-      };
-    });
-
+    // Bottom Drawer Tabs
     const tabEdit = document.getElementById('navTabEdit');
     const tabCaptions = document.getElementById('navTabCaptions');
     const tabStyle = document.getElementById('navTabStyle');
@@ -817,6 +915,131 @@
       };
     });
 
+    // ==================== MULTI-CLIP EXPORT CHECKLIST MODAL ====================
+    const exportSelectModal = document.getElementById('exportSelectModal');
+    const checklistContainer = document.getElementById('exportClipsChecklist');
+    const summaryText = document.getElementById('selectedClipsSummary');
+
+    function renderExportChecklist() {
+      checklistContainer.innerHTML = '';
+      let selectedCount = 0;
+
+      clips.forEach((c, i) => {
+        if (c.selectedForExport === undefined) c.selectedForExport = true;
+        if (c.selectedForExport) selectedCount++;
+
+        checklistContainer.innerHTML += `
+          <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" id="chk_clip_${i}" ${c.selectedForExport ? 'checked' : ''} onchange="toggleClipExportSelection(${i}, this.checked)" class="w-4 h-4 accent-[#00F0FF] rounded cursor-pointer">
+              <div>
+                <label for="chk_clip_${i}" class="text-xs font-bold text-white block cursor-pointer">Clip #${i+1}: ${c.label || 'Segment'}</label>
+                <span class="text-[10px] font-mono text-slate-400">${c.start} ➔ ${c.end}</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-[#00F0FF]">
+              Face: ${Math.round((c.crop_pos || 0.5) * 100)}%
+            </span>
+          </div>
+        `;
+      });
+
+      summaryText.innerText = `${selectedCount} of ${clips.length} Selected`;
+    }
+
+    window.toggleClipExportSelection = (idx, isChecked) => {
+      clips[idx].selectedForExport = isChecked;
+      const count = clips.filter(x => x.selectedForExport).length;
+      summaryText.innerText = `${count} of ${clips.length} Selected`;
+    };
+
+    document.getElementById('btnSelectAllClips').onclick = () => {
+      clips.forEach(c => c.selectedForExport = true);
+      renderExportChecklist();
+    };
+
+    document.getElementById('btnDeselectAllClips').onclick = () => {
+      clips.forEach(c => c.selectedForExport = false);
+      renderExportChecklist();
+    };
+
+    // Open Clip Selection Checklist
+    document.getElementById('btnExportTop').onclick = () => {
+      renderExportChecklist();
+      exportSelectModal.classList.remove('hidden');
+    };
+    document.getElementById('btnCloseSelectExport').onclick = () => {
+      exportSelectModal.classList.add('hidden');
+    };
+
+    // Confirm Selection & Execute Cloud Render
+    document.getElementById('btnConfirmRenderClips').onclick = async () => {
+      const selectedClips = clips.filter(c => c.selectedForExport);
+      if (selectedClips.length === 0) return alert("Please select at least 1 clip to export.");
+
+      const token = localStorage.getItem('autoclip_token');
+      if (!token) {
+        exportSelectModal.classList.add('hidden');
+        document.getElementById('tokenModal').classList.remove('hidden');
+        return;
+      }
+
+      exportSelectModal.classList.add('hidden');
+      const modal = document.getElementById('exportModal');
+      const msg = document.getElementById('exportStatusMsg');
+      const dlBox = document.getElementById('downloadContainer');
+      const dlBtn = document.getElementById('btnDirectDownload');
+      const ghBackupBtn = document.getElementById('btnGitHubRunBackup');
+
+      modal.classList.remove('hidden');
+      dlBox.classList.add('hidden');
+      msg.innerText = `Dispatching runner for ${selectedClips.length} clips with ${currentStyle.toUpperCase()} style...`;
+
+      try {
+        await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
+          method: "POST",
+          headers: { "Accept": "application/vnd.github.v3+json", "Authorization": `Bearer ${token}` },
+          body: JSON.stringify({
+            event_type: "start-render",
+            client_payload: {
+              action: "render",
+              url: document.getElementById('ytUrlInput').value.trim() || "https://www.youtube.com/watch?v=MHRUnJ0Gf8s",
+              clips: selectedClips,
+              style: currentStyle
+            }
+          })
+        });
+
+        msg.innerText = `Encoding ${selectedClips.length} vertical shorts in the cloud...`;
+
+        const poll = setInterval(async () => {
+          const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
+            headers: { "Authorization": `Bearer ${token}` }
+          });
+          const data = await res.json();
+          const run = data.workflow_runs?.[0];
+
+          if (run && run.status === "completed") {
+            clearInterval(poll);
+            if (run.conclusion === "success") {
+              msg.innerText = `All ${selectedClips.length} Shorts finished rendering!`;
+              dlBtn.href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
+              ghBackupBtn.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
+              dlBox.classList.remove('hidden');
+            } else {
+              msg.innerText = "Render encountered an error. Check Actions logs.";
+            }
+          }
+        }, 7000);
+
+      } catch (err) {
+        msg.innerText = "Error: " + err.message;
+      }
+    };
+
+    document.getElementById('btnCloseExport').onclick = () => document.getElementById('exportModal').classList.add('hidden');
+
+    // Virality Report Drawer
     function renderReportCards() {
       const container = document.getElementById('reportCardsList');
       container.innerHTML = '';
@@ -871,7 +1094,7 @@
       document.getElementById('inputEnd').value = item.end;
       document.getElementById('lblStartTime').innerText = item.start;
       document.getElementById('lblEndTime').innerText = item.end;
-      setFramingPreset(item.crop_pos);
+      updateFraming(item.crop_pos);
 
       document.getElementById('reportModal').classList.add('hidden');
       document.getElementById('homeScreen').classList.add('hidden');
@@ -895,63 +1118,6 @@
       localStorage.setItem('autoclip_token', document.getElementById('inputGithubToken').value.trim());
       document.getElementById('tokenModal').classList.add('hidden');
     };
-
-    // Master Export Trigger & Verified Download Handler
-    document.getElementById('btnExportTop').onclick = async () => {
-      const token = localStorage.getItem('autoclip_token');
-      if (!token) return document.getElementById('tokenModal').classList.remove('hidden');
-
-      const modal = document.getElementById('exportModal');
-      const msg = document.getElementById('exportStatusMsg');
-      const dlBox = document.getElementById('downloadContainer');
-      const dlBtn = document.getElementById('btnDirectDownload');
-      const ghBackupBtn = document.getElementById('btnGitHubRunBackup');
-
-      modal.classList.remove('hidden');
-      dlBox.classList.add('hidden');
-      msg.innerText = `Dispatching runner with ${currentStyle.toUpperCase()} style...`;
-
-      await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
-        method: "POST",
-        headers: { "Accept": "application/vnd.github.v3+json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify({
-          event_type: "start-render",
-          client_payload: {
-            action: "render",
-            url: document.getElementById('ytUrlInput').value.trim() || "https://www.youtube.com/watch?v=MHRUnJ0Gf8s",
-            clips: clips,
-            style: currentStyle
-          }
-        })
-      });
-
-      msg.innerText = "Encoding 9:16 vertical short with Whisper AI subtitles...";
-
-      const poll = setInterval(async () => {
-        const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
-        const data = await res.json();
-        const run = data.workflow_runs?.[0];
-
-        if (run && run.status === "completed") {
-          clearInterval(poll);
-          if (run.conclusion === "success") {
-            msg.innerText = "Your 9:16 Short is ready!";
-            
-            // 100% Reliable Direct Artifact Download (No 404s)
-            dlBtn.href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
-            ghBackupBtn.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
-            
-            dlBox.classList.remove('hidden');
-          } else {
-            msg.innerText = "Render failed. Check GitHub Actions logs.";
-          }
-        }
-      }, 7000);
-    };
-
-    document.getElementById('btnCloseExport').onclick = () => document.getElementById('exportModal').classList.add('hidden');
   </script>
 </body>
 </html>
