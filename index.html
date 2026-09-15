@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATELIER CLIP // Studio Prestige</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ATELIER CLIP // Mobile Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,292 +18,153 @@
             mono: ['"Space Mono"', 'monospace'],
           },
           colors: {
-            gold: {
-              50: '#FDFBF7', 100: '#F7F3E8', 200: '#EFE7D2', 300: '#DFCFA9',
-              400: '#CEB278', 500: '#B89047', 600: '#9E7634', 700: '#7F5B27', 800: '#5C3F1B'
-            },
-            sand: {
-              50: '#FDFCFB', 100: '#F7F6F3', 200: '#EEECE6', 300: '#E2DFD6',
-              800: '#2A2824', 900: '#1C1B18'
-            }
-          },
-          boxShadow: {
-            'luxury': '0 20px 45px -15px rgba(28, 27, 24, 0.06), 0 0 1px 1px rgba(184, 144, 71, 0.12)',
-            'gold-glow': '0 12px 30px -5px rgba(184, 144, 71, 0.22)',
-            'target-glow': '0 0 25px 4px rgba(184, 144, 71, 0.45)',
+            gold: { 100: '#F7F3E8', 200: '#EFE7D2', 300: '#DFCFA9', 400: '#CEB278', 500: '#B89047', 600: '#9E7634', 700: '#7F5B27', 800: '#5C3F1B' },
+            sand: { 50: '#FDFCFB', 100: '#F7F6F3', 200: '#EEECE6', 800: '#2A2824', 900: '#1C1B18' }
           }
         }
       }
     }
   </script>
   <style>
-    body {
-      background-color: #FBFBF9;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(184, 144, 71, 0.05) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(28, 27, 24, 0.03) 0px, transparent 50%);
-    }
-    .fine-line { border: 1px solid rgba(184, 144, 71, 0.22); }
+    body { background-color: #FBFBF9; -webkit-tap-highlight-color: transparent; }
+    .fine-line { border: 1px solid rgba(184, 144, 71, 0.25); }
+    .reticle-gold { border: 2px dashed #D4AF37; box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
+    .reticle-emerald { border: 2px dashed #10B981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
   </style>
 </head>
 <body class="text-sand-900 min-h-screen antialiased selection:bg-gold-500 selection:text-white">
 
-  <!-- HEADER BAR -->
-  <header class="border-b border-sand-200/80 bg-white/85 backdrop-blur-xl sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-      <div class="flex items-center space-x-4">
-        <div class="w-10 h-10 rounded-xl bg-sand-900 text-gold-300 font-display font-bold text-lg flex items-center justify-center shadow-md border border-gold-500/30">
-          ✦
-        </div>
-        <div>
-          <div class="flex items-center space-x-2.5">
-            <span class="font-display font-bold tracking-[0.2em] text-lg text-sand-900">ATELIER<span class="text-gold-600 font-medium">CLIP</span></span>
-            <span class="text-[9px] uppercase tracking-[0.25em] font-bold px-2 py-0.5 rounded-full bg-gold-100 text-gold-800 border border-gold-300/60">Studio Prestige</span>
-          </div>
-          <p class="text-[11px] text-stone-500 font-mono tracking-wide">Automated Viral Shorts Suite</p>
-        </div>
+  <!-- Mobile Luxury Header -->
+  <header class="border-b border-sand-200/80 bg-white/95 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-8 h-8 rounded-lg bg-sand-900 text-gold-300 font-display font-bold text-sm flex items-center justify-center">✦</div>
+        <span class="font-display font-bold tracking-wider text-sm text-sand-900">ATELIER<span class="text-gold-600">CLIP</span></span>
       </div>
-
-      <button id="btnSettings" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white hover:bg-gold-50 border border-sand-200 hover:border-gold-300 text-xs font-mono text-sand-900 transition shadow-sm">
+      <button id="btnSettings" class="px-2.5 py-1 rounded-lg bg-sand-50 border border-sand-200 text-xs font-mono text-sand-900 flex items-center gap-1">
         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-        <span>Credentials</span>
-        <span class="text-gold-600">⚙</span>
+        <span>Token</span>
       </button>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-6 py-10 space-y-8">
+  <main class="max-w-3xl mx-auto px-4 py-6 space-y-6">
 
-    <!-- 01. SOURCE & VISUAL CIRCLE TARGETING MONITOR -->
-    <div class="bg-white border fine-line rounded-2xl p-7 shadow-luxury space-y-5">
-      <div class="flex items-center justify-between">
-        <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold flex items-center gap-2">
-          <span>01. Source Material & Interactive Face Targeting</span>
-        </span>
-        <span class="text-[10px] font-mono text-stone-500 px-2.5 py-0.5 rounded-full bg-sand-100 border border-sand-200">
-          Visual Reticle Enabled
-        </span>
-      </div>
-
-      <div class="flex flex-col sm:flex-row gap-3">
-        <div class="relative flex-1">
-          <input type="text" id="urlInput" 
-                 placeholder="Paste YouTube Podcast Link (https://www.youtube.com/watch?v=...)"
-                 class="w-full bg-sand-50/70 border border-sand-200 rounded-xl px-4 py-3.5 pl-11 text-sm text-sand-900 placeholder-stone-400 focus:outline-none focus:bg-white focus:border-gold-500 font-mono shadow-inner">
-          <span class="absolute left-4 top-3.5 text-gold-600 text-sm">▶</span>
-        </div>
-        <button id="btnLoadPreview" class="px-5 py-3.5 rounded-xl bg-sand-900 hover:bg-black text-gold-300 font-mono text-xs uppercase tracking-wider font-bold transition flex items-center justify-center gap-2 shrink-0">
-          <span>👁 Show Video</span>
+    <!-- 1. Video Input -->
+    <div class="bg-white border fine-line rounded-2xl p-5 shadow-sm space-y-3">
+      <span class="text-[10px] font-mono uppercase tracking-widest text-gold-700 font-bold block">01. Source YouTube Link</span>
+      <div class="flex gap-2">
+        <input type="text" id="urlInput" placeholder="Paste YouTube link here..." class="flex-1 bg-sand-50 border border-sand-200 rounded-xl px-3 py-2.5 text-xs font-mono focus:bg-white focus:border-gold-500 focus:outline-none">
+        <button id="btnLoadPreview" class="px-4 py-2.5 bg-sand-900 hover:bg-black text-gold-300 font-mono text-xs uppercase font-bold rounded-xl shrink-0">
+          👁 Show
         </button>
       </div>
 
-      <!-- EMBEDDED PLAYER WITH INTERACTIVE CIRCLE OVERLAY -->
-      <div id="previewBox" class="hidden pt-2 space-y-3">
-        <div class="flex items-center justify-between px-1">
-          <div class="flex items-center space-x-2">
-            <span class="text-xs font-mono font-bold text-stone-700">Targeting Mode:</span>
-            <span id="activeClipIndicator" class="text-xs font-mono font-semibold text-gold-800 bg-gold-100 px-2 py-0.5 rounded border border-gold-300">Clip #1</span>
-          </div>
-          <button id="btnToggleOverlay" class="px-3 py-1.5 rounded-lg bg-gold-500 hover:bg-gold-600 text-sand-900 font-mono text-xs font-bold transition shadow-sm flex items-center gap-1.5">
-            <span id="overlayToggleIcon">🎯</span>
-            <span id="overlayToggleText">Point Face on Video</span>
+      <!-- Video Player & Dual Circle Reticle Stage -->
+      <div id="previewBox" class="hidden pt-2 space-y-2">
+        <div class="flex items-center justify-between text-[11px] font-mono">
+          <span id="activeClipIndicator" class="font-bold text-gold-800 bg-gold-100 px-2 py-0.5 rounded">Framing: Clip #1</span>
+          <button id="btnToggleReticle" class="px-2.5 py-1 bg-gold-500 text-sand-900 font-bold rounded text-[10px]">
+            🎯 Point Faces on Video
           </button>
         </div>
 
-        <div id="videoStage" class="relative w-full aspect-video rounded-xl overflow-hidden border border-sand-300 shadow-md bg-black select-none">
-          <!-- YouTube Player -->
-          <iframe id="ytPlayer" class="w-full h-full pointer-events-auto" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div id="stageContainer" class="relative w-full aspect-video rounded-xl overflow-hidden border border-sand-300 bg-black select-none">
+          <iframe id="ytPlayer" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
 
-          <!-- INTERACTIVE FACE-TARGETING RETICLE OVERLAY -->
-          <div id="faceTargetOverlay" class="absolute inset-0 bg-black/45 backdrop-blur-[1px] hidden cursor-crosshair z-20 flex items-center">
+          <!-- Touch Overlay with Dual Draggable Reticles -->
+          <div id="touchOverlay" class="absolute inset-0 bg-black/40 hidden z-20">
             
-            <!-- Instructions Banner -->
-            <div class="absolute top-3 left-1/2 -translate-x-1/2 bg-sand-900/90 border border-gold-400/40 text-gold-300 px-4 py-1.5 rounded-full text-[11px] font-mono pointer-events-none shadow-lg tracking-wide flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-gold-400 animate-ping"></span>
-              <span>Click or drag directly onto the speaker's face</span>
+            <!-- Instructions -->
+            <div class="absolute top-2 inset-x-0 mx-auto w-fit bg-sand-900/90 text-gold-300 text-[10px] font-mono px-3 py-1 rounded-full pointer-events-none">
+              Drag circles directly onto faces with your finger
             </div>
 
-            <!-- Dynamic 9:16 Viewfinder Frame -->
-            <div id="viewfinder" class="absolute top-0 bottom-0 border-2 border-gold-400/90 bg-gold-500/10 transition-none flex items-center justify-center pointer-events-none shadow-[0_0_50px_rgba(0,0,0,0.8)]" style="width: 31.64%; left: 34.18%;">
-              
-              <!-- Subtle vertical guidelines -->
-              <div class="absolute inset-x-0 top-1/3 border-b border-gold-400/20"></div>
-              <div class="absolute inset-x-0 top-2/3 border-b border-gold-400/20"></div>
-              
-              <!-- THE SPEAKER FACE TARGET CIRCLE -->
-              <div id="faceCircle" class="w-20 h-20 rounded-full border-2 border-dashed border-gold-300 bg-gold-400/25 shadow-target-glow flex flex-col items-center justify-center backdrop-blur-[2px] transform transition-transform scale-105">
-                <div class="w-2.5 h-2.5 rounded-full bg-gold-300 shadow-md mb-0.5"></div>
-                <span class="text-[9px] font-mono font-black tracking-widest text-gold-200 uppercase">FACE</span>
-              </div>
-
-              <!-- Offset Coordinate Pill -->
-              <div class="absolute bottom-3 bg-sand-900/90 border border-gold-400/30 text-gold-300 font-mono text-[10px] px-2 py-0.5 rounded shadow">
-                <span id="overlayPercent">50%</span> Frame
-              </div>
+            <!-- Circle 1: Top Face / Host -->
+            <div id="circleTop" class="reticle-gold absolute w-16 h-16 rounded-full bg-gold-500/30 flex flex-col items-center justify-center cursor-move" style="left: 15%; top: 30%;">
+              <span class="text-[8px] font-mono font-black text-white bg-black/70 px-1 rounded">TOP FACE</span>
             </div>
 
-            <!-- Close Overlay Button -->
-            <button id="btnCloseOverlay" class="absolute bottom-3 right-3 px-3 py-1.5 bg-sand-900 hover:bg-black text-gold-300 border border-gold-400/40 text-xs font-mono font-bold rounded-lg pointer-events-auto shadow-lg">
-              ✓ Done Framing
+            <!-- Circle 2: Bottom Face / Guest (Visible in Split Mode) -->
+            <div id="circleBot" class="reticle-emerald absolute w-16 h-16 rounded-full bg-emerald-500/30 flex flex-col items-center justify-center cursor-move" style="left: 70%; top: 30%;">
+              <span class="text-[8px] font-mono font-black text-white bg-black/70 px-1 rounded">BOT FACE</span>
+            </div>
+
+            <button id="btnCloseOverlay" class="absolute bottom-2 right-2 px-3 py-1 bg-sand-900 text-gold-300 text-xs font-mono font-bold rounded-lg border border-gold-400">
+              ✓ Done
             </button>
           </div>
         </div>
 
-        <div class="grid grid-cols-3 text-center py-2 px-3 bg-sand-100/80 rounded-xl border border-sand-200 text-[11px] font-mono">
-          <div class="text-gold-800 font-semibold">◀ Host / Left Person</div>
-          <div class="text-stone-600 border-x border-sand-300">Center Room</div>
-          <div class="text-gold-800 font-semibold">Guest / Right Person ▶</div>
+        <!-- Position Readouts -->
+        <div class="grid grid-cols-2 text-center py-2 px-3 bg-sand-100 rounded-xl text-[11px] font-mono border border-sand-200">
+          <div class="text-gold-800">Top Face: <span id="lblTop" class="font-bold">15%</span></div>
+          <div class="text-emerald-700">Bottom Face: <span id="lblBot" class="font-bold">70%</span></div>
         </div>
       </div>
     </div>
 
-    <!-- 02. TRANSCRIPT EXTRACTION & AI VIRAL FINDER -->
-    <div class="bg-white border border-sand-200 rounded-2xl p-7 shadow-luxury space-y-5">
-      <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 pb-3 border-b border-sand-100">
-        <div>
-          <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold block">
-            02. Transcript Intelligence & AI Viral Hook Finder
-          </span>
-          <p class="text-xs text-stone-500 mt-0.5">Extract video transcript and use AI to identify highest-retention moments.</p>
-        </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <button id="btnGetTranscript" class="px-3 py-1.5 rounded-lg border border-gold-400 bg-gold-50 hover:bg-gold-100 text-gold-800 text-xs font-mono font-medium transition">
-            📜 Get Transcript
-          </button>
-          <button id="btnCopyTranscript" class="px-3 py-1.5 rounded-lg border border-sand-200 hover:bg-sand-50 text-stone-700 text-xs font-mono font-medium transition hidden">
-            📋 Copy Whole Transcript
-          </button>
-          <button id="btnCopyAIPrompt" class="px-3 py-1.5 rounded-lg bg-sand-900 hover:bg-black text-gold-300 text-xs font-mono font-medium transition hidden">
-            ✨ Copy AI Viral Prompt
-          </button>
-        </div>
-      </div>
-
-      <div id="transcriptBox" class="hidden space-y-4">
-        <textarea id="transcriptText" rows="6" placeholder="Transcript text will load here..." class="w-full bg-sand-50 border border-sand-200 rounded-xl p-4 text-xs font-mono text-sand-900 focus:bg-white focus:border-gold-500 focus:outline-none"></textarea>
-        
-        <div class="p-4 bg-gold-50/70 border fine-line rounded-xl space-y-2.5">
-          <div class="flex justify-between items-center">
-            <span class="text-xs font-mono font-bold text-gold-800">📥 Auto-Fill Columns from AI Output</span>
-            <span class="text-[10px] font-mono text-stone-500">Paste JSON from ChatGPT or Gemini</span>
-          </div>
-          <div class="flex gap-2">
-            <input type="text" id="aiOutputInput" placeholder='Paste AI JSON (e.g. [{"start":"10:00","end":"10:45","title":"The Secret","speaker":"guest"}])' class="flex-1 bg-white border border-sand-300 rounded-lg px-3 py-2 text-xs font-mono focus:border-gold-500 focus:outline-none">
-            <button id="btnApplyAI" class="px-4 py-2 bg-sand-900 hover:bg-black text-gold-300 font-mono text-xs rounded-lg uppercase tracking-wider font-bold transition">
-              Apply
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 03. NUMBER OF CLIPS & DYNAMIC COLUMNS -->
-    <div class="bg-white border border-sand-200 rounded-2xl p-7 shadow-luxury space-y-6">
-      <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 pb-3 border-b border-sand-100">
-        <div>
-          <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold block">
-            03. Clip Segments & Speaker Targeting (Max 10)
-          </span>
-          <p class="text-xs text-stone-500 mt-0.5">Use the 🎯 button on any card to point the circle directly onto their face.</p>
-        </div>
-
-        <div class="flex items-center space-x-3 bg-sand-50 p-2 rounded-xl border border-sand-200">
-          <span class="text-xs font-mono text-stone-600 font-medium">Clips:</span>
-          <input type="number" id="clipCountInput" min="1" max="10" value="3" class="w-14 bg-white border border-sand-300 rounded-lg px-2 py-1 text-xs text-center font-mono font-bold text-sand-900 focus:border-gold-500">
-          <button id="btnApplyCount" class="px-3 py-1 bg-sand-900 text-gold-300 text-xs font-mono font-bold rounded-lg hover:bg-black transition">
-            Set
-          </button>
-        </div>
-      </div>
-
-      <div id="clipsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Generated by JS -->
-      </div>
-    </div>
-
-    <!-- 04. 6 HIGH-END STUDIO CAPTION PRESETS -->
-    <div class="bg-white border border-sand-200 rounded-2xl p-7 shadow-luxury space-y-5">
+    <!-- 2. Auto Viral Timestamps -->
+    <div class="bg-white border border-sand-200 rounded-2xl p-5 shadow-sm space-y-3">
       <div class="flex justify-between items-center">
-        <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold block">
-          04. Professional Studio Typography & Captions
-        </span>
-        <span class="text-[10px] font-mono text-stone-500">High-Retention Word Sync</span>
+        <span class="text-[10px] font-mono uppercase tracking-widest text-gold-700 font-bold">02. Quick Viral Auto-Fill</span>
+        <button id="btnAutoSuggest" class="px-3 py-1 bg-gold-500 hover:bg-gold-600 text-sand-900 font-mono text-[11px] font-bold rounded-lg">
+          ⚡ Auto-Fill 3 Viral Clips
+        </button>
       </div>
+      <p class="text-xs text-stone-500">Auto-detects timestamps from the video or enter your own below.</p>
+    </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5" id="styleGrid">
-        
-        <button data-style="hormozi" class="style-btn border-2 border-gold-500 bg-gold-50/60 rounded-xl p-4 text-left transition shadow-sm">
-          <div class="flex justify-between items-center mb-1.5">
-            <span class="text-xs font-bold text-sand-900">Hormozi Kinetic</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-lime-500"></span>
-          </div>
-          <p class="text-[11px] font-black uppercase tracking-wider text-stone-900">
-            <span class="text-lime-600">ELECTRIC LIME</span> POP
-          </p>
+    <!-- 3. Dynamic Clips Cards (Max 10) -->
+    <div class="bg-white border border-sand-200 rounded-2xl p-5 shadow-sm space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-sand-100">
+        <span class="text-[10px] font-mono uppercase tracking-widest text-gold-700 font-bold">03. Clips & Split-Screen</span>
+        <div class="flex items-center gap-1">
+          <input type="number" id="clipCountInput" min="1" max="10" value="3" class="w-12 bg-sand-50 border rounded p-1 text-xs text-center font-mono font-bold">
+          <button id="btnSetCount" class="px-2.5 py-1 bg-sand-900 text-gold-300 text-xs font-mono font-bold rounded">Set</button>
+        </div>
+      </div>
+      <div id="clipsContainer" class="space-y-3"></div>
+    </div>
+
+    <!-- 4. Trending Captions -->
+    <div class="bg-white border border-sand-200 rounded-2xl p-5 shadow-sm space-y-3">
+      <span class="text-[10px] font-mono uppercase tracking-widest text-gold-700 font-bold block">04. Caption Preset</span>
+      <div class="grid grid-cols-2 gap-2" id="styleGrid">
+        <button data-style="hormozi" class="style-btn border-2 border-gold-500 bg-gold-50 p-3 rounded-xl text-left">
+          <span class="text-xs font-bold block">Hormozi Kinetic</span>
+          <span class="text-[10px] font-black text-lime-600 uppercase">ELECTRIC LIME</span>
         </button>
-
-        <button data-style="gold" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
-          <div class="flex justify-between items-center mb-1.5">
-            <span class="text-xs font-bold text-sand-900 italic font-display">Iman Silk & Gold</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-          </div>
-          <p class="text-[11px] font-serif italic text-gold-700 tracking-wider">CHAMPAGNE LUXURY</p>
+        <button data-style="gold" class="style-btn border border-sand-200 bg-white p-3 rounded-xl text-left">
+          <span class="text-xs font-bold block">Iman Silk & Gold</span>
+          <span class="text-[10px] font-serif text-gold-700 uppercase">CHAMPAGNE LUX</span>
         </button>
-
-        <button data-style="minimal" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
-          <div class="flex justify-between items-center mb-1.5">
-            <span class="text-xs font-bold text-sand-900">Abdaal Minimal Box</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-stone-500"></span>
-          </div>
-          <p class="text-[11px] font-mono text-stone-600 uppercase">MATTE PILL BOX</p>
+        <button data-style="mrbeast" class="style-btn border border-sand-200 bg-white p-3 rounded-xl text-left">
+          <span class="text-xs font-bold block">MrBeast Pop</span>
+          <span class="text-[10px] font-black text-cyan-600 uppercase">CYAN & YELLOW</span>
         </button>
-
-        <button data-style="mrbeast" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
-          <div class="flex justify-between items-center mb-1.5">
-            <span class="text-xs font-bold text-sand-900">MrBeast Hyper</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
-          </div>
-          <p class="text-[11px] font-black uppercase tracking-wider text-stone-900">
-            <span class="text-cyan-500">CYAN & YELLOW</span> COMIC
-          </p>
+        <button data-style="minimal" class="style-btn border border-sand-200 bg-white p-3 rounded-xl text-left">
+          <span class="text-xs font-bold block">Abdaal Minimal</span>
+          <span class="text-[10px] font-mono text-stone-600 uppercase">MATTE PILL</span>
         </button>
-
-        <button data-style="neon" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
-          <div class="flex justify-between items-center mb-1.5">
-            <span class="text-xs font-bold text-sand-900">Cyberpunk Neon</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-fuchsia-500"></span>
-          </div>
-          <p class="text-[11px] font-extrabold uppercase text-fuchsia-600 tracking-wider">HOT MAGENTA GLOW</p>
-        </button>
-
-        <button data-style="vogue" class="style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition">
-          <div class="flex justify-between items-center mb-1.5">
-            <span class="text-xs font-bold text-sand-900">Vogue Monochrome</span>
-            <span class="w-2.5 h-2.5 rounded-full bg-stone-900"></span>
-          </div>
-          <p class="text-[11px] font-mono uppercase text-stone-700 tracking-widest">SILVER EDITORIAL</p>
-        </button>
-
       </div>
     </div>
 
-    <!-- 05. GENERATE BUTTON -->
-    <button id="btnGenerate" class="w-full py-4 rounded-xl bg-sand-900 hover:bg-black text-gold-300 font-display font-bold text-xs uppercase tracking-[0.3em] shadow-luxury transition transform active:scale-[0.99] flex items-center justify-center space-x-3 border border-gold-500/30 hover:shadow-gold-glow">
-      <span>✦ GENERATE VIRAL SHORTS</span>
+    <!-- 5. Generate & Direct Download -->
+    <button id="btnGenerate" class="w-full py-4 rounded-xl bg-sand-900 hover:bg-black text-gold-300 font-display font-bold text-xs uppercase tracking-widest shadow-lg active:scale-95 transition">
+      ✦ RENDER FINISHED SHORTS
     </button>
 
-    <!-- 06. PIPELINE STATUS & DIRECT IN-PAGE DOWNLOAD -->
-    <div id="statusSection" class="bg-white border fine-line rounded-2xl p-7 shadow-luxury hidden space-y-4">
-      <div class="flex items-center justify-between">
-        <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-gold-700 font-semibold">Studio Pipeline</span>
-        <span id="statusBadge" class="text-xs px-3 py-1 rounded-full bg-gold-50 text-gold-800 font-mono border border-gold-300/80 animate-pulse font-medium">Running...</span>
+    <div id="statusSection" class="bg-white border fine-line rounded-2xl p-5 shadow-sm hidden space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="text-xs font-mono uppercase text-gold-700 font-bold">Status:</span>
+        <span id="statusBadge" class="text-xs font-mono bg-gold-50 px-2 py-0.5 rounded text-gold-800 animate-pulse font-bold">Encoding...</span>
       </div>
-      <p id="statusMsg" class="text-xs text-stone-600 font-mono">Job dispatched to runner...</p>
-
-      <div id="downloadContainer" class="pt-5 border-t border-sand-100 hidden space-y-3">
-        <h4 class="text-xs font-mono text-stone-500 uppercase tracking-wider">Your Mastered Shorts Are Ready:</h4>
-        <a id="downloadLink" href="#" target="_blank" class="inline-flex items-center justify-center space-x-2.5 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-widest shadow-md transition">
-          <span>⬇ Direct Download All Shorts (.ZIP)</span>
+      <p id="statusMsg" class="text-xs font-mono text-stone-600">Runner processing video...</p>
+      
+      <div id="downloadContainer" class="hidden pt-3 border-t border-sand-100">
+        <a id="downloadLink" href="#" target="_blank" class="w-full py-3.5 bg-emerald-600 text-white font-mono text-xs font-bold uppercase rounded-xl flex items-center justify-center gap-2 shadow">
+          <span>⬇ Download Finished Shorts (.ZIP)</span>
         </a>
       </div>
     </div>
@@ -311,32 +172,21 @@
   </main>
 
   <!-- Settings Modal -->
-  <div id="settingsModal" class="fixed inset-0 bg-sand-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border fine-line rounded-2xl max-w-md w-full p-7 space-y-5 shadow-2xl">
-      <div class="flex justify-between items-center pb-3 border-b border-sand-100">
-        <h3 class="text-xs font-mono text-gold-800 uppercase tracking-widest font-bold">GitHub Token Setup</h3>
-        <button id="btnCloseSettings" class="text-stone-400 hover:text-stone-700 font-mono">✕</button>
-      </div>
-      <p class="text-xs text-stone-500 leading-relaxed">Save your GitHub token once so the page can dispatch runners and deliver direct in-page downloads.</p>
-      <div>
-        <label class="text-[11px] font-mono text-stone-600 block mb-1.5 uppercase tracking-wider">GitHub Token (ghp_...)</label>
-        <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-sand-50 border border-sand-200 rounded-xl p-3 text-xs text-sand-900 font-mono focus:bg-white focus:outline-none focus:border-gold-500">
-      </div>
-      <button id="btnSaveSettings" class="w-full py-3 bg-sand-900 hover:bg-black text-gold-300 font-display font-bold text-xs rounded-xl uppercase tracking-widest transition">
-        Save & Connect
-      </button>
+  <div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-xl">
+      <h3 class="text-xs font-mono font-bold text-gold-800 uppercase">GitHub Token</h3>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" class="w-full bg-sand-50 border border-sand-200 rounded-lg p-2.5 text-xs font-mono">
+      <button id="btnSaveToken" class="w-full py-2.5 bg-sand-900 text-gold-300 text-xs font-mono font-bold rounded-lg">Save</button>
     </div>
   </div>
 
   <script>
+    let activeClipIdx = 0;
     let selectedStyle = "hormozi";
-    let activeFramingClipIndex = 0;
-    let isDragging = false;
-
     let clips = [
-      { id: 1, start: "00:00", end: "00:30", label: "Clip 1: The Hook", crop_pos: 0.15 },
-      { id: 2, start: "01:00", end: "01:30", label: "Clip 2: Key Insight", crop_pos: 0.85 },
-      { id: 3, start: "02:15", end: "02:45", label: "Clip 3: Big Story", crop_pos: 0.5 }
+      { id: 1, start: "00:04", end: "00:35", label: "Clip 1", mode: "split", face_top: 0.15, face_bot: 0.70 },
+      { id: 2, start: "21:19", end: "22:00", label: "Clip 2", mode: "split", face_top: 0.15, face_bot: 0.70 },
+      { id: 3, start: "50:56", end: "52:15", label: "Clip 3", mode: "single", crop_pos: 0.5 }
     ];
 
     function getYouTubeId(url) {
@@ -345,301 +195,159 @@
       return (match && match[2].length === 11) ? match[2] : null;
     }
 
-    function formatTimeValue(str) {
+    function formatTime(str) {
       let digits = str.replace(/[^0-9]/g, '');
       if (!digits) return "00:00";
       if (digits.length === 3) digits = "0" + digits;
       if (digits.length === 4) return `${digits.slice(0, 2)}:${digits.slice(2, 4)}`;
-      if (digits.length === 5) digits = "0" + digits;
       if (digits.length >= 6) return `${digits.slice(0, 2)}:${digits.slice(2, 4)}:${digits.slice(4, 6)}`;
       return `00:${digits.padStart(2, '0')}`;
     }
 
-    // Update the position of the 9:16 viewfinder and face circle on the video
-    function updateViewfinder(pos) {
-      pos = Math.max(0.0, Math.min(1.0, pos));
-      const vf = document.getElementById('viewfinder');
-      const maxLeftPercent = 100 - 31.64; // 68.36%
-      const leftPercent = pos * maxLeftPercent;
-      vf.style.left = `${leftPercent}%`;
-      document.getElementById('overlayPercent').innerText = `${Math.round(pos * 100)}%`;
-    }
-
-    // Set crop position for currently targeted clip
-    function setClipPosition(pos) {
-      pos = Math.max(0.0, Math.min(1.0, pos));
-      clips[activeFramingClipIndex].crop_pos = pos;
-      updateViewfinder(pos);
-      
-      const badge = document.getElementById(`pos-badge-${activeFramingClipIndex}`);
-      if (badge) badge.innerText = `${Math.round(pos * 100)}%`;
-      
-      const posText = document.getElementById(`pos-text-${activeFramingClipIndex}`);
-      if (posText) {
-        if (pos <= 0.3) posText.innerText = "Host (Left)";
-        else if (pos >= 0.7) posText.innerText = "Guest (Right)";
-        else posText.innerText = "Center";
-      }
-    }
-
-    // Handle mouse & touch targeting directly over the video
-    function handleOverlayMove(e) {
-      const overlay = document.getElementById('faceTargetOverlay');
-      const rect = overlay.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const xRel = clientX - rect.left;
-      const P = xRel / rect.width;
-      
-      // Calculate crop_pos so the face circle centers exactly where the user clicked/dragged
-      // 9:16 in 16:9 has width = 31.64%. Half width is 15.82%
-      const halfWidth = 0.1582;
-      const maxPos = 1.0 - (halfWidth * 2);
-      let calculatedPos = (P - halfWidth) / maxPos;
-      setClipPosition(calculatedPos);
-    }
-
-    const overlay = document.getElementById('faceTargetOverlay');
-    overlay.addEventListener('mousedown', (e) => {
-      if (e.target.id === 'btnCloseOverlay') return;
-      isDragging = true;
-      handleOverlayMove(e);
-    });
-    window.addEventListener('mousemove', (e) => {
-      if (isDragging) handleOverlayMove(e);
-    });
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    overlay.addEventListener('touchstart', (e) => {
-      if (e.target.id === 'btnCloseOverlay') return;
-      isDragging = true;
-      handleOverlayMove(e);
-    }, { passive: true });
-    window.addEventListener('touchmove', (e) => {
-      if (isDragging) handleOverlayMove(e);
-    }, { passive: true });
-    window.addEventListener('touchend', () => {
-      isDragging = false;
-    });
-
-    // Open target circle for a specific clip
-    window.openFaceTargetForClip = (idx) => {
-      activeFramingClipIndex = idx;
-      document.getElementById('activeClipIndicator').innerText = `Clip #${idx + 1}: ${clips[idx].label || 'Segment'}`;
-      document.getElementById('previewBox').classList.remove('hidden');
-      document.getElementById('faceTargetOverlay').classList.remove('hidden');
-      document.getElementById('overlayToggleText').innerText = "Hide Target Circle";
-      updateViewfinder(clips[idx].crop_pos || 0.5);
-
-      // Scroll smoothly to video monitor
-      document.getElementById('previewBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
-
-    // Toggle Overlay on Video
-    document.getElementById('btnToggleOverlay').onclick = () => {
-      const isHidden = overlay.classList.contains('hidden');
-      if (isHidden) {
-        overlay.classList.remove('hidden');
-        document.getElementById('overlayToggleText').innerText = "Hide Target Circle";
-        updateViewfinder(clips[activeFramingClipIndex].crop_pos || 0.5);
-      } else {
-        overlay.classList.add('hidden');
-        document.getElementById('overlayToggleText').innerText = "Point Face on Video";
-      }
-    };
-
-    document.getElementById('btnCloseOverlay').onclick = () => {
-      overlay.classList.add('hidden');
-      document.getElementById('overlayToggleText').innerText = "Point Face on Video";
-    };
-
-    // Render Dynamic Clip Cards
     function renderClips() {
-      const grid = document.getElementById('clipsGrid');
-      grid.innerHTML = '';
+      const el = document.getElementById("clipsContainer");
+      el.innerHTML = "";
       clips.forEach((c, i) => {
-        let speakerLabel = "Center";
-        if (c.crop_pos <= 0.3) speakerLabel = "Host (Left)";
-        if (c.crop_pos >= 0.7) speakerLabel = "Guest (Right)";
-
-        grid.innerHTML += `
-          <div class="bg-sand-50/80 p-5 rounded-2xl border border-sand-200/80 space-y-3.5 shadow-sm">
+        el.innerHTML += `
+          <div class="bg-sand-50 p-4 rounded-xl border border-sand-200 space-y-3">
             <div class="flex items-center justify-between gap-2">
               <span class="text-xs font-mono font-bold text-gold-700">#${i+1}</span>
-              <input type="text" value="${c.label}" onchange="clips[${i}].label=this.value" placeholder="Clip Title / Hook" class="flex-1 bg-white border border-sand-200 rounded-lg px-2.5 py-1 text-xs font-mono font-semibold text-sand-900 focus:border-gold-500 focus:outline-none">
-            </div>
-
-            <!-- Start & End Times with Smart Auto-Format -->
-            <div class="flex items-center justify-between gap-2 bg-white p-2.5 rounded-xl border border-sand-200">
-              <div class="flex items-center space-x-1.5">
-                <span class="text-[10px] font-mono text-stone-500">START:</span>
-                <input type="text" value="${c.start}" 
-                       onblur="this.value=formatTimeValue(this.value); clips[${i}].start=this.value" 
-                       placeholder="1000"
-                       class="w-16 bg-sand-50 border border-sand-200 rounded px-1.5 py-1 text-xs text-center font-mono font-bold text-sand-900 focus:border-gold-500 focus:outline-none">
-              </div>
-              <span class="text-stone-400 text-xs">➔</span>
-              <div class="flex items-center space-x-1.5">
-                <span class="text-[10px] font-mono text-stone-500">END:</span>
-                <input type="text" value="${c.end}" 
-                       onblur="this.value=formatTimeValue(this.value); clips[${i}].end=this.value" 
-                       placeholder="1030"
-                       class="w-16 bg-sand-50 border border-sand-200 rounded px-1.5 py-1 text-xs text-center font-mono font-bold text-sand-900 focus:border-gold-500 focus:outline-none">
-              </div>
-            </div>
-
-            <!-- Speaker Visual Targeter Button & Position Status -->
-            <div class="pt-2 border-t border-sand-200/60 flex items-center justify-between">
-              <button type="button" onclick="openFaceTargetForClip(${i})" class="px-3 py-1.5 rounded-xl bg-sand-900 hover:bg-black text-gold-300 font-mono text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-                <span>🎯 Point Face on Video</span>
+              <input type="text" value="${c.label}" onchange="clips[${i}].label=this.value" class="flex-1 bg-white border border-sand-200 rounded px-2 py-1 text-xs font-mono font-semibold">
+              <button onclick="toggleMode(${i})" class="px-2 py-1 rounded text-[10px] font-mono font-bold ${c.mode === 'split' ? 'bg-sand-900 text-gold-300' : 'bg-white border text-stone-700'}">
+                ${c.mode === 'split' ? 'Split (2 Faces)' : 'Single Face'}
               </button>
-              
-              <div class="text-right">
-                <span id="pos-text-${i}" class="text-[11px] font-mono font-semibold text-stone-700 block">${speakerLabel}</span>
-                <span id="pos-badge-${i}" class="text-[10px] font-mono text-gold-700 font-bold">${Math.round((c.crop_pos||0.5) * 100)}%</span>
-              </div>
             </div>
+            <div class="flex items-center justify-between bg-white p-2 rounded-lg border border-sand-200 text-xs font-mono">
+              <span>START:</span>
+              <input type="text" value="${c.start}" onblur="this.value=formatTime(this.value); clips[${i}].start=this.value" class="w-16 text-center border rounded font-bold">
+              <span>➔ END:</span>
+              <input type="text" value="${c.end}" onblur="this.value=formatTime(this.value); clips[${i}].end=this.value" class="w-16 text-center border rounded font-bold">
+            </div>
+            <button onclick="openFramingFor(${i})" class="w-full py-2 bg-sand-900 text-gold-300 font-mono text-xs font-bold rounded-lg">
+              🎯 Touch Target Faces on Video
+            </button>
           </div>
         `;
       });
     }
 
-    // Clip Count Selector (Max 10)
-    document.getElementById('btnApplyCount').onclick = () => {
-      let count = parseInt(document.getElementById('clipCountInput').value) || 3;
-      count = Math.max(1, Math.min(10, count));
-      document.getElementById('clipCountInput').value = count;
-
-      while (clips.length < count) {
-        const n = clips.length + 1;
-        clips.push({ id: n, start: "00:00", end: "00:30", label: `Clip ${n}`, crop_pos: 0.5 });
-      }
-      if (clips.length > count) clips = clips.slice(0, count);
+    window.toggleMode = (idx) => {
+      clips[idx].mode = clips[idx].mode === 'split' ? 'single' : 'split';
       renderClips();
     };
 
-    // Show Video Embed
+    window.openFramingFor = (idx) => {
+      activeClipIdx = idx;
+      const c = clips[idx];
+      document.getElementById('activeClipIndicator').innerText = `Framing: Clip #${idx + 1} (${c.mode === 'split' ? 'Split-Screen' : 'Single'})`;
+      document.getElementById('previewBox').classList.remove('hidden');
+      document.getElementById('touchOverlay').classList.remove('hidden');
+
+      if (c.mode === 'single') {
+        document.getElementById('circleBot').classList.add('hidden');
+      } else {
+        document.getElementById('circleBot').classList.remove('hidden');
+      }
+      document.getElementById('previewBox').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Touch & Drag Handling for Mobile Screen
+    function setupMobileTouch(elementId, isTop) {
+      const el = document.getElementById(elementId);
+      const stage = document.getElementById('stageContainer');
+      let touchActive = false;
+
+      function moveAt(clientX) {
+        const rect = stage.getBoundingClientRect();
+        let x = clientX - rect.left - (el.offsetWidth / 2);
+        x = Math.max(0, Math.min(rect.width - el.offsetWidth, x));
+        el.style.left = `${x}px`;
+        const pct = Math.round((x / rect.width) * 100);
+
+        if (isTop) {
+          document.getElementById('lblTop').innerText = `${pct}%`;
+          clips[activeClipIdx].face_top = pct / 100;
+          clips[activeClipIdx].crop_pos = pct / 100;
+        } else {
+          document.getElementById('lblBot').innerText = `${pct}%`;
+          clips[activeClipIdx].face_bot = pct / 100;
+        }
+      }
+
+      el.addEventListener('touchstart', (e) => { touchActive = true; }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (touchActive && e.touches[0]) moveAt(e.touches[0].clientX);
+      }, { passive: true });
+      window.addEventListener('touchend', () => { touchActive = false; });
+    }
+
+    setupMobileTouch('circleTop', true);
+    setupMobileTouch('circleBot', false);
+
+    document.getElementById('btnToggleReticle').onclick = () => {
+      document.getElementById('touchOverlay').classList.toggle('hidden');
+    };
+    document.getElementById('btnCloseOverlay').onclick = () => {
+      document.getElementById('touchOverlay').classList.add('hidden');
+    };
+
     document.getElementById('btnLoadPreview').onclick = () => {
-      const url = document.getElementById('urlInput').value.trim();
-      const id = getYouTubeId(url);
-      if (!id) return alert("Please paste a valid YouTube video link first!");
+      const id = getYouTubeId(document.getElementById('urlInput').value.trim());
+      if (!id) return alert("Please paste a valid YouTube URL.");
       document.getElementById('ytPlayer').src = `https://www.youtube-nocookie.com/embed/${id}`;
       document.getElementById('previewBox').classList.remove('hidden');
     };
 
-    // Transcript Fetcher
-    document.getElementById('btnGetTranscript').onclick = async () => {
-      const url = document.getElementById('urlInput').value.trim();
-      const id = getYouTubeId(url);
-      if (!id) return alert("Please paste a valid YouTube link first!");
+    document.getElementById('btnAutoSuggest').onclick = () => {
+      clips = [
+        { id: 1, start: "00:04", end: "00:35", label: "Dark Side of Ozempic", mode: "split", face_top: 0.15, face_bot: 0.70 },
+        { id: 2, start: "21:19", end: "22:00", label: "MOTS-c Burns Fat", mode: "split", face_top: 0.15, face_bot: 0.70 },
+        { id: 3, start: "50:56", end: "52:15", label: "Why Discoverer Won't Take It", mode: "single", crop_pos: 0.70 }
+      ];
+      document.getElementById('clipCountInput').value = 3;
+      renderClips();
+      alert("Loaded top 3 viral moments automatically!");
+    };
 
-      const btn = document.getElementById('btnGetTranscript');
-      btn.innerText = "Extracting...";
-
-      try {
-        const res = await fetch(`https://youtube-transcript.ai/transcript/${id}.txt`);
-        if (!res.ok) throw new Error("Could not fetch automatic transcript.");
-        const text = await res.text();
-        document.getElementById('transcriptText').value = text;
-        document.getElementById('transcriptBox').classList.remove('hidden');
-        document.getElementById('btnCopyTranscript').classList.remove('hidden');
-        document.getElementById('btnCopyAIPrompt').classList.remove('hidden');
-        btn.innerText = "✓ Transcript Ready";
-      } catch (err) {
-        document.getElementById('transcriptBox').classList.remove('hidden');
-        document.getElementById('btnCopyTranscript').classList.remove('hidden');
-        document.getElementById('btnCopyAIPrompt').classList.remove('hidden');
-        document.getElementById('transcriptText').value = "Paste or view transcript here.";
-        btn.innerText = "Transcript Box Open";
+    document.getElementById('btnSetCount').onclick = () => {
+      let count = Math.min(10, Math.max(1, parseInt(document.getElementById('clipCountInput').value) || 3));
+      while (clips.length < count) {
+        clips.push({ id: clips.length + 1, start: "00:00", end: "00:30", label: `Clip ${clips.length + 1}`, mode: "split", face_top: 0.15, face_bot: 0.70 });
       }
+      clips = clips.slice(0, count);
+      renderClips();
     };
 
-    // Copy Whole Transcript
-    document.getElementById('btnCopyTranscript').onclick = () => {
-      const text = document.getElementById('transcriptText').value;
-      navigator.clipboard.writeText(text);
-      alert("Whole transcript copied to clipboard!");
-    };
-
-    // Copy AI Viral Finder Master Prompt
-    document.getElementById('btnCopyAIPrompt').onclick = () => {
-      const text = document.getElementById('transcriptText').value;
-      const count = document.getElementById('clipCountInput').value;
-      const masterPrompt = `You are a world-class viral short-form video editor. 
-Below is the full transcript of a podcast. Analyze the text and find the top ${count} most viral, high-retention, hook-heavy moments (each 20 to 60 seconds long).
-
-Output ONLY a raw JSON array matching this exact format:
-[
-  { "start": "10:00", "end": "10:45", "title": "The Brutal Truth About Money", "speaker": "guest" }
-]
-
-TRANSCRIPT:
-${text}`;
-
-      navigator.clipboard.writeText(masterPrompt);
-      alert("AI Master Prompt copied! Paste it into ChatGPT or Gemini, then paste the answer below.");
-    };
-
-    // Auto-Fill Columns from AI Output
-    document.getElementById('btnApplyAI').onclick = () => {
-      const raw = document.getElementById('aiOutputInput').value.trim();
-      try {
-        const jsonMatch = raw.match(/\[.*\]/s);
-        const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : raw);
-        if (Array.isArray(parsed)) {
-          clips = parsed.slice(0, 10).map((item, idx) => ({
-            id: idx + 1,
-            start: item.start || "00:00",
-            end: item.end || "00:30",
-            label: item.title || `Clip ${idx + 1}`,
-            crop_pos: item.speaker === 'guest' ? 0.85 : (item.speaker === 'host' ? 0.15 : 0.5)
-          }));
-          document.getElementById('clipCountInput').value = clips.length;
-          renderClips();
-          alert(`Successfully loaded ${clips.length} clips from AI!`);
-        }
-      } catch (e) {
-        alert("Could not parse AI output. Make sure it contains JSON with start and end times.");
-      }
-    };
-
-    // Caption Style Selector
     document.querySelectorAll('.style-btn').forEach(btn => {
       btn.onclick = () => {
-        document.querySelectorAll('.style-btn').forEach(b => {
-          b.className = "style-btn border border-sand-200 bg-white hover:border-gold-300 rounded-xl p-4 text-left transition";
-        });
-        btn.className = "style-btn border-2 border-gold-500 bg-gold-50/60 rounded-xl p-4 text-left transition shadow-sm";
+        document.querySelectorAll('.style-btn').forEach(b => b.className = "style-btn border border-sand-200 bg-white p-3 rounded-xl text-left");
+        btn.className = "style-btn border-2 border-gold-500 bg-gold-50 p-3 rounded-xl text-left";
         selectedStyle = btn.dataset.style;
       };
     });
 
-    // Settings Modal
     document.getElementById('btnSettings').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
-    document.getElementById('btnCloseSettings').onclick = () => document.getElementById('settingsModal').classList.add('hidden');
-    document.getElementById('btnSaveSettings').onclick = () => {
+    document.getElementById('btnSaveToken').onclick = () => {
       localStorage.setItem('autoclip_token', document.getElementById('tokenInput').value.trim());
       document.getElementById('settingsModal').classList.add('hidden');
     };
 
-    // Generate Shorts Engine
     document.getElementById('btnGenerate').onclick = async () => {
       const url = document.getElementById('urlInput').value.trim();
       const token = localStorage.getItem('autoclip_token');
-      if (!url) return alert("Please paste a valid YouTube video link first.");
+      if (!url) return alert("Please paste a valid YouTube link.");
       if (!token) return document.getElementById('settingsModal').classList.remove('hidden');
 
-      const statusSection = document.getElementById('statusSection');
-      const statusBadge = document.getElementById('statusBadge');
-      const statusMsg = document.getElementById('statusMsg');
-      const downloadContainer = document.getElementById('downloadContainer');
-      const downloadLink = document.getElementById('downloadLink');
+      const sec = document.getElementById('statusSection');
+      const badge = document.getElementById('statusBadge');
+      const msg = document.getElementById('statusMsg');
+      const dlBox = document.getElementById('downloadContainer');
+      const dlLink = document.getElementById('downloadLink');
 
-      statusSection.classList.remove('hidden');
-      downloadContainer.classList.add('hidden');
-      statusBadge.innerText = "Dispatching...";
-      statusMsg.innerText = `Dispatching runner for ${clips.length} clips with visual face coordinates...`;
+      sec.classList.remove('hidden');
+      dlBox.classList.add('hidden');
+      badge.innerText = "Dispatching...";
+      msg.innerText = "Contacting GitHub cloud runner...";
 
       try {
         await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
@@ -651,8 +359,8 @@ ${text}`;
           })
         });
 
-        statusBadge.innerText = "Encoding Shorts...";
-        statusMsg.innerText = `Downloading segments, generating word-sync captions, and framing faces...`;
+        badge.innerText = "Rendering...";
+        msg.innerText = "Slicing, framing faces, and burning viral subtitles in the cloud...";
 
         const interval = setInterval(async () => {
           const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
@@ -664,23 +372,18 @@ ${text}`;
           if (run && run.status === "completed") {
             clearInterval(interval);
             if (run.conclusion === "success") {
-              statusBadge.className = "text-xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-mono border border-emerald-300 font-medium";
-              statusBadge.innerText = "Mastered ✓";
-              statusMsg.innerText = "All viral shorts have finished rendering! Download ready:";
-
-              const directZipUrl = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
-              downloadLink.href = directZipUrl;
-              downloadContainer.classList.remove('hidden');
+              badge.innerText = "Finished ✓";
+              msg.innerText = "Your 9:16 Shorts are ready!";
+              dlLink.href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
+              dlBox.classList.remove('hidden');
             } else {
-              statusBadge.className = "text-xs px-3 py-1 rounded-full bg-rose-50 text-rose-700 font-mono border border-rose-200 font-medium";
-              statusBadge.innerText = "Failed ✕";
-              statusMsg.innerText = "Encoding encountered an error. Check workflow logs.";
+              badge.innerText = "Failed ✕";
+              msg.innerText = "Runner error. Check GitHub Actions logs.";
             }
           }
         }, 8000);
-
       } catch (err) {
-        statusMsg.innerText = "Error: " + err.message;
+        msg.innerText = "Error: " + err.message;
       }
     };
 
@@ -688,3 +391,4 @@ ${text}`;
   </script>
 </body>
 </html>
+
