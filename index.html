@@ -47,7 +47,7 @@
           <div>
             <div class="flex items-center space-x-2">
               <span class="text-base font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V4.0</span>
+              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V4.2</span>
             </div>
             <p class="text-xs text-slate-400">Automated 9:16 Video Synthesis</p>
           </div>
@@ -64,7 +64,7 @@
         </div>
       </div>
 
-      <!-- Quick Action: Launch AI Intelligence Engine -->
+      <!-- Quick Action: Launch AI Virality Report -->
       <button id="btnRunAiReport" class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#00F0FF] via-[#00B4D8] to-[#0077B6] text-black font-extrabold text-xs uppercase tracking-widest flex items-center justify-between shadow-[0_8px_25px_rgba(0,240,255,0.25)] active:scale-[0.98] transition">
         <span class="flex items-center gap-2">
           <span class="text-sm">🔥</span>
@@ -140,7 +140,7 @@
       </div>
     </header>
 
-    <!-- ZONE 1: UPPER STAGE (ASPECT MASK & BULLETPROOF VIDEO CANVAS) -->
+    <!-- ZONE 1: UPPER STAGE (ASPECT MASK & VIDEO CANVAS) -->
     <div class="p-3 space-y-2.5">
       <!-- Aspect Mask Selector -->
       <div class="flex items-center justify-center gap-2 text-[11px] font-mono">
@@ -154,7 +154,7 @@
       <!-- Studio Viewport -->
       <div class="relative w-full aspect-[9/10] sm:aspect-square bg-black rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center select-none" id="viewportContainer">
         
-        <!-- Engine A: Guaranteed YouTube Embed (Direct stream, controls hidden) -->
+        <!-- Engine A: YouTube Embed Stream -->
         <iframe id="ytIframePlayer" class="w-full h-full object-cover pointer-events-auto" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
         <!-- Engine B: Phone Gallery Native Video Player -->
@@ -163,7 +163,6 @@
         <!-- 9:16 Framing Guide & Real-Time Touch Reticle -->
         <div id="reticleLayer" class="absolute inset-0 pointer-events-none flex items-center justify-center z-20">
           <div id="phoneMask" class="h-full border-2 border-[#00F0FF]/60 pointer-events-none relative" style="width: 56.25%;">
-            <!-- Reticle Circle (Draggable with touch-action: none) -->
             <div id="targetCircle" class="target-ring absolute w-16 h-16 rounded-full bg-[#00F0FF]/25 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-move flex flex-col items-center justify-center" style="left: 50%; top: 40%; touch-action: none;">
               <div class="w-2 h-2 rounded-full bg-white mb-0.5 pointer-events-none"></div>
               <span class="text-[8px] font-mono font-black text-black bg-[#00F0FF] px-1 rounded pointer-events-none">TARGET</span>
@@ -205,7 +204,6 @@
           </button>
         </div>
 
-        <!-- 1-Second Step Range Scrubber -->
         <input type="range" id="timelineScrubber" min="0" max="100" value="4" step="1" class="w-full accent-[#00F0FF] cursor-pointer">
       </div>
     </div>
@@ -404,8 +402,8 @@
   </div>
 
 
-  <!-- ==================== EXPORT PROGRESS MODAL ==================== -->
-  <div id="exportModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <!-- ==================== EXPORT PROGRESS & BULLETPROOF DOWNLOAD MODAL ==================== -->
+  <div id="exportModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
       <div class="w-12 h-12 mx-auto rounded-2xl bg-[#00F0FF]/15 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] text-xl">
         ◈
@@ -419,9 +417,13 @@
         <div id="exportProgressBar" class="h-full bg-[#00F0FF] w-1/3 animate-pulse"></div>
       </div>
 
-      <div id="downloadContainer" class="hidden pt-2">
-        <a id="btnDirectDownload" href="#" download="vertex_short.mp4" class="w-full py-3.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl flex items-center justify-center gap-2 shadow-lg">
-          <span>⬇ Download Finished 9:16 Video (.MP4)</span>
+      <!-- Direct Verified Download Links Container -->
+      <div id="downloadContainer" class="hidden pt-2 space-y-2">
+        <a id="btnDirectDownload" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition">
+          <span>⬇ Download Finished Shorts (.ZIP)</span>
+        </a>
+        <a id="btnGitHubRunBackup" href="#" target="_blank" class="w-full py-2 bg-[#161A29] hover:bg-[#202538] text-slate-300 font-mono text-[11px] rounded-xl flex items-center justify-center gap-1.5 border border-slate-700">
+          <span>📁 View on GitHub Actions Run</span>
         </a>
       </div>
 
@@ -451,10 +453,10 @@
     let cropPosition = 0.5;
     let isDraggingReticle = false;
     let activeClipIndex = 0;
-    let activeMode = "youtube"; // 'youtube' or 'native'
+    let activeMode = "youtube";
     let isPlaying = false;
     let currentTimeSec = 4;
-    let totalDurationSec = 5360; // ~1h29m
+    let totalDurationSec = 5360;
     let playheadTimer = null;
 
     const viralReportData = [
@@ -548,7 +550,6 @@
       return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
-    // Direct PostMessage Controller to YouTube Iframe
     function sendYtCommand(func, args = []) {
       if (ytIframe && ytIframe.contentWindow) {
         ytIframe.contentWindow.postMessage(JSON.stringify({
@@ -559,7 +560,6 @@
       }
     }
 
-    // Unified Media Player Interface
     const StudioEngine = {
       play() {
         isPlaying = true;
@@ -614,19 +614,16 @@
       }
     };
 
-    // Transport Button Controls
     btnPlayPause.onclick = () => StudioEngine.toggle();
     document.getElementById('btnStepBack1').onclick = () => StudioEngine.seekTo(currentTimeSec - 1);
     document.getElementById('btnStepFwd1').onclick = () => StudioEngine.seekTo(currentTimeSec + 1);
     document.getElementById('btnStepBack5').onclick = () => StudioEngine.seekTo(currentTimeSec - 5);
     document.getElementById('btnStepFwd5').onclick = () => StudioEngine.seekTo(currentTimeSec + 5);
 
-    // Scrubber Dragging
     scrubber.oninput = (e) => {
       StudioEngine.seekTo(Number(e.target.value));
     };
 
-    // 1-Tap Timestamp Marker Setters
     document.getElementById('btnSetInMarker').onclick = () => {
       const formatted = formatSeconds(currentTimeSec);
       clips[activeClipIndex].start = formatted;
@@ -641,7 +638,6 @@
       document.getElementById('inputEnd').value = formatted;
     };
 
-    // Open Video in Studio
     document.getElementById('btnOpenInStudio').onclick = () => {
       const url = document.getElementById('ytUrlInput').value.trim();
       const videoId = extractYouTubeId(url);
@@ -653,7 +649,6 @@
       currentTimeSec = timeToSeconds(clips[activeClipIndex].start);
       scrubber.max = totalDurationSec;
 
-      // Stream YouTube with custom controls
       ytIframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&playsinline=1&controls=0&modestbranding=1&rel=0&start=${currentTimeSec}`;
 
       document.getElementById('homeScreen').classList.add('hidden');
@@ -662,7 +657,6 @@
       StudioEngine.updateUI();
     };
 
-    // Local Phone Gallery File Picker
     document.getElementById('localVideoPicker').onchange = (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -693,7 +687,6 @@
       document.getElementById('homeScreen').classList.remove('hidden');
     };
 
-    // Multi-Clip Switcher Pills
     function renderClipPills() {
       const bar = document.getElementById('clipsPillsBar');
       bar.innerHTML = '';
@@ -735,7 +728,6 @@
 
     document.getElementById('btnAddClipBtn').onclick = () => addNewClip();
 
-    // Reticle Dragging & 9:16 Frame Following
     const circle = document.getElementById('targetCircle');
     const container = document.getElementById('viewportContainer');
     const phoneMask = document.getElementById('phoneMask');
@@ -749,7 +741,6 @@
       clips[activeClipIndex].crop_pos = cropPosition;
       document.getElementById('posIndicatorText').innerText = `${Math.round(cropPosition * 100)}%`;
 
-      // Live 9:16 frame shift
       const maxShift = rect.width - phoneMask.offsetWidth;
       phoneMask.style.transform = `translateX(${(cropPosition - 0.5) * maxShift}px)`;
     }
@@ -770,7 +761,6 @@
       phoneMask.style.transform = `translateX(${(cropPosition - 0.5) * maxShift}px)`;
     };
 
-    // Aspect Ratio Switching
     document.querySelectorAll('.aspect-btn').forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll('.aspect-btn').forEach(b => {
@@ -786,7 +776,6 @@
       };
     });
 
-    // Bottom Drawer Tabs
     const tabEdit = document.getElementById('navTabEdit');
     const tabCaptions = document.getElementById('navTabCaptions');
     const tabStyle = document.getElementById('navTabStyle');
@@ -820,7 +809,6 @@
       panelStyle.classList.remove('hidden');
     };
 
-    // Subtitle Style Card Selection
     document.querySelectorAll('.style-card').forEach(card => {
       card.onclick = () => {
         document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected-style'));
@@ -829,7 +817,6 @@
       };
     });
 
-    // AI Virality Report
     function renderReportCards() {
       const container = document.getElementById('reportCardsList');
       container.innerHTML = '';
@@ -903,14 +890,13 @@
     document.getElementById('btnOpenReportEditor').onclick = openReport;
     document.getElementById('btnCloseReport').onclick = () => reportModal.classList.add('hidden');
 
-    // GitHub Settings
     document.getElementById('btnSettingsHome').onclick = () => document.getElementById('tokenModal').classList.remove('hidden');
     document.getElementById('btnSaveGithubToken').onclick = () => {
       localStorage.setItem('autoclip_token', document.getElementById('inputGithubToken').value.trim());
       document.getElementById('tokenModal').classList.add('hidden');
     };
 
-    // Final Render Dispatch
+    // Master Export Trigger & Verified Download Handler
     document.getElementById('btnExportTop').onclick = async () => {
       const token = localStorage.getItem('autoclip_token');
       if (!token) return document.getElementById('tokenModal').classList.remove('hidden');
@@ -919,6 +905,7 @@
       const msg = document.getElementById('exportStatusMsg');
       const dlBox = document.getElementById('downloadContainer');
       const dlBtn = document.getElementById('btnDirectDownload');
+      const ghBackupBtn = document.getElementById('btnGitHubRunBackup');
 
       modal.classList.remove('hidden');
       dlBox.classList.add('hidden');
@@ -951,7 +938,11 @@
           clearInterval(poll);
           if (run.conclusion === "success") {
             msg.innerText = "Your 9:16 Short is ready!";
-            dlBtn.href = `https://github.com/clipeasyfree/Pk/releases/download/preview/short_1.mp4?t=${Date.now()}`;
+            
+            // 100% Reliable Direct Artifact Download (No 404s)
+            dlBtn.href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
+            ghBackupBtn.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
+            
             dlBox.classList.remove('hidden');
           } else {
             msg.innerText = "Render failed. Check GitHub Actions logs.";
