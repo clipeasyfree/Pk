@@ -34,11 +34,9 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between overflow-x-hidden select-none">
 
-  <!-- ==================== SCREEN 1: HOME WORKSPACE ==================== -->
   <div id="homeScreen" class="max-w-md mx-auto w-full min-h-screen p-5 flex flex-col justify-between">
     <div class="space-y-6 pt-2">
       
-      <!-- Brand & Navigation -->
       <div class="flex justify-between items-start">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#00F0FF] to-[#0072FF] text-black font-black text-base flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.4)]">
@@ -47,7 +45,7 @@
           <div>
             <div class="flex items-center space-x-2">
               <span class="text-base font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V4.5</span>
+              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V4.8</span>
             </div>
             <p class="text-xs text-slate-400">Automated 9:16 Video Synthesis</p>
           </div>
@@ -64,7 +62,6 @@
         </div>
       </div>
 
-      <!-- Virality Report Banner -->
       <button id="btnRunAiReport" class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#00F0FF] via-[#00B4D8] to-[#0077B6] text-black font-extrabold text-xs uppercase tracking-widest flex items-center justify-between shadow-[0_8px_25px_rgba(0,240,255,0.25)] active:scale-[0.98] transition">
         <span class="flex items-center gap-2">
           <span class="text-sm">🔥</span>
@@ -73,13 +70,11 @@
         <span class="text-[10px] bg-black/25 px-2.5 py-1 rounded-full text-black font-mono font-bold">5 Clips Ready</span>
       </button>
 
-      <!-- Video Ingestion Panel -->
       <div class="card-titanium rounded-3xl p-5 space-y-4 shadow-xl">
         <span class="text-[11px] font-mono uppercase tracking-widest text-slate-400 font-bold block">
           Ingest Footage
         </span>
 
-        <!-- Direct Phone Gallery Upload -->
         <div class="border-2 border-dashed border-slate-700/80 rounded-2xl p-6 text-center space-y-3 bg-[#0B0D14]/70">
           <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] flex items-center justify-center text-[#00F0FF] text-lg border border-slate-700">
             ↑
@@ -101,7 +96,6 @@
           <div class="flex-grow border-t border-slate-800"></div>
         </div>
 
-        <!-- YouTube Link Ingestion -->
         <div class="space-y-2">
           <input type="text" id="ytUrlInput" value="https://www.youtube.com/watch?v=MHRUnJ0Gf8s" placeholder="Paste YouTube Link..." class="w-full bg-[#0B0D14] border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
           <button id="btnOpenInStudio" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] hover:opacity-95 text-black font-bold text-xs font-mono tracking-wider transition shadow-lg">
@@ -111,39 +105,32 @@
       </div>
     </div>
 
-    <!-- Workspace Footer -->
     <div class="text-center py-4 border-t border-slate-900 text-[10px] font-mono text-slate-500">
       VERTEX CREATIVE PIPELINE // 9:16 DYNAMIC ENGINE
     </div>
   </div>
 
 
-  <!-- ==================== SCREEN 2: 3-ZONE STUDIO EDITOR ==================== -->
   <div id="editorScreen" class="hidden flex-1 flex flex-col justify-between max-w-md mx-auto w-full min-h-screen pb-2">
 
-    <!-- Top App Bar -->
     <header class="px-4 py-3 flex items-center justify-between border-b border-slate-800 bg-[#090A0F]">
       <button id="btnBackHome" class="w-8 h-8 rounded-lg item-dark flex items-center justify-center text-slate-300 text-sm">
         ←
       </button>
 
-      <!-- Multi-Clip Selector Pills -->
       <div id="clipsPillsBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-[180px] py-0.5"></div>
 
       <div class="flex items-center gap-2">
         <button id="btnOpenReportEditor" class="w-8 h-8 rounded-lg item-dark flex items-center justify-center text-[#00F0FF] text-sm">
           📊
         </button>
-        <!-- Master Export Button -->
         <button id="btnExportTop" class="h-8 px-3.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1 shadow-[0_4px_15px_rgba(0,240,255,0.25)] active:scale-95 transition">
           <span>⬇ Export</span>
         </button>
       </div>
     </header>
 
-    <!-- ZONE 1: UPPER STAGE (ASPECT MASK & SLIDING VIEWFINDER RIG) -->
     <div class="p-3 space-y-2.5">
-      <!-- Aspect Ratio Bar -->
       <div class="flex items-center justify-center gap-2 text-[11px] font-mono">
         <button data-aspect="original" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">Original</button>
         <button data-aspect="9:16" class="aspect-btn px-3 py-1 rounded-full bg-[#00F0FF] text-black font-bold transition">9:16</button>
@@ -152,42 +139,30 @@
         <button data-aspect="4:5" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">4:5</button>
       </div>
 
-      <!-- Studio Viewport with Sliding Viewfinder Rig -->
       <div class="relative w-full aspect-[9/10] sm:aspect-square bg-black rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center select-none" id="viewportContainer">
         
-        <!-- Engine A: YouTube Embed Stream -->
         <iframe id="ytIframePlayer" class="w-full h-full object-cover pointer-events-auto" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-        <!-- Engine B: Phone Gallery Native Video Player -->
         <video id="nativeVideoPlayer" playsinline webkit-playsinline class="w-full h-full object-contain pointer-events-none bg-black hidden"></video>
 
-        <!-- Viewfinder Overlay Layer: Left Curtain, 9:16 Rig with Center Target, Right Curtain -->
         <div id="reticleLayer" class="absolute inset-0 pointer-events-none z-20 overflow-hidden">
-          
-          <!-- Left Dimmed Curtain -->
-          <div id="maskLeftCurtain" class="absolute top-0 bottom-0 left-0 bg-black/55 backdrop-blur-[1px] pointer-events-none transition-all duration-75"></div>
+          <div id="maskLeftCurtain" class="absolute top-0 bottom-0 left-0 bg-black/60 backdrop-blur-[1px] pointer-events-none transition-all duration-75"></div>
 
-          <!-- UNIFIED 9:16 VIEWFINDER RIG -->
           <div id="phoneMask" class="absolute top-0 bottom-0 border-2 border-[#00F0FF] bg-[#00F0FF]/10 pointer-events-auto cursor-move flex items-center justify-center transition-all duration-75 shadow-[0_0_35px_rgba(0,0,0,0.8)]" style="touch-action: none;">
-            
-            <!-- Safe Zone Crosshair Lines -->
             <div class="absolute inset-x-0 top-1/3 border-b border-[#00F0FF]/25 pointer-events-none"></div>
             <div class="absolute inset-x-0 top-2/3 border-b border-[#00F0FF]/25 pointer-events-none"></div>
             
-            <!-- LOCKED TARGET CIRCLE (Permanently centered inside 9:16 frame) -->
             <div id="targetCircle" class="target-ring w-16 h-16 rounded-full bg-[#00F0FF]/25 flex flex-col items-center justify-center pointer-events-none shadow-lg">
               <div class="w-2 h-2 rounded-full bg-white mb-0.5 shadow"></div>
               <span class="text-[8px] font-mono font-black text-black bg-[#00F0FF] px-1 rounded">TARGET</span>
             </div>
 
-            <!-- Frame Label -->
             <div class="absolute bottom-2 inset-x-0 mx-auto w-fit bg-black/85 border border-[#00F0FF]/40 px-2 py-0.5 rounded text-[9px] font-mono text-[#00F0FF] pointer-events-none">
               9:16 CUT
             </div>
           </div>
 
-          <!-- Right Dimmed Curtain -->
-          <div id="maskRightCurtain" class="absolute top-0 bottom-0 right-0 bg-black/55 backdrop-blur-[1px] pointer-events-none transition-all duration-75"></div>
+          <div id="maskRightCurtain" class="absolute top-0 bottom-0 right-0 bg-black/60 backdrop-blur-[1px] pointer-events-none transition-all duration-75"></div>
         </div>
 
         <div class="absolute bottom-2.5 left-3 bg-black/80 border border-slate-800 px-2 py-0.5 rounded-lg text-[10px] font-mono text-[#00F0FF] z-30">
@@ -196,14 +171,11 @@
       </div>
     </div>
 
-    <!-- ZONE 2: CENTER TIMELINE & PRECISE DECK -->
     <div class="px-4 py-2 space-y-2.5">
-      <!-- Steppers & Transport Controls -->
       <div class="flex items-center justify-between px-1">
         <button id="btnStepBack5" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-slate-300 active:scale-90 transition">-5s</button>
         <button id="btnStepBack1" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-[#00F0FF] border border-[#00F0FF]/40 active:scale-90 transition">⏮ -1s</button>
 
-        <!-- Custom Cyan Play/Pause Button -->
         <button id="btnPlayPause" class="w-13 h-13 px-4 py-3 rounded-full bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.4)] active:scale-90 transition">
           ▶
         </button>
@@ -212,7 +184,6 @@
         <button id="btnStepFwd5" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-slate-300 active:scale-90 transition">+5s</button>
       </div>
 
-      <!-- Scrubber Deck & Timestamp Markers -->
       <div class="card-titanium p-3 rounded-2xl space-y-2">
         <div class="flex justify-between items-center text-[10px] font-mono text-slate-400 px-1">
           <button id="btnSetInMarker" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-[#00F0FF] hover:text-black font-bold text-slate-200 transition">
@@ -228,11 +199,9 @@
       </div>
     </div>
 
-    <!-- ZONE 3: 3-TAB BOTTOM DRAWER -->
     <div class="card-titanium rounded-t-3xl border-b-0 p-4 space-y-3 shadow-2xl">
       <div id="drawerContent" class="max-h-56 overflow-y-auto no-scrollbar space-y-3">
         
-        <!-- PANEL 1: EDIT (Timestamps & Speaker Framing) -->
         <div id="tabEditPanel" class="space-y-3">
           <div class="flex justify-between items-center">
             <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
@@ -268,7 +237,6 @@
           </div>
         </div>
 
-        <!-- PANEL 2: CAPTIONS SCRIPT REVIEW -->
         <div id="tabCaptionsPanel" class="hidden space-y-2">
           <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
             Subtitles Script Review
@@ -276,18 +244,16 @@
           <textarea id="captionScriptText" rows="4" class="w-full bg-[#161A29] border border-slate-800 rounded-xl p-3 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]" placeholder="Subtitles will automatically synchronize word-by-word with Faster-Whisper AI during final render."></textarea>
         </div>
 
-        <!-- PANEL 3: STYLE (Original Subtitle Presets) -->
         <div id="tabStylePanel" class="hidden space-y-2.5">
           <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
             Visual Subtitle Profiles (9)
           </span>
 
           <div class="grid grid-cols-1 gap-2" id="presetGallery">
-            <!-- 1. Hyper-Glow Neon -->
             <div data-style="neon_lime" class="style-card selected-style card-titanium rounded-xl p-3 cursor-pointer">
               <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Hyper-Glow Neon</span>
-                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Signature</span>
+                <span class="text-xs font-bold text-white font-mono">Captik Glow</span>
+                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Popular</span>
               </div>
               <div class="text-center py-1">
                 <div class="text-[10px] text-slate-400">the quick</div>
@@ -296,9 +262,11 @@
               </div>
             </div>
 
-            <!-- 2. Monolith Impact -->
             <div data-style="bold_shadow" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Monolith Impact</span>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Captik Shadow</span>
+                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
+              </div>
               <div class="text-center py-1">
                 <div class="text-[10px] text-slate-400">the quick</div>
                 <div class="text-xl font-black text-white drop-shadow-[0_6px_8px_rgba(0,0,0,1)]">BROWN</div>
@@ -306,17 +274,18 @@
               </div>
             </div>
 
-            <!-- 3. Editorial Moonlight -->
             <div data-style="moonlight_serif" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Editorial Moonlight</span>
+              <span class="text-xs font-bold text-white font-mono block mb-1">Delhi</span>
               <div class="text-center py-2 text-sm font-serif text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]">
                 the <span class="italic font-normal">quick</span> fox
               </div>
             </div>
 
-            <!-- 4. Kinetic Mega-Zoom -->
             <div data-style="kinetic_scale" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Kinetic Mega-Zoom</span>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Illusion</span>
+                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
+              </div>
               <div class="text-center py-1">
                 <div class="text-[10px] text-slate-400">he had rented the</div>
                 <div class="text-2xl font-black text-white leading-tight">Biggest</div>
@@ -324,45 +293,52 @@
               </div>
             </div>
 
-            <!-- 5. Tokyo Sunset -->
             <div data-style="canary_punch" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Tokyo Sunset</span>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Editor Masala</span>
+                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Smart</span>
+              </div>
               <div class="text-center py-1">
                 <div class="text-[10px] text-slate-400 font-semibold">trust the</div>
                 <div class="text-2xl font-black text-[#FFE600] tracking-wider uppercase">PROCESS</div>
               </div>
             </div>
 
-            <!-- 6. Cosmic Dual-Tone -->
             <div data-style="sky_dual" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Cosmic Dual-Tone</span>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Aura</span>
+                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Editorial</span>
+              </div>
               <div class="text-center py-1">
                 <div class="text-lg font-serif italic text-white leading-none">forget</div>
                 <div class="text-xl font-black text-[#00F0FF] tracking-wider uppercase leading-none mt-1">STATUS</div>
               </div>
             </div>
 
-            <!-- 7. Zurich Minimalist -->
             <div data-style="modernist_swiss" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Zurich Minimalist</span>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">Swiss</span>
+                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Editorial</span>
+              </div>
               <div class="text-center py-1">
                 <div class="text-lg font-black text-white leading-none">focus</div>
                 <div class="text-xl font-black text-[#FFD700] uppercase leading-none mt-0.5">DEEPLY</div>
               </div>
             </div>
 
-            <!-- 8. Cinematic Carmine -->
             <div data-style="crimson_cinematic" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Cinematic Carmine</span>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-white font-mono">The Big Red</span>
+                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
+              </div>
               <div class="text-center py-1 relative">
                 <div class="text-xl font-serif font-black text-[#E63333] tracking-widest uppercase">SECOND</div>
                 <div class="text-xs font-serif text-white -mt-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">the quick fox</div>
               </div>
             </div>
 
-            <!-- 9. Ambient Aura -->
             <div data-style="ambient_white" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Ambient Aura</span>
+              <span class="text-xs font-bold text-white font-mono block mb-1">Clean Glow Style</span>
               <div class="text-center py-2 text-sm font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.85)]">
                 the quick brown fox jumps over
               </div>
@@ -372,7 +348,6 @@
 
       </div>
 
-      <!-- Navigation Tabs -->
       <div class="grid grid-cols-3 pt-2 border-t border-slate-800 text-center">
         <button id="navTabEdit" class="py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5">
           <span class="text-sm">✂</span>
@@ -393,19 +368,17 @@
   </div>
 
 
-  <!-- ==================== NEW: EXPORT CLIPS SELECTION CHECKLIST MODAL ==================== -->
   <div id="exportSelectModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex flex-col justify-end hidden">
     <div class="bg-[#111420] border-t border-slate-800 rounded-t-3xl max-w-md mx-auto w-full max-h-[85vh] flex flex-col justify-between p-5 shadow-2xl space-y-4">
       
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <div>
           <h3 class="text-sm font-mono font-bold text-white uppercase tracking-wider">SELECT CLIPS TO RENDER</h3>
-          <p class="text-[11px] text-slate-400">Choose which clips you want to export as 9:16 Shorts:</p>
+          <p class="text-[11px] text-slate-400">Choose which clips to export as 9:16 Shorts:</p>
         </div>
         <button id="btnCloseSelectExport" class="w-7 h-7 rounded-full bg-[#161A29] border border-slate-700 text-slate-300 text-xs flex items-center justify-center">✕</button>
       </div>
 
-      <!-- Checklist Controls -->
       <div class="flex justify-between items-center text-xs font-mono px-1">
         <span id="selectedClipsSummary" class="text-[#00F0FF] font-bold">3 of 3 Selected</span>
         <div class="flex gap-2">
@@ -415,12 +388,8 @@
         </div>
       </div>
 
-      <!-- Checklist Items Container -->
-      <div id="exportClipsChecklist" class="flex-1 overflow-y-auto no-scrollbar space-y-2.5 py-1">
-        <!-- Injected via JavaScript -->
-      </div>
+      <div id="exportClipsChecklist" class="flex-1 overflow-y-auto no-scrollbar space-y-2.5 py-1"></div>
 
-      <!-- Confirm Render Trigger -->
       <button id="btnConfirmRenderClips" class="w-full py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
         <span>⚡ Start Cloud Render</span>
       </button>
@@ -429,7 +398,6 @@
   </div>
 
 
-  <!-- ==================== EXPORT PROGRESS & VERIFIED DOWNLOAD MODAL ==================== -->
   <div id="exportModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
       <div class="w-12 h-12 mx-auto rounded-2xl bg-[#00F0FF]/15 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] text-xl">
@@ -444,7 +412,6 @@
         <div id="exportProgressBar" class="h-full bg-[#00F0FF] w-1/3 animate-pulse"></div>
       </div>
 
-      <!-- Direct Verified Download Links Container -->
       <div id="downloadContainer" class="hidden pt-2 space-y-2">
         <a id="btnDirectDownload" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition">
           <span>⬇ Download Finished Shorts (.ZIP)</span>
@@ -461,7 +428,6 @@
   </div>
 
 
-  <!-- ==================== AI VIRALITY PROCESS REPORT MODAL ==================== -->
   <div id="reportModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex flex-col justify-end hidden">
     <div class="bg-[#111420] border-t border-slate-800 rounded-t-3xl max-w-md mx-auto w-full h-[85vh] flex flex-col justify-between p-4 shadow-2xl">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
@@ -486,7 +452,6 @@
   </div>
 
 
-  <!-- ==================== GITHUB SETTINGS MODAL ==================== -->
   <div id="tokenModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
       <h3 class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider">GitHub Access Token</h3>
@@ -499,7 +464,6 @@
   </div>
 
 
-  <!-- ==================== LOGIC & CONTROLLER ENGINE ==================== -->
   <script>
     let currentStyle = "neon_lime";
     let cropPosition = 0.5;
@@ -521,7 +485,7 @@
         end: "00:35",
         crop_pos: 0.5,
         tiktokCaption: "Up to 30% of weight lost on GLP-1s is lean muscle tissue. Dr. Cohen explains the sarcopenia risk. 📉\n\n#ozempic #glp1 #muscleloss #biohacking #longevity",
-        igCaption: "Up to 30% of weight lost on GLP-1 agonists is functional muscle tissue.\n\nDr. Pinchas Cohen (Dean of USC Gerontology) warns against losing lean mass without resistance protocols.\n\n#longevitymedicine #peptidebiology #ozempicjourney #healthoptimization"
+        igCaption: "Up to 30% of weight lost on GLP-1 agonists is functional muscle tissue.\n\nDr. Pinchas Cohen warns against losing lean mass without resistance protocols.\n\n#longevitymedicine #peptidebiology #healthoptimization"
       },
       {
         id: 2,
@@ -616,7 +580,7 @@
       }
     }
 
-    // ==================== ROCK-SOLID UNIFIED SLIDING RIG ====================
+    // Unified Sliding Viewfinder Rig
     function updateFraming(pos) {
       pos = Math.max(0.0, Math.min(1.0, pos));
       cropPosition = pos;
@@ -629,7 +593,6 @@
       const cWidth = container.clientWidth;
       const cHeight = container.clientHeight;
 
-      // Calculate 9:16 or selected aspect width
       let maskWidth;
       if (currentAspect === "9:16") {
         maskWidth = cHeight * (9 / 16);
@@ -642,29 +605,18 @@
       }
       maskWidth = Math.min(cWidth, maskWidth);
 
-      // Travel bounds
       const maxLeft = Math.max(0, cWidth - maskWidth);
       const leftPx = pos * maxLeft;
 
-      // Position sliding rig
       phoneMask.style.width = `${maskWidth}px`;
       phoneMask.style.left = `${leftPx}px`;
 
-      // Position side-curtains
-      if (maskLeft) {
-        maskLeft.style.width = `${leftPx}px`;
-      }
-      if (maskRight) {
-        const rightWidth = Math.max(0, cWidth - (leftPx + maskWidth));
-        maskRight.style.width = `${rightWidth}px`;
-      }
+      if (maskLeft) maskLeft.style.width = `${leftPx}px`;
+      if (maskRight) maskRight.style.width = `${Math.max(0, cWidth - (leftPx + maskWidth))}px`;
     }
 
-    window.setFramingPreset = (pos) => {
-      updateFraming(pos);
-    };
+    window.setFramingPreset = (pos) => updateFraming(pos);
 
-    // Viewport Touch/Drag Controller
     let isDraggingRig = false;
     function handleRigDrag(clientX) {
       const rect = container.getBoundingClientRect();
@@ -677,45 +629,32 @@
 
     phoneMask.addEventListener('touchstart', (e) => { isDraggingRig = true; }, { passive: true });
     container.addEventListener('touchstart', (e) => { isDraggingRig = true; handleRigDrag(e.touches[0].clientX); }, { passive: true });
-
     window.addEventListener('touchmove', (e) => {
       if (isDraggingRig && e.touches[0]) handleRigDrag(e.touches[0].clientX);
     }, { passive: true });
     window.addEventListener('touchend', () => { isDraggingRig = false; });
+    window.addEventListener('resize', () => updateFraming(cropPosition));
 
-    window.addEventListener('resize', () => {
-      updateFraming(cropPosition);
-    });
-
-    // Aspect Ratio Switching
     document.querySelectorAll('.aspect-btn').forEach(btn => {
       btn.onclick = () => {
-        document.querySelectorAll('.aspect-btn').forEach(b => {
-          b.className = "aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition";
-        });
+        document.querySelectorAll('.aspect-btn').forEach(b => b.className = "aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition");
         btn.className = "aspect-btn px-3 py-1 rounded-full bg-[#00F0FF] text-black font-bold transition";
         currentAspect = btn.dataset.aspect;
         updateFraming(cropPosition);
       };
     });
 
-    // Unified Media Player Controller
+    // Player Controller
     const StudioEngine = {
       play() {
         isPlaying = true;
         btnPlayPause.innerText = "⏸";
-        if (activeMode === "youtube") {
-          sendYtCommand('playVideo');
-        } else {
-          nativeVideo.play();
-        }
+        if (activeMode === "youtube") sendYtCommand('playVideo');
+        else nativeVideo.play();
         if (!playheadTimer) {
           playheadTimer = setInterval(() => {
-            if (activeMode === "native") {
-              currentTimeSec = nativeVideo.currentTime;
-            } else {
-              currentTimeSec += 1;
-            }
+            if (activeMode === "native") currentTimeSec = nativeVideo.currentTime;
+            else currentTimeSec += 1;
             StudioEngine.updateUI();
           }, 1000);
         }
@@ -723,11 +662,8 @@
       pause() {
         isPlaying = false;
         btnPlayPause.innerText = "▶";
-        if (activeMode === "youtube") {
-          sendYtCommand('pauseVideo');
-        } else {
-          nativeVideo.pause();
-        }
+        if (activeMode === "youtube") sendYtCommand('pauseVideo');
+        else nativeVideo.pause();
         if (playheadTimer) {
           clearInterval(playheadTimer);
           playheadTimer = null;
@@ -739,18 +675,13 @@
       },
       seekTo(sec) {
         currentTimeSec = Math.max(0, Math.min(totalDurationSec, sec));
-        if (activeMode === "youtube") {
-          sendYtCommand('seekTo', [currentTimeSec, true]);
-        } else {
-          nativeVideo.currentTime = currentTimeSec;
-        }
+        if (activeMode === "youtube") sendYtCommand('seekTo', [currentTimeSec, true]);
+        else nativeVideo.currentTime = currentTimeSec;
         this.updateUI();
       },
       updateUI() {
         lblCurrent.innerText = formatSeconds(currentTimeSec);
-        if (totalDurationSec > 0) {
-          scrubber.value = currentTimeSec;
-        }
+        if (totalDurationSec > 0) scrubber.value = currentTimeSec;
       }
     };
 
@@ -759,10 +690,7 @@
     document.getElementById('btnStepFwd1').onclick = () => StudioEngine.seekTo(currentTimeSec + 1);
     document.getElementById('btnStepBack5').onclick = () => StudioEngine.seekTo(currentTimeSec - 5);
     document.getElementById('btnStepFwd5').onclick = () => StudioEngine.seekTo(currentTimeSec + 5);
-
-    scrubber.oninput = (e) => {
-      StudioEngine.seekTo(Number(e.target.value));
-    };
+    scrubber.oninput = (e) => StudioEngine.seekTo(Number(e.target.value));
 
     document.getElementById('btnSetInMarker').onclick = () => {
       const formatted = formatSeconds(currentTimeSec);
@@ -829,7 +757,7 @@
       document.getElementById('homeScreen').classList.remove('hidden');
     };
 
-    // Multi-Clip Pills Controller
+    // Clip Switcher
     function renderClipPills() {
       const bar = document.getElementById('clipsPillsBar');
       bar.innerHTML = '';
@@ -857,8 +785,6 @@
       document.getElementById('inputEnd').value = c.end;
       document.getElementById('lblStartTime').innerText = c.start;
       document.getElementById('lblEndTime').innerText = c.end;
-      
-      // Update framing & sync player seamlessly
       updateFraming(c.crop_pos !== undefined ? c.crop_pos : 0.5);
       renderClipPills();
       StudioEngine.seekTo(timeToSeconds(c.start));
@@ -873,11 +799,10 @@
 
     document.getElementById('btnAddClipBtn').onclick = () => addNewClip();
 
-    // Bottom Drawer Tabs
+    // Drawer Tabs
     const tabEdit = document.getElementById('navTabEdit');
     const tabCaptions = document.getElementById('navTabCaptions');
     const tabStyle = document.getElementById('navTabStyle');
-
     const panelEdit = document.getElementById('tabEditPanel');
     const panelCaptions = document.getElementById('tabCaptionsPanel');
     const panelStyle = document.getElementById('tabStylePanel');
@@ -891,22 +816,11 @@
       panelStyle.classList.add('hidden');
     }
 
-    tabEdit.onclick = () => {
-      resetTabs();
-      tabEdit.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5";
-      panelEdit.classList.remove('hidden');
-    };
-    tabCaptions.onclick = () => {
-      resetTabs();
-      tabCaptions.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5";
-      panelCaptions.classList.remove('hidden');
-    };
-    tabStyle.onclick = () => {
-      resetTabs();
-      tabStyle.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5";
-      panelStyle.classList.remove('hidden');
-    };
+    tabEdit.onclick = () => { resetTabs(); tabEdit.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5"; panelEdit.classList.remove('hidden'); };
+    tabCaptions.onclick = () => { resetTabs(); tabCaptions.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5"; panelCaptions.classList.remove('hidden'); };
+    tabStyle.onclick = () => { resetTabs(); tabStyle.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5"; panelStyle.classList.remove('hidden'); };
 
+    // Template Picker: Instant Real-Time Selection
     document.querySelectorAll('.style-card').forEach(card => {
       card.onclick = () => {
         document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected-style'));
@@ -915,7 +829,7 @@
       };
     });
 
-    // ==================== MULTI-CLIP EXPORT CHECKLIST MODAL ====================
+    // Multi-Clip Export Checklist
     const exportSelectModal = document.getElementById('exportSelectModal');
     const checklistContainer = document.getElementById('exportClipsChecklist');
     const summaryText = document.getElementById('selectedClipsSummary');
@@ -943,7 +857,6 @@
           </div>
         `;
       });
-
       summaryText.innerText = `${selectedCount} of ${clips.length} Selected`;
     }
 
@@ -963,16 +876,13 @@
       renderExportChecklist();
     };
 
-    // Open Clip Selection Checklist
     document.getElementById('btnExportTop').onclick = () => {
       renderExportChecklist();
       exportSelectModal.classList.remove('hidden');
     };
-    document.getElementById('btnCloseSelectExport').onclick = () => {
-      exportSelectModal.classList.add('hidden');
-    };
+    document.getElementById('btnCloseSelectExport').onclick = () => exportSelectModal.classList.add('hidden');
 
-    // Confirm Selection & Execute Cloud Render
+    // Execute Cloud Render for ALL Selected Clips
     document.getElementById('btnConfirmRenderClips').onclick = async () => {
       const selectedClips = clips.filter(c => c.selectedForExport);
       if (selectedClips.length === 0) return alert("Please select at least 1 clip to export.");
@@ -1010,7 +920,7 @@
           })
         });
 
-        msg.innerText = `Encoding ${selectedClips.length} vertical shorts in the cloud...`;
+        msg.innerText = `Encoding ${selectedClips.length} vertical shorts in the cloud with AI Auto-Framing...`;
 
         const poll = setInterval(async () => {
           const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
@@ -1039,7 +949,7 @@
 
     document.getElementById('btnCloseExport').onclick = () => document.getElementById('exportModal').classList.add('hidden');
 
-    // Virality Report Drawer
+    // Report Logic
     function renderReportCards() {
       const container = document.getElementById('reportCardsList');
       container.innerHTML = '';
