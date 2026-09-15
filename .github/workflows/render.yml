@@ -5,6 +5,9 @@ on:
     types: [start-render]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   render:
     runs-on: ubuntu-latest
@@ -18,29 +21,32 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install FFmpeg and Deno (JS Runtime)
+      - name: Install System Dependencies & Real Studio Fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-liberation
-          curl -fsSL https://deno.land/install.sh | sh
-          echo "$HOME/.deno/bin" >> $GITHUB_PATH
+          sudo apt-get install -y ffmpeg curl
+          mkdir -p fonts
+          # Download Google Fonts for Authentic Captik Subtitles
+          curl -sL "https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf" -o fonts/Anton.ttf
+          curl -sL "https://github.com/google/fonts/raw/main/ofl/montserrat/static/Montserrat-Black.ttf" -o fonts/Montserrat-Black.ttf
+          curl -sL "https://github.com/google/fonts/raw/main/ofl/playfairdisplay/static/PlayfairDisplay-BoldItalic.ttf" -o fonts/PlayfairDisplay-BoldItalic.ttf
+          curl -sL "https://github.com/google/fonts/raw/main/ofl/playfairdisplay/static/PlayfairDisplay-Black.ttf" -o fonts/PlayfairDisplay-Black.ttf
 
-      - name: Install Dependencies
+      - name: Install Python AI Libraries
         run: |
           pip install --upgrade pip
-          pip install --upgrade yt-dlp yt-dlp-ejs faster-whisper
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install --upgrade yt-dlp yt-dlp-ejs faster-whisper opencv-python-headless numpy
 
-      - name: Run Clipping Engine
+      - name: Run Clipping & Auto-Framing Engine
         env:
           JOB_PAYLOAD: ${{ toJson(github.event.client_payload) }}
           COOKIES_DATA: ${{ secrets.YT_COOKIES }}
         run: |
           python worker.py
 
-      - name: Upload Output Clips Artifact
+      - name: Upload Finished Shorts Package
         uses: actions/upload-artifact@v4
         with:
           name: autoclip-shorts
           path: output/*.mp4
-          retention-days: 2
+          retention-days: 7
