@@ -1,64 +1,55 @@
-name: VERTEX PRO Render Engine
+name: AutoClip Render Pipeline
 
 on:
   repository_dispatch:
     types: [start-render]
   workflow_dispatch:
 
-concurrency:
-  group: render-${{ github.ref }}
-  cancel-in-progress: false
+permissions:
+  contents: write
 
 jobs:
   render:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
 
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
 
-      - name: Setup Python 3.11
+      - name: Setup Python 3.10
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: '3.10'
 
-      - name: Install System Dependencies & Real Studio Fonts
+      - name: Install System Dependencies, Deno JS Runtime & Studio Fonts
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y ffmpeg fontconfig curl
-
-          mkdir -p fonts temp output
-
-          # Download high-retention studio typography directly into the project fonts folder
-          curl -sSL "https://raw.githubusercontent.com/google/fonts/main/ofl/anton/Anton-Regular.ttf" -o fonts/Anton.ttf
-          curl -sSL "https://raw.githubusercontent.com/google/fonts/main/ofl/montserrat/static/Montserrat-Black.ttf" -o fonts/Montserrat-Black.ttf
-          curl -sSL "https://raw.githubusercontent.com/google/fonts/main/ofl/playfairdisplay/static/PlayfairDisplay-BoldItalic.ttf" -o fonts/PlayfairDisplay-BoldItalic.ttf
-          curl -sSL "https://raw.githubusercontent.com/google/fonts/main/ofl/playfairdisplay/static/PlayfairDisplay-Black.ttf" -o fonts/PlayfairDisplay-Black.ttf
-
-          # Register fonts with the system font cache
-          sudo cp fonts/*.ttf /usr/local/share/fonts/ 2>/dev/null || true
-          sudo fc-cache -f -v
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg curl
+          # 1. Install Deno (Required by yt-dlp to solve YouTube n-challenge)
+          curl -fsSL https://deno.land/install.sh | sh
+          echo "$HOME/.deno/bin" >> $GITHUB_PATH
+          # 2. Download Studio Fonts for Captik Subtitles
+          mkdir -p fonts
+          curl -sL "https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf" -o fonts/Anton.ttf
+          curl -sL "https://github.com/google/fonts/raw/main/ofl/montserrat/static/Montserrat-Black.ttf" -o fonts/Montserrat-Black.ttf
+          curl -sL "https://github.com/google/fonts/raw/main/ofl/playfairdisplay/static/PlayfairDisplay-BoldItalic.ttf" -o fonts/PlayfairDisplay-BoldItalic.ttf
+          curl -sL "https://github.com/google/fonts/raw/main/ofl/playfairdisplay/static/PlayfairDisplay-Black.ttf" -o fonts/PlayfairDisplay-Black.ttf
 
       - name: Install Python AI Libraries
         run: |
-          python -m pip install --upgrade pip
-          pip install -U "yt-dlp[default]" faster-whisper opencv-python-headless numpy
+          pip install --upgrade pip
+          pip install --upgrade yt-dlp yt-dlp-ejs faster-whisper opencv-python-headless numpy
 
       - name: Run Clipping & Auto-Framing Engine
         env:
           JOB_PAYLOAD: ${{ toJson(github.event.client_payload) }}
-          COOKIES_DATA: ${{ secrets.COOKIES_DATA }}
-          HF_HUB_DISABLE_SYMLINKS_WARNING: 1
+          COOKIES_DATA: ${{ secrets.YT_COOKIES }}
         run: |
           python worker.py
 
       - name: Upload Finished Shorts Package
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: autoclip-shorts
           path: output/*.mp4
           retention-days: 7
-          if-no-files-found: warn
