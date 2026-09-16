@@ -9,7 +9,7 @@ from faster_whisper import WhisperModel
 
 print("[*] Initializing VERTEX PRO AI Studio Engine...")
 
-# 1. Setup cookies safely
+# 1. Setup cookies
 cookies_path = None
 cookies_env = os.environ.get('COOKIES_DATA', '').strip()
 if cookies_env and len(cookies_env) > 20:
@@ -57,22 +57,22 @@ for f in glob.glob("output/*"):
     try: os.remove(f)
     except: pass
 
-# 3. Subtitle Styles
+# 3. Authentic Typography Presets (Color mapping in ASS format: &H00BBGGRR&)
 STYLES = {
     "neon_lime": {
         "font": "Anton", "size": "76", "primary": "&H00FFFFFF&", "highlight": "&H0014FF39&",
-        "border": "3", "blur": "12", "shadow": "0", "italic": "0", "scale": "115"
+        "border": "4", "blur": "12", "shadow": "0", "italic": "0", "scale": "115"
     },
     "bold_shadow": {
-        "font": "Montserrat-Black", "size": "72", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
+        "font": "Montserrat", "size": "72", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
         "border": "0", "blur": "0", "shadow": "7", "italic": "0", "scale": "110"
     },
     "moonlight_serif": {
-        "font": "PlayfairDisplay-BoldItalic", "size": "66", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
-        "border": "1", "blur": "8", "shadow": "0", "italic": "-1", "scale": "108"
+        "font": "Playfair Display", "size": "66", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
+        "border": "2", "blur": "8", "shadow": "0", "italic": "-1", "scale": "108"
     },
     "kinetic_scale": {
-        "font": "Montserrat-Black", "size": "68", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
+        "font": "Montserrat", "size": "68", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
         "border": "3", "blur": "0", "shadow": "3", "italic": "0", "scale": "135"
     },
     "canary_punch": {
@@ -80,7 +80,7 @@ STYLES = {
         "border": "4", "blur": "0", "shadow": "3", "italic": "0", "scale": "115"
     },
     "sky_dual": {
-        "font": "PlayfairDisplay-BoldItalic", "size": "70", "primary": "&H00FFFFFF&", "highlight": "&H00FFC266&",
+        "font": "Playfair Display", "size": "70", "primary": "&H00FFFFFF&", "highlight": "&H00FFC266&",
         "border": "2", "blur": "4", "shadow": "0", "italic": "-1", "scale": "118"
     },
     "modernist_swiss": {
@@ -88,144 +88,97 @@ STYLES = {
         "border": "4", "blur": "0", "shadow": "3", "italic": "0", "scale": "115"
     },
     "crimson_cinematic": {
-        "font": "PlayfairDisplay-Black", "size": "74", "primary": "&H00FFFFFF&", "highlight": "&H003333E6&",
+        "font": "Playfair Display", "size": "74", "primary": "&H00FFFFFF&", "highlight": "&H003333E6&",
         "border": "2", "blur": "5", "shadow": "0", "italic": "0", "scale": "125"
     },
     "ambient_white": {
-        "font": "Montserrat-Black", "size": "64", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
+        "font": "Montserrat", "size": "64", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
         "border": "2", "blur": "14", "shadow": "0", "italic": "0", "scale": "105"
     }
 }
 cfg = STYLES.get(style, STYLES["neon_lime"])
-print(f"[*] Applying Selected Style Profile: {style.upper()} ({cfg['font']})")
+print(f"[*] Selected Subtitle Profile: {style.upper()} ({cfg['font']})")
 
-# Resilient Downloader Function that avoids the broken 'tv_downgraded' client
-def download_youtube_slice(target_url, start_time, end_time, out_path, cookie_file=None):
-    # Base command explicitly excluding tv_downgraded to eliminate "The page needs to be reloaded"
-    base_args = [
-        "yt-dlp",
-        "--remote-components", "ejs:github",
-        "--extractor-args", "youtube:player_client=android,web_embedded,web",
-        "--download-sections", f"*{start_time}-{end_time}",
-        "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
-        "--merge-output-format", "mp4",
-        "--force-keyframes-at-cuts",
-        "--no-check-certificates"
-    ]
-
-    # Strategy 1: Attempt with cookies if available
-    if cookie_file and os.path.exists(cookie_file):
-        print("[*] Attempting download using provided cookies...")
-        cmd = base_args + ["--cookies", cookie_file, target_url, "-o", out_path]
-        proc = subprocess.run(cmd)
-        if proc.returncode == 0:
-            return True
-        print("[!] Cookie download failed or session expired. Falling back to direct client without cookies...")
-
-    # Strategy 2: Direct download without cookies (bypasses expired/flagged cookie errors)
-    cmd = base_args + [target_url, "-o", out_path]
-    proc = subprocess.run(cmd)
-    if proc.returncode == 0:
-        return True
-
-    # Strategy 3: Ultimate Fallback (Default client with tv_downgraded explicitly banned)
-    print("[!] Trying secondary fallback client (default,-tv_downgraded)...")
-    fallback_cmd = [
-        "yt-dlp",
-        "--extractor-args", "youtube:player_client=default,-tv_downgraded,web_embedded",
-        "--download-sections", f"*{start_time}-{end_time}",
-        "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
-        "--merge-output-format", "mp4",
-        "--force-keyframes-at-cuts",
-        "--no-check-certificates",
-        target_url, "-o", out_path
-    ]
-    proc_fallback = subprocess.run(fallback_cmd)
-    if proc_fallback.returncode != 0:
-        raise RuntimeError("yt-dlp failed to download slice with all available client strategies.")
-    return True
-
-
-# 4. Computer Vision AI: Auto-Framing & Split-Screen Detector
 def analyze_shots_and_faces(video_path):
+    """Detects whether shots have 1 or 2 people present."""
     cap = cv2.VideoCapture(video_path)
     w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = cap.get(cv2.CAP_PROP_FPS) or 30
 
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    
     frame_idx = 0
-    shots = []
-    current_shot = {"start": 0, "faces": []}
-    prev_gray = None
+    two_people_found = False
 
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
             break
 
-        if frame_idx % 6 == 0:
+        if frame_idx % 15 == 0:  # Check every half second
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            if prev_gray is not None:
-                diff = cv2.absdiff(gray, prev_gray)
-                ratio = np.count_nonzero(diff > 30) / (w * h)
-                if ratio > 0.40:
-                    current_shot["end"] = frame_idx / fps
-                    shots.append(current_shot)
-                    current_shot = {"start": frame_idx / fps, "faces": []}
-            prev_gray = gray
-
             detected = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(60, 60))
-            if len(detected) > 0:
-                current_shot["faces"].append(detected)
+            if len(detected) >= 2:
+                two_people_found = True
+                break
 
         frame_idx += 1
 
-    current_shot["end"] = frame_idx / fps
-    shots.append(current_shot)
     cap.release()
-    return w, h, fps, shots
+    return w, h, fps, two_people_found
 
-print("[*] Loading Faster-Whisper AI model...")
+print("[*] Loading Faster-Whisper AI...")
 model = WhisperModel("base.en", device="cpu", compute_type="int8")
 
-# 5. Process Each Selected Clip
+# 4. Render Selected Clips
 for clip_item in clips:
     cid = clip_item.get('id', 1)
     start = clip_item.get('start', '00:04')
     end = clip_item.get('end', '00:35')
     clean_label = clip_item.get('label', f'clip_{cid}').replace(' ', '_').replace(':', '')
 
-    raw_template = f"temp/raw_{cid}.%(ext)s"
-    final_raw = f"temp/raw_{cid}.mp4"
+    dl_output = f"temp/downloaded_{cid}.%(ext)s"
     wav_path = f"temp/audio_{cid}.wav"
     ass_file = f"temp/sub_{cid}.ass"
     out_mp4 = f"output/short_{cid}_{clean_label}.mp4"
 
     print(f"\n==========================================")
-    print(f"[*] Slicing Clip #{cid} ({start} -> {end})...")
+    print(f"[*] Downloading Clip #{cid} ({start} -> {end})...")
     print(f"==========================================")
 
-    # Call the self-healing slice downloader
-    download_youtube_slice(url, start, end, raw_template, cookies_path)
+    cmd_dl = [
+        "yt-dlp",
+        "--remote-components", "ejs:github",
+        "--extractor-args", "youtube:player_client=default,web_embedded",
+        "--download-sections", f"*{start}-{end}",
+        "-f", "bv*[height<=1080]+ba/b[height<=1080]/best",
+        "--merge-output-format", "mp4",
+        "--force-keyframes-at-cuts",
+        "--no-check-certificates"
+    ]
+    if cookies_path and os.path.exists(cookies_path):
+        cmd_dl.extend(["--cookies", cookies_path])
+    cmd_dl.extend([url, "-o", dl_output])
+    subprocess.run(cmd_dl, check=True)
 
-    downloaded = [f for f in glob.glob(f"temp/raw_{cid}.*") if not f.endswith(".part") and not f.endswith(".ytdl")]
+    downloaded = [f for f in glob.glob(f"temp/downloaded_{cid}.*") if not f.endswith(".part") and not f.endswith(".ytdl")]
     if not downloaded:
-        raise FileNotFoundError(f"Could not find sliced output file for clip {cid}")
-    subprocess.run(["ffmpeg", "-y", "-i", downloaded[0], "-c", "copy", final_raw], check=True)
+        raise FileNotFoundError(f"Could not find downloaded file for clip {cid}")
+    
+    source_video = downloaded[0]
+    print(f"[✓] Download complete: {source_video}")
 
-    # Audio Transcription
-    print(f"[*] Transcribing speech for Clip #{cid}...")
-    subprocess.run(["ffmpeg", "-y", "-i", final_raw, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
+    # Audio transcription
+    print(f"[*] Transcribing audio with Faster-Whisper...")
+    subprocess.run(["ffmpeg", "-y", "-i", source_video, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
     segments, _ = model.transcribe(wav_path, word_timestamps=True)
 
-    # Subtitles
-    print(f"[*] Generating Captik-tier animated typography for Clip #{cid}...")
+    # Generate phrase-grouped kinetic subtitles
+    print(f"[*] Generating {style.upper()} subtitles...")
     with open(ass_file, "w", encoding="utf-8") as f:
         f.write("[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\n\n")
-        f.write("[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Italic, Alignment, MarginV, Outline, Shadow, BorderStyle\n")
-        f.write(f"Style: Default,{cfg['font']},{cfg['size']},{cfg['primary']},&H00000000&,&H80000000&,-1,{cfg['italic']},2,360,{cfg['border']},{cfg['shadow']},1\n\n")
+        f.write("[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n")
+        f.write(f"Style: Default,{cfg['font']},{cfg['size']},{cfg['primary']},&H000000FF&,&H00000000&,&H80000000&,-1,{cfg['italic']},0,0,100,100,0,0,1,{cfg['border']},{cfg['shadow']},2,40,40,360,1\n\n")
         f.write("[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
 
         all_words = []
@@ -235,6 +188,7 @@ for clip_item in clips:
                 if cleaned:
                     all_words.append({"word": cleaned.upper(), "start": w.start, "end": w.end})
 
+        # Group words into 3-word rhythmic phrases
         chunk_size = 3
         for i in range(0, len(all_words), chunk_size):
             chunk = all_words[i:i+chunk_size]
@@ -250,28 +204,21 @@ for clip_item in clips:
                 line_text = " ".join(phrase_parts)
                 f.write(f"Dialogue: 0,{fmt(active_word['start'])},{fmt(active_word['end'])},Default,,0,0,0,,{line_text}\n")
 
-    # Run AI Auto-Framing & Split Screen
-    print(f"[*] Running AI Computer Vision & Shot Detection...")
-    vid_w, vid_h, fps, shots = analyze_shots_and_faces(final_raw)
+    # Framing configuration
+    print(f"[*] Running computer vision analysis...")
+    vid_w, vid_h, fps, is_two_people = analyze_shots_and_faces(source_video)
 
-    two_people_detected = False
-    for s in shots:
-        for f_batch in s["faces"]:
-            if len(f_batch) >= 2:
-                two_people_detected = True
-                break
-
-    if two_people_detected:
-        print("[⚡] Wide 2-person shot detected! Rendering Stacked 9:16 Split-Screen...")
+    if is_two_people:
+        print("[⚡] Wide 2-person shot detected: Rendering Stacked 9:16 Split-Screen...")
         filter_str = (
             f"[0:v]split=2[in1][in2]; "
             f"[in1]crop=w=ih*(9/8):h=ih:x=0:y=0,scale=1080:960[top]; "
             f"[in2]crop=w=ih*(9/8):h=ih:x=iw-ih*(9/8):y=0,scale=1080:960[bot]; "
             f"[top][bot]vstack=inputs=2[v_stacked]; "
-            f"[v_stacked]subtitles='{ass_file}':fontsdir='fonts'[outv]"
+            f"[v_stacked]subtitles='{ass_file}'[outv]"
         )
         cmd_render = [
-            "ffmpeg", "-y", "-i", final_raw,
+            "ffmpeg", "-y", "-i", source_video,
             "-filter_complex", filter_str,
             "-map", "[outv]", "-map", "0:a",
             "-c:v", "libx264", "-preset", "fast", "-crf", "22",
@@ -280,10 +227,10 @@ for clip_item in clips:
         ]
     else:
         user_pos = float(clip_item.get('crop_pos', 0.5))
-        print(f"[*] Rendering Single Speaker 9:16 with Center Offset: {int(user_pos * 100)}%...")
-        crop_filter = f"crop=ih*(9/16):ih:(iw-ih*(9/16))*{user_pos}:0,scale=1080:1920,subtitles='{ass_file}':fontsdir='fonts'"
+        print(f"[*] Rendering Single Speaker 9:16 (Center Offset: {int(user_pos * 100)}%)...")
+        crop_filter = f"crop=ih*(9/16):ih:(iw-ih*(9/16))*{user_pos}:0,scale=1080:1920,subtitles='{ass_file}'"
         cmd_render = [
-            "ffmpeg", "-y", "-i", final_raw,
+            "ffmpeg", "-y", "-i", source_video,
             "-vf", crop_filter,
             "-c:v", "libx264", "-preset", "fast", "-crf", "22",
             "-c:a", "aac", "-b:a", "128k",
@@ -293,4 +240,5 @@ for clip_item in clips:
     subprocess.run(cmd_render, check=True)
     print(f"[✓] Rendered: {out_mp4}")
 
-print("\n[*] All requested clips finished successfully!")
+print("\n[*] All clips processed successfully!")
+
