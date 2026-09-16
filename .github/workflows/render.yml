@@ -21,19 +21,20 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install System Dependencies, Deno JS Runtime & Studio Fonts
+      - name: Install System Dependencies, Deno & Register Fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg curl
-          # 1. Install Deno (Required by yt-dlp to solve YouTube n-challenge)
+          sudo apt-get install -y ffmpeg curl fontconfig
+          # 1. Install Deno (for YouTube JS challenge)
           curl -fsSL https://deno.land/install.sh | sh
           echo "$HOME/.deno/bin" >> $GITHUB_PATH
-          # 2. Download Studio Fonts for Captik Subtitles
-          mkdir -p fonts
-          curl -sL "https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf" -o fonts/Anton.ttf
-          curl -sL "https://github.com/google/fonts/raw/main/ofl/montserrat/static/Montserrat-Black.ttf" -o fonts/Montserrat-Black.ttf
-          curl -sL "https://github.com/google/fonts/raw/main/ofl/playfairdisplay/static/PlayfairDisplay-BoldItalic.ttf" -o fonts/PlayfairDisplay-BoldItalic.ttf
-          curl -sL "https://github.com/google/fonts/raw/main/ofl/playfairdisplay/static/PlayfairDisplay-Black.ttf" -o fonts/PlayfairDisplay-Black.ttf
+          # 2. Download and register fonts system-wide
+          sudo mkdir -p /usr/local/share/fonts/studio
+          sudo curl -sL "https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf" -o /usr/local/share/fonts/studio/Anton-Regular.ttf
+          sudo curl -sL "https://github.com/google/fonts/raw/main/ofl/montserrat/static/Montserrat-Black.ttf" -o /usr/local/share/fonts/studio/Montserrat-Black.ttf
+          sudo curl -sL "https://github.com/google/fonts/raw/main/ofl/playfairdisplay/static/PlayfairDisplay-BoldItalic.ttf" -o /usr/local/share/fonts/studio/PlayfairDisplay-BoldItalic.ttf
+          sudo curl -sL "https://github.com/google/fonts/raw/main/ofl/playfairdisplay/static/PlayfairDisplay-Black.ttf" -o /usr/local/share/fonts/studio/PlayfairDisplay-Black.ttf
+          sudo fc-cache -f -v
 
       - name: Install Python AI Libraries
         run: |
