@@ -45,7 +45,7 @@
           <div>
             <div class="flex items-center space-x-2">
               <span class="text-base font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V4.8</span>
+              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V5.0</span>
             </div>
             <p class="text-xs text-slate-400">Automated 9:16 Video Synthesis</p>
           </div>
@@ -205,10 +205,21 @@
         <div id="tabEditPanel" class="space-y-3">
           <div class="flex justify-between items-center">
             <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-              Frame Alignment & Segment
+              Framing Mode & Segment
             </span>
             <button id="btnAddClipBtn" class="px-2.5 py-1 bg-[#161A29] border border-slate-700 hover:border-[#00F0FF] rounded text-[10px] font-mono text-slate-300 font-bold">
               + Add Clip (Max 10)
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+            <button id="btnModeSingle" onclick="setClipMode('single')" class="py-2.5 rounded-xl border border-[#00F0FF] bg-[#13222E] text-[#00F0FF] font-bold flex items-center justify-center gap-1.5">
+              <span>👤</span>
+              <span>Single (9:16 Center)</span>
+            </button>
+            <button id="btnModeSplit" onclick="setClipMode('split')" class="py-2.5 rounded-xl item-dark text-slate-300 hover:border-[#00F0FF] flex items-center justify-center gap-1.5">
+              <span>👥</span>
+              <span>Split (Stacked 2-Person)</span>
             </button>
           </div>
 
@@ -241,7 +252,7 @@
           <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
             Subtitles Script Review
           </span>
-          <textarea id="captionScriptText" rows="4" class="w-full bg-[#161A29] border border-slate-800 rounded-xl p-3 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]" placeholder="Subtitles will automatically synchronize word-by-word with Faster-Whisper AI during final render."></textarea>
+          <textarea id="captionScriptText" rows="4" class="w-full bg-[#161A29] border border-slate-800 rounded-xl p-3 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]" placeholder="Subtitles synchronize automatically with Faster-Whisper AI."></textarea>
         </div>
 
         <div id="tabStylePanel" class="hidden space-y-2.5">
@@ -263,10 +274,7 @@
             </div>
 
             <div data-style="bold_shadow" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Captik Shadow</span>
-                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
-              </div>
+              <span class="text-xs font-bold text-white font-mono block mb-1">Captik Shadow</span>
               <div class="text-center py-1">
                 <div class="text-[10px] text-slate-400">the quick</div>
                 <div class="text-xl font-black text-white drop-shadow-[0_6px_8px_rgba(0,0,0,1)]">BROWN</div>
@@ -282,10 +290,7 @@
             </div>
 
             <div data-style="kinetic_scale" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Illusion</span>
-                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
-              </div>
+              <span class="text-xs font-bold text-white font-mono block mb-1">Illusion</span>
               <div class="text-center py-1">
                 <div class="text-[10px] text-slate-400">he had rented the</div>
                 <div class="text-2xl font-black text-white leading-tight">Biggest</div>
@@ -294,10 +299,7 @@
             </div>
 
             <div data-style="canary_punch" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Editor Masala</span>
-                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Smart</span>
-              </div>
+              <span class="text-xs font-bold text-white font-mono block mb-1">Editor Masala</span>
               <div class="text-center py-1">
                 <div class="text-[10px] text-slate-400 font-semibold">trust the</div>
                 <div class="text-2xl font-black text-[#FFE600] tracking-wider uppercase">PROCESS</div>
@@ -305,10 +307,7 @@
             </div>
 
             <div data-style="sky_dual" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Aura</span>
-                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Editorial</span>
-              </div>
+              <span class="text-xs font-bold text-white font-mono block mb-1">Aura</span>
               <div class="text-center py-1">
                 <div class="text-lg font-serif italic text-white leading-none">forget</div>
                 <div class="text-xl font-black text-[#00F0FF] tracking-wider uppercase leading-none mt-1">STATUS</div>
@@ -316,10 +315,7 @@
             </div>
 
             <div data-style="modernist_swiss" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Swiss</span>
-                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Editorial</span>
-              </div>
+              <span class="text-xs font-bold text-white font-mono block mb-1">Swiss</span>
               <div class="text-center py-1">
                 <div class="text-lg font-black text-white leading-none">focus</div>
                 <div class="text-xl font-black text-[#FFD700] uppercase leading-none mt-0.5">DEEPLY</div>
@@ -327,10 +323,7 @@
             </div>
 
             <div data-style="crimson_cinematic" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">The Big Red</span>
-                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">New</span>
-              </div>
+              <span class="text-xs font-bold text-white font-mono block mb-1">The Big Red</span>
               <div class="text-center py-1 relative">
                 <div class="text-xl font-serif font-black text-[#E63333] tracking-widest uppercase">SECOND</div>
                 <div class="text-xs font-serif text-white -mt-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">the quick fox</div>
@@ -404,12 +397,15 @@
         ◈
       </div>
       <div>
-        <h3 class="text-sm font-mono font-bold uppercase tracking-wider text-white">Rendering Engine</h3>
-        <p id="exportStatusMsg" class="text-xs text-slate-400 mt-1">Dispatching cloud runner with selected style...</p>
+        <div class="flex items-center justify-center gap-2">
+          <h3 class="text-sm font-mono font-bold uppercase tracking-wider text-white">Rendering Engine</h3>
+          <span id="exportProgressPct" class="text-xs font-mono font-bold text-[#00F0FF]">5%</span>
+        </div>
+        <p id="exportStatusMsg" class="text-xs text-slate-400 mt-1">Connecting to cloud runner...</p>
       </div>
 
-      <div class="w-full bg-[#161A29] h-2 rounded-full overflow-hidden border border-slate-800">
-        <div id="exportProgressBar" class="h-full bg-[#00F0FF] w-1/3 animate-pulse"></div>
+      <div class="w-full bg-[#161A29] h-2.5 rounded-full overflow-hidden border border-slate-800 p-0.5">
+        <div id="exportProgressBar" class="h-full bg-gradient-to-r from-[#00F0FF] to-[#0077B6] rounded-full transition-all duration-300" style="width: 5%;"></div>
       </div>
 
       <div id="downloadContainer" class="hidden pt-2 space-y-2">
@@ -474,6 +470,7 @@
     let currentTimeSec = 4;
     let totalDurationSec = 5360;
     let playheadTimer = null;
+    let renderSimulationTimer = null;
 
     const viralReportData = [
       {
@@ -484,6 +481,7 @@
         start: "00:04",
         end: "00:35",
         crop_pos: 0.5,
+        mode: "single",
         tiktokCaption: "Up to 30% of weight lost on GLP-1s is lean muscle tissue. Dr. Cohen explains the sarcopenia risk. 📉\n\n#ozempic #glp1 #muscleloss #biohacking #longevity",
         igCaption: "Up to 30% of weight lost on GLP-1 agonists is functional muscle tissue.\n\nDr. Pinchas Cohen warns against losing lean mass without resistance protocols.\n\n#longevitymedicine #peptidebiology #healthoptimization"
       },
@@ -495,6 +493,7 @@
         start: "50:56",
         end: "52:15",
         crop_pos: 0.85,
+        mode: "single",
         tiktokCaption: "At 69, Dr. Cohen loses 1kg muscle/yr. He discovered MOTS-c, but refuses to buy online. Here's why. 🧪\n\n#peptides #motsc #biohacker #longevity",
         igCaption: "Would you take the molecule you discovered if it wasn't FDA approved?\n\nDr. Cohen discovered MOTS-c but warns about gray-market impurities.\n\n#peptideprotocols #functionalmedicine #scientifictruth"
       },
@@ -506,6 +505,7 @@
         start: "21:19",
         end: "22:00",
         crop_pos: 0.85,
+        mode: "single",
         tiktokCaption: "GLP-1 crushes hunger. MOTS-c shuttles calories from fat into muscle. 🥩\n\n#metabolism #musclebuilding #fatlosshelp",
         igCaption: "MOTS-c partitions energy away from fat cells and directly into muscle tissue.\n\n#metabolichealth #insulinresistance #gymmotivation"
       },
@@ -517,6 +517,7 @@
         start: "01:21:51",
         end: "01:22:45",
         crop_pos: 0.5,
+        mode: "single",
         tiktokCaption: "Exercise in a vial? Trials showed subjects ran 200% longer. 🏃‍♂️\n\n#endurance #athletictraining #biohacking",
         igCaption: "Preclinical trials showed MOTS-c doubled physical endurance capacity.\n\n#sportsperformancelab #exerciseprotocols #recovery"
       },
@@ -528,15 +529,16 @@
         start: "01:13:04",
         end: "01:14:05",
         crop_pos: 0.85,
+        mode: "single",
         tiktokCaption: "20% of people carry this mutation spiking Alzheimer's risk by 50%. 🧠\n\n#alzheimers #brainhealth #neuroscience",
         igCaption: "Meet SHMOO—a mitochondrial peptide protecting neurons against amyloid beta toxicity.\n\n#neuroprotection #brainoptimization #genetics"
       }
     ];
 
     let clips = [
-      { id: 1, label: "Clip 1: The Hook", start: "00:04", end: "00:35", crop_pos: 0.5, selectedForExport: true },
-      { id: 2, label: "Clip 2: Key Insight", start: "21:19", end: "22:00", crop_pos: 0.85, selectedForExport: true },
-      { id: 3, label: "Clip 3: Big Story", start: "50:56", end: "52:15", crop_pos: 0.85, selectedForExport: true }
+      { id: 1, label: "Clip 1: The Hook", start: "00:04", end: "00:35", crop_pos: 0.5, mode: "single", selectedForExport: true },
+      { id: 2, label: "Clip 2: Key Insight", start: "21:19", end: "22:00", crop_pos: 0.85, mode: "single", selectedForExport: true },
+      { id: 3, label: "Clip 3: Big Story", start: "50:56", end: "52:15", crop_pos: 0.85, mode: "split", selectedForExport: true }
     ];
 
     const ytIframe = document.getElementById('ytIframePlayer');
@@ -616,6 +618,19 @@
     }
 
     window.setFramingPreset = (pos) => updateFraming(pos);
+
+    window.setClipMode = (mode) => {
+      clips[activeClipIndex].mode = mode;
+      const btnSingle = document.getElementById('btnModeSingle');
+      const btnSplit = document.getElementById('btnModeSplit');
+      if (mode === 'split') {
+        btnSplit.className = "py-2.5 rounded-xl border border-[#00F0FF] bg-[#13222E] text-[#00F0FF] font-bold flex items-center justify-center gap-1.5";
+        btnSingle.className = "py-2.5 rounded-xl item-dark text-slate-300 hover:border-[#00F0FF] flex items-center justify-center gap-1.5";
+      } else {
+        btnSingle.className = "py-2.5 rounded-xl border border-[#00F0FF] bg-[#13222E] text-[#00F0FF] font-bold flex items-center justify-center gap-1.5";
+        btnSplit.className = "py-2.5 rounded-xl item-dark text-slate-300 hover:border-[#00F0FF] flex items-center justify-center gap-1.5";
+      }
+    };
 
     let isDraggingRig = false;
     function handleRigDrag(clientX) {
@@ -757,7 +772,6 @@
       document.getElementById('homeScreen').classList.remove('hidden');
     };
 
-    // Clip Switcher
     function renderClipPills() {
       const bar = document.getElementById('clipsPillsBar');
       bar.innerHTML = '';
@@ -785,6 +799,7 @@
       document.getElementById('inputEnd').value = c.end;
       document.getElementById('lblStartTime').innerText = c.start;
       document.getElementById('lblEndTime').innerText = c.end;
+      setClipMode(c.mode || 'single');
       updateFraming(c.crop_pos !== undefined ? c.crop_pos : 0.5);
       renderClipPills();
       StudioEngine.seekTo(timeToSeconds(c.start));
@@ -793,7 +808,7 @@
     window.addNewClip = () => {
       if (clips.length >= 10) return alert("Max 10 clips supported.");
       const n = clips.length + 1;
-      clips.push({ id: n, label: `Clip ${n}`, start: "00:00", end: "00:30", crop_pos: 0.5, selectedForExport: true });
+      clips.push({ id: n, label: `Clip ${n}`, start: "00:00", end: "00:30", crop_pos: 0.5, mode: "single", selectedForExport: true });
       switchClip(clips.length - 1);
     };
 
@@ -848,15 +863,16 @@
               <input type="checkbox" id="chk_clip_${i}" ${c.selectedForExport ? 'checked' : ''} onchange="toggleClipExportSelection(${i}, this.checked)" class="w-4 h-4 accent-[#00F0FF] rounded cursor-pointer">
               <div>
                 <label for="chk_clip_${i}" class="text-xs font-bold text-white block cursor-pointer">Clip #${i+1}: ${c.label || 'Segment'}</label>
-                <span class="text-[10px] font-mono text-slate-400">${c.start} ➔ ${c.end}</span>
+                <span class="text-[10px] font-mono text-slate-400">${c.start} ➔ ${c.end} (${c.mode === 'split' ? 'Split-Screen' : 'Single 9:16'})</span>
               </div>
             </div>
             <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-[#00F0FF]">
-              Face: ${Math.round((c.crop_pos || 0.5) * 100)}%
+              ${c.mode === 'split' ? '👥 Split' : 'Face: ' + Math.round((c.crop_pos || 0.5) * 100) + '%'}
             </span>
           </div>
         `;
       });
+
       summaryText.innerText = `${selectedCount} of ${clips.length} Selected`;
     }
 
@@ -882,7 +898,7 @@
     };
     document.getElementById('btnCloseSelectExport').onclick = () => exportSelectModal.classList.add('hidden');
 
-    // Execute Cloud Render for ALL Selected Clips
+    // ==================== DYNAMIC REAL-TIME PROGRESS BAR CONTROLLER ====================
     document.getElementById('btnConfirmRenderClips').onclick = async () => {
       const selectedClips = clips.filter(c => c.selectedForExport);
       if (selectedClips.length === 0) return alert("Please select at least 1 clip to export.");
@@ -897,13 +913,38 @@
       exportSelectModal.classList.add('hidden');
       const modal = document.getElementById('exportModal');
       const msg = document.getElementById('exportStatusMsg');
+      const bar = document.getElementById('exportProgressBar');
+      const pct = document.getElementById('exportProgressPct');
       const dlBox = document.getElementById('downloadContainer');
       const dlBtn = document.getElementById('btnDirectDownload');
       const ghBackupBtn = document.getElementById('btnGitHubRunBackup');
 
       modal.classList.remove('hidden');
       dlBox.classList.add('hidden');
-      msg.innerText = `Dispatching runner for ${selectedClips.length} clips with ${currentStyle.toUpperCase()} style...`;
+      bar.className = "h-full bg-gradient-to-r from-[#00F0FF] to-[#0077B6] rounded-full transition-all duration-300";
+      
+      let progress = 5;
+      bar.style.width = '5%';
+      pct.innerText = '5%';
+      msg.innerText = `Dispatching cloud runner for ${selectedClips.length} clips with ${currentStyle.toUpperCase()} style...`;
+
+      // Active progress bar simulation loop
+      if (renderSimulationTimer) clearInterval(renderSimulationTimer);
+      renderSimulationTimer = setInterval(() => {
+        if (progress < 90) {
+          progress += (progress < 30 ? 2.5 : progress < 60 ? 1.2 : 0.6);
+          bar.style.width = Math.min(92, progress) + '%';
+          pct.innerText = Math.round(Math.min(92, progress)) + '%';
+
+          if (progress > 15 && progress < 40) {
+            msg.innerText = "Downloading high-resolution video streams from YouTube...";
+          } else if (progress >= 40 && progress < 70) {
+            msg.innerText = "Transcribing speech & synchronizing Faster-Whisper AI timestamps...";
+          } else if (progress >= 70 && progress < 90) {
+            msg.innerText = "Rendering Captik 9:16 typography & applying framing filters...";
+          }
+        }
+      }, 1000);
 
       try {
         await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
@@ -920,8 +961,6 @@
           })
         });
 
-        msg.innerText = `Encoding ${selectedClips.length} vertical shorts in the cloud with AI Auto-Framing...`;
-
         const poll = setInterval(async () => {
           const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
             headers: { "Authorization": `Bearer ${token}` }
@@ -931,25 +970,34 @@
 
           if (run && run.status === "completed") {
             clearInterval(poll);
+            clearInterval(renderSimulationTimer);
+
             if (run.conclusion === "success") {
+              bar.style.width = '100%';
+              pct.innerText = '100%';
               msg.innerText = `All ${selectedClips.length} Shorts finished rendering!`;
               dlBtn.href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
               ghBackupBtn.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
               dlBox.classList.remove('hidden');
             } else {
+              bar.className = "h-full bg-red-500 rounded-full";
               msg.innerText = "Render encountered an error. Check Actions logs.";
+              ghBackupBtn.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
+              dlBox.classList.remove('hidden');
             }
           }
         }, 7000);
 
       } catch (err) {
+        clearInterval(renderSimulationTimer);
+        bar.className = "h-full bg-red-500 rounded-full";
         msg.innerText = "Error: " + err.message;
       }
     };
 
     document.getElementById('btnCloseExport').onclick = () => document.getElementById('exportModal').classList.add('hidden');
 
-    // Report Logic
+    // Virality Report Logic
     function renderReportCards() {
       const container = document.getElementById('reportCardsList');
       container.innerHTML = '';
@@ -1000,17 +1048,19 @@
       clips[activeClipIndex].start = item.start;
       clips[activeClipIndex].end = item.end;
       clips[activeClipIndex].crop_pos = item.crop_pos;
+      clips[activeClipIndex].mode = item.mode || 'single';
       document.getElementById('inputStart').value = item.start;
       document.getElementById('inputEnd').value = item.end;
       document.getElementById('lblStartTime').innerText = item.start;
       document.getElementById('lblEndTime').innerText = item.end;
+      setClipMode(item.mode || 'single');
       updateFraming(item.crop_pos);
 
       document.getElementById('reportModal').classList.add('hidden');
       document.getElementById('homeScreen').classList.add('hidden');
       document.getElementById('editorScreen').classList.remove('hidden');
 
-      StudioEngine.seekTo(timeToSeconds(item.start));
+      StudioEngine.seekTo(timeToSeconds(item.start)); 
     };
 
     const reportModal = document.getElementById('reportModal');
