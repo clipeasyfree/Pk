@@ -3,11 +3,9 @@ import sys
 import glob
 import json
 import subprocess
-import cv2
-import numpy as np
 from faster_whisper import WhisperModel
 
-print("[*] Initializing VERTEX PRO AI Studio Engine...")
+print("[*] Initializing VERTEX PRO Studio Engine...")
 
 # 1. Setup cookies
 cookies_path = None
@@ -48,7 +46,7 @@ elif "watch?v=" in url:
     url = f"https://www.youtube.com/watch?v={url.split('watch?v=')[1].split('&')[0]}"
 
 if not clips:
-    clips = [{"id": 1, "start": "00:04", "end": "00:35", "crop_pos": 0.5}]
+    clips = [{"id": 1, "start": "00:04", "end": "00:35", "crop_pos": 0.5, "mode": "single"}]
 
 os.makedirs('output', exist_ok=True)
 os.makedirs('temp', exist_ok=True)
@@ -57,93 +55,76 @@ for f in glob.glob("output/*"):
     try: os.remove(f)
     except: pass
 
-# 3. Authentic Typography Presets (Color mapping in ASS format: &H00BBGGRR&)
+# 3. Authentic Captik Typography Presets (90pt Bold with ASS &H00BBGGRR& Colors)
 STYLES = {
+    # 1. Captik Glow (Neon Lime active glow on Anton bold)
     "neon_lime": {
-        "font": "Anton", "size": "76", "primary": "&H00FFFFFF&", "highlight": "&H0014FF39&",
-        "border": "4", "blur": "12", "shadow": "0", "italic": "0", "scale": "115"
+        "font": "Anton", "size": "92", "primary": "&H00FFFFFF&", "highlight": "&H0014FF39&",
+        "border": "4", "blur": "14", "shadow": "0", "italic": "0", "scale": "115"
     },
+    # 2. Captik Shadow (Montserrat Black with 8px drop shadow)
     "bold_shadow": {
-        "font": "Montserrat", "size": "72", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
-        "border": "0", "blur": "0", "shadow": "7", "italic": "0", "scale": "110"
+        "font": "Montserrat", "size": "88", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
+        "border": "0", "blur": "0", "shadow": "8", "italic": "0", "scale": "110"
     },
+    # 3. Delhi (Editorial luxury italic Playfair Display)
     "moonlight_serif": {
-        "font": "Playfair Display", "size": "66", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
-        "border": "2", "blur": "8", "shadow": "0", "italic": "-1", "scale": "108"
+        "font": "Playfair Display", "size": "82", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
+        "border": "2", "blur": "10", "shadow": "0", "italic": "-1", "scale": "108"
     },
+    # 4. Illusion (Kinetic 135% Scale Pop)
     "kinetic_scale": {
-        "font": "Montserrat", "size": "68", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
-        "border": "3", "blur": "0", "shadow": "3", "italic": "0", "scale": "135"
+        "font": "Montserrat", "size": "84", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
+        "border": "3", "blur": "0", "shadow": "4", "italic": "0", "scale": "135"
     },
+    # 5. Editor Masala (Canary yellow punch)
     "canary_punch": {
-        "font": "Anton", "size": "78", "primary": "&H00FFFFFF&", "highlight": "&H0000E5FF&",
-        "border": "4", "blur": "0", "shadow": "3", "italic": "0", "scale": "115"
+        "font": "Anton", "size": "92", "primary": "&H00FFFFFF&", "highlight": "&H0000E5FF&",
+        "border": "4", "blur": "0", "shadow": "4", "italic": "0", "scale": "115"
     },
+    # 6. Aura (Editorial Playfair with Cyan accent)
     "sky_dual": {
-        "font": "Playfair Display", "size": "70", "primary": "&H00FFFFFF&", "highlight": "&H00FFC266&",
+        "font": "Playfair Display", "size": "84", "primary": "&H00FFFFFF&", "highlight": "&H00FFC266&",
         "border": "2", "blur": "4", "shadow": "0", "italic": "-1", "scale": "118"
     },
+    # 7. Swiss (Modernist Anton with bright gold accent)
     "modernist_swiss": {
-        "font": "Anton", "size": "74", "primary": "&H00FFFFFF&", "highlight": "&H0000D4FF&",
-        "border": "4", "blur": "0", "shadow": "3", "italic": "0", "scale": "115"
+        "font": "Anton", "size": "90", "primary": "&H00FFFFFF&", "highlight": "&H0000D4FF&",
+        "border": "4", "blur": "0", "shadow": "4", "italic": "0", "scale": "115"
     },
+    # 8. The Big Red (Playfair Display with deep red accent)
     "crimson_cinematic": {
-        "font": "Playfair Display", "size": "74", "primary": "&H00FFFFFF&", "highlight": "&H003333E6&",
-        "border": "2", "blur": "5", "shadow": "0", "italic": "0", "scale": "125"
+        "font": "Playfair Display", "size": "88", "primary": "&H00FFFFFF&", "highlight": "&H003333E6&",
+        "border": "2", "blur": "6", "shadow": "0", "italic": "0", "scale": "125"
     },
+    # 9. Clean Glow (Soft ambient white glow)
     "ambient_white": {
-        "font": "Montserrat", "size": "64", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
-        "border": "2", "blur": "14", "shadow": "0", "italic": "0", "scale": "105"
+        "font": "Montserrat", "size": "80", "primary": "&H00FFFFFF&", "highlight": "&H00FFFFFF&",
+        "border": "2", "blur": "16", "shadow": "0", "italic": "0", "scale": "105"
     }
 }
 cfg = STYLES.get(style, STYLES["neon_lime"])
-print(f"[*] Selected Subtitle Profile: {style.upper()} ({cfg['font']})")
+print(f"[*] Subtitle Preset: {style.upper()} ({cfg['font']})")
 
-def analyze_shots_and_faces(video_path):
-    """Detects whether shots have 1 or 2 people present."""
-    cap = cv2.VideoCapture(video_path)
-    w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS) or 30
-
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    frame_idx = 0
-    two_people_found = False
-
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            break
-
-        if frame_idx % 15 == 0:  # Check every half second
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            detected = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(60, 60))
-            if len(detected) >= 2:
-                two_people_found = True
-                break
-
-        frame_idx += 1
-
-    cap.release()
-    return w, h, fps, two_people_found
-
-print("[*] Loading Faster-Whisper AI...")
+print("[*] Loading Faster-Whisper AI model...")
 model = WhisperModel("base.en", device="cpu", compute_type="int8")
 
-# 4. Render Selected Clips
+# 4. Render All Selected Clips
 for clip_item in clips:
     cid = clip_item.get('id', 1)
     start = clip_item.get('start', '00:04')
     end = clip_item.get('end', '00:35')
+    mode = clip_item.get('mode', 'single')
+    user_pos = float(clip_item.get('crop_pos', 0.5))
     clean_label = clip_item.get('label', f'clip_{cid}').replace(' ', '_').replace(':', '')
 
-    dl_output = f"temp/downloaded_{cid}.%(ext)s"
+    dl_output = f"temp/raw_{cid}.%(ext)s"
     wav_path = f"temp/audio_{cid}.wav"
     ass_file = f"temp/sub_{cid}.ass"
     out_mp4 = f"output/short_{cid}_{clean_label}.mp4"
 
     print(f"\n==========================================")
-    print(f"[*] Downloading Clip #{cid} ({start} -> {end})...")
+    print(f"[*] Processing Clip #{cid} ({start} -> {end}) | Mode: {mode.upper()}...")
     print(f"==========================================")
 
     cmd_dl = [
@@ -161,24 +142,22 @@ for clip_item in clips:
     cmd_dl.extend([url, "-o", dl_output])
     subprocess.run(cmd_dl, check=True)
 
-    downloaded = [f for f in glob.glob(f"temp/downloaded_{cid}.*") if not f.endswith(".part") and not f.endswith(".ytdl")]
+    downloaded = [f for f in glob.glob(f"temp/raw_{cid}.*") if not f.endswith(".part") and not f.endswith(".ytdl")]
     if not downloaded:
         raise FileNotFoundError(f"Could not find downloaded file for clip {cid}")
-    
     source_video = downloaded[0]
-    print(f"[✓] Download complete: {source_video}")
 
-    # Audio transcription
-    print(f"[*] Transcribing audio with Faster-Whisper...")
+    # Transcribe speech
+    print(f"[*] Transcribing audio for Clip #{cid}...")
     subprocess.run(["ffmpeg", "-y", "-i", source_video, "-vn", "-ar", "16000", "-ac", "1", wav_path], check=True)
     segments, _ = model.transcribe(wav_path, word_timestamps=True)
 
-    # Generate phrase-grouped kinetic subtitles
-    print(f"[*] Generating {style.upper()} subtitles...")
+    # Generate rhythmic 3-word phrase subtitles
+    print(f"[*] Burning {style.upper()} stacked typography...")
     with open(ass_file, "w", encoding="utf-8") as f:
         f.write("[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\n\n")
         f.write("[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n")
-        f.write(f"Style: Default,{cfg['font']},{cfg['size']},{cfg['primary']},&H000000FF&,&H00000000&,&H80000000&,-1,{cfg['italic']},0,0,100,100,0,0,1,{cfg['border']},{cfg['shadow']},2,40,40,360,1\n\n")
+        f.write(f"Style: Default,{cfg['font']},{cfg['size']},{cfg['primary']},&H000000FF&,&H00000000&,&H80000000&,-1,{cfg['italic']},0,0,100,100,0,0,1,{cfg['border']},{cfg['shadow']},2,40,40,420,1\n\n")
         f.write("[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
 
         all_words = []
@@ -188,7 +167,7 @@ for clip_item in clips:
                 if cleaned:
                     all_words.append({"word": cleaned.upper(), "start": w.start, "end": w.end})
 
-        # Group words into 3-word rhythmic phrases
+        # Group words into 3-word chunks
         chunk_size = 3
         for i in range(0, len(all_words), chunk_size):
             chunk = all_words[i:i+chunk_size]
@@ -204,18 +183,15 @@ for clip_item in clips:
                 line_text = " ".join(phrase_parts)
                 f.write(f"Dialogue: 0,{fmt(active_word['start'])},{fmt(active_word['end'])},Default,,0,0,0,,{line_text}\n")
 
-    # Framing configuration
-    print(f"[*] Running computer vision analysis...")
-    vid_w, vid_h, fps, is_two_people = analyze_shots_and_faces(source_video)
-
-    if is_two_people:
-        print("[⚡] Wide 2-person shot detected: Rendering Stacked 9:16 Split-Screen...")
+    # Render: Stacked Split-Screen or Single Centered Speaker
+    if mode == "split":
+        print(f"[*] Rendering Stacked 9:16 Split-Screen (Host Top / Guest Bottom)...")
         filter_str = (
             f"[0:v]split=2[in1][in2]; "
             f"[in1]crop=w=ih*(9/8):h=ih:x=0:y=0,scale=1080:960[top]; "
             f"[in2]crop=w=ih*(9/8):h=ih:x=iw-ih*(9/8):y=0,scale=1080:960[bot]; "
             f"[top][bot]vstack=inputs=2[v_stacked]; "
-            f"[v_stacked]subtitles='{ass_file}'[outv]"
+            f"[v_stacked]subtitles='{ass_file}':fontsdir='fonts'[outv]"
         )
         cmd_render = [
             "ffmpeg", "-y", "-i", source_video,
@@ -226,9 +202,8 @@ for clip_item in clips:
             out_mp4
         ]
     else:
-        user_pos = float(clip_item.get('crop_pos', 0.5))
-        print(f"[*] Rendering Single Speaker 9:16 (Center Offset: {int(user_pos * 100)}%)...")
-        crop_filter = f"crop=ih*(9/16):ih:(iw-ih*(9/16))*{user_pos}:0,scale=1080:1920,subtitles='{ass_file}'"
+        print(f"[*] Rendering Single Speaker 9:16 at offset {int(user_pos * 100)}%...")
+        crop_filter = f"crop=ih*(9/16):ih:(iw-ih*(9/16))*{user_pos}:0,scale=1080:1920,subtitles='{ass_file}':fontsdir='fonts'"
         cmd_render = [
             "ffmpeg", "-y", "-i", source_video,
             "-vf", crop_filter,
@@ -240,5 +215,4 @@ for clip_item in clips:
     subprocess.run(cmd_render, check=True)
     print(f"[✓] Rendered: {out_mp4}")
 
-print("\n[*] All clips processed successfully!")
-
+print("\n[*] All requested shorts rendered successfully!")
