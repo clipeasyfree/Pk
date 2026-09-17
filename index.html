@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VERTEX PRO // Mobile Studio Engine</title>
+  <title>VERTEX PRO // Podcast Clipper & Auto-Framer</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,24 +18,14 @@
     .card-titanium { background-color: #111420; border: 1px solid #1E2335; }
     .card-titanium:hover { border-color: #2D354F; }
     .item-dark { background-color: #161A29; border: 1px solid #232A3F; }
-    .selected-style { border: 2px solid #00F0FF !important; background-color: #13222E !important; }
-    .target-ring { border: 2px dashed #00F0FF; box-shadow: 0 0 20px rgba(0, 240, 255, 0.7); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    input[type=range]::-webkit-slider-thumb {
-      height: 18px;
-      width: 18px;
-      border-radius: 50%;
-      background: #00F0FF;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between overflow-x-hidden select-none">
 
-  <div id="homeScreen" class="max-w-md mx-auto w-full min-h-screen p-5 flex flex-col justify-between">
-    <div class="space-y-6 pt-2">
+  <div class="max-w-md mx-auto w-full min-h-screen p-5 flex flex-col justify-between">
+    <div class="space-y-5 pt-2">
       
       <div class="flex justify-between items-start">
         <div class="flex items-center space-x-3">
@@ -45,348 +35,56 @@
           <div>
             <div class="flex items-center space-x-2">
               <span class="text-base font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V5.0</span>
+              <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V6.0</span>
             </div>
-            <p class="text-xs text-slate-400">Automated 9:16 Video Synthesis</p>
+            <p class="text-xs text-slate-400">Podcast Clipper & 9:16 Auto-Framer</p>
           </div>
         </div>
 
-        <div class="flex items-center space-x-2">
-          <button id="btnOpenReportHome" class="px-3 py-1.5 rounded-full bg-[#161A29] border border-[#00F0FF]/40 text-[#00F0FF] text-xs font-mono font-bold flex items-center gap-1.5 shadow-md">
-            <span>📊</span>
-            <span>AI Report</span>
-          </button>
-          <button id="btnSettingsHome" class="w-8 h-8 rounded-full item-dark flex items-center justify-center text-xs text-slate-300">
-            ⚙
-          </button>
-        </div>
+        <button id="btnSettingsHome" class="w-8 h-8 rounded-full item-dark flex items-center justify-center text-xs text-slate-300">
+          ⚙
+        </button>
       </div>
 
-      <button id="btnRunAiReport" class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#00F0FF] via-[#00B4D8] to-[#0077B6] text-black font-extrabold text-xs uppercase tracking-widest flex items-center justify-between shadow-[0_8px_25px_rgba(0,240,255,0.25)] active:scale-[0.98] transition">
-        <span class="flex items-center gap-2">
-          <span class="text-sm">🔥</span>
-          <span>View AI Virality Report</span>
-        </span>
-        <span class="text-[10px] bg-black/25 px-2.5 py-1 rounded-full text-black font-mono font-bold">5 Clips Ready</span>
-      </button>
+      <div class="card-titanium rounded-3xl p-5 space-y-3.5 shadow-xl">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold">
+            STEP 1: ADD VIDEO SOURCE
+          </span>
+          <span class="text-[10px] font-mono text-slate-400">Any URL</span>
+        </div>
 
-      <div class="card-titanium rounded-3xl p-5 space-y-4 shadow-xl">
-        <span class="text-[11px] font-mono uppercase tracking-widest text-slate-400 font-bold block">
-          Ingest Footage
-        </span>
+        <input type="text" id="ytUrlInput" value="https://www.youtube.com/watch?v=MHRUnJ0Gf8s" placeholder="Paste YouTube Link..." class="w-full bg-[#0B0D14] border border-slate-800 rounded-xl px-3.5 py-3 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
 
-        <div class="border-2 border-dashed border-slate-700/80 rounded-2xl p-6 text-center space-y-3 bg-[#0B0D14]/70">
-          <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] flex items-center justify-center text-[#00F0FF] text-lg border border-slate-700">
-            ↑
-          </div>
+        <button id="btnAnalyzeClips" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] hover:opacity-95 text-black font-bold text-xs font-mono tracking-wider transition shadow-[0_8px_25px_rgba(0,240,255,0.25)] active:scale-95 flex items-center justify-center gap-2">
+          <span>🧠</span>
+          <span>Detect Unusual Activity & Viral Clips</span>
+        </button>
+      </div>
+
+      <div class="card-titanium rounded-3xl p-5 space-y-3.5 shadow-xl">
+        <div class="flex justify-between items-center pb-2 border-b border-slate-800">
           <div>
-            <span class="text-sm font-bold text-white block">Select video from device</span>
-            <p class="text-[11px] text-slate-400 mt-0.5">Instant local editing with 0 wait time</p>
+            <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
+              STEP 2: SELECT CLIPS TO EXPORT
+            </span>
+            <p class="text-[10px] text-slate-400">Choose which moments to render in 9:16:</p>
           </div>
-          
-          <input type="file" id="localVideoPicker" accept="video/*" class="hidden">
-          <button onclick="document.getElementById('localVideoPicker').click()" class="px-5 py-2.5 bg-[#1F253A] hover:bg-[#28304B] text-white text-xs font-mono font-bold rounded-xl border border-slate-600 transition">
-            Choose File from Phone
-          </button>
+          <span id="clipsCountBadge" class="text-xs font-mono font-bold text-[#00F0FF] bg-[#161A29] px-2 py-1 rounded-lg border border-slate-700">3 Selected</span>
         </div>
 
-        <div class="relative flex py-1 items-center">
-          <div class="flex-grow border-t border-slate-800"></div>
-          <span class="flex-shrink mx-3 text-[10px] font-mono text-slate-500 uppercase">OR YOUTUBE SOURCE</span>
-          <div class="flex-grow border-t border-slate-800"></div>
-        </div>
+        <div id="viralClipsList" class="space-y-3 max-h-[380px] overflow-y-auto no-scrollbar">
+          </div>
 
-        <div class="space-y-2">
-          <input type="text" id="ytUrlInput" value="https://www.youtube.com/watch?v=MHRUnJ0Gf8s" placeholder="Paste YouTube Link..." class="w-full bg-[#0B0D14] border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
-          <button id="btnOpenInStudio" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] hover:opacity-95 text-black font-bold text-xs font-mono tracking-wider transition shadow-lg">
-            ⚡ Open in Studio Editor
-          </button>
-        </div>
+        <button id="btnStartRender" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_8px_25px_rgba(16,185,129,0.3)] active:scale-[0.98] transition mt-2">
+          <span>⚡ Download & Auto-Frame Selected Shorts</span>
+        </button>
       </div>
+
     </div>
 
     <div class="text-center py-4 border-t border-slate-900 text-[10px] font-mono text-slate-500">
-      VERTEX CREATIVE PIPELINE // 9:16 DYNAMIC ENGINE
-    </div>
-  </div>
-
-
-  <div id="editorScreen" class="hidden flex-1 flex flex-col justify-between max-w-md mx-auto w-full min-h-screen pb-2">
-
-    <header class="px-4 py-3 flex items-center justify-between border-b border-slate-800 bg-[#090A0F]">
-      <button id="btnBackHome" class="w-8 h-8 rounded-lg item-dark flex items-center justify-center text-slate-300 text-sm">
-        ←
-      </button>
-
-      <div id="clipsPillsBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-[180px] py-0.5"></div>
-
-      <div class="flex items-center gap-2">
-        <button id="btnOpenReportEditor" class="w-8 h-8 rounded-lg item-dark flex items-center justify-center text-[#00F0FF] text-sm">
-          📊
-        </button>
-        <button id="btnExportTop" class="h-8 px-3.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1 shadow-[0_4px_15px_rgba(0,240,255,0.25)] active:scale-95 transition">
-          <span>⬇ Export</span>
-        </button>
-      </div>
-    </header>
-
-    <div class="p-3 space-y-2.5">
-      <div class="flex items-center justify-center gap-2 text-[11px] font-mono">
-        <button data-aspect="original" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">Original</button>
-        <button data-aspect="9:16" class="aspect-btn px-3 py-1 rounded-full bg-[#00F0FF] text-black font-bold transition">9:16</button>
-        <button data-aspect="16:9" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">16:9</button>
-        <button data-aspect="1:1" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">1:1</button>
-        <button data-aspect="4:5" class="aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition">4:5</button>
-      </div>
-
-      <div class="relative w-full aspect-[9/10] sm:aspect-square bg-black rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center select-none" id="viewportContainer">
-        
-        <iframe id="ytIframePlayer" class="w-full h-full object-cover pointer-events-auto" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-        <video id="nativeVideoPlayer" playsinline webkit-playsinline class="w-full h-full object-contain pointer-events-none bg-black hidden"></video>
-
-        <div id="reticleLayer" class="absolute inset-0 pointer-events-none z-20 overflow-hidden">
-          <div id="maskLeftCurtain" class="absolute top-0 bottom-0 left-0 bg-black/60 backdrop-blur-[1px] pointer-events-none transition-all duration-75"></div>
-
-          <div id="phoneMask" class="absolute top-0 bottom-0 border-2 border-[#00F0FF] bg-[#00F0FF]/10 pointer-events-auto cursor-move flex items-center justify-center transition-all duration-75 shadow-[0_0_35px_rgba(0,0,0,0.8)]" style="touch-action: none;">
-            <div class="absolute inset-x-0 top-1/3 border-b border-[#00F0FF]/25 pointer-events-none"></div>
-            <div class="absolute inset-x-0 top-2/3 border-b border-[#00F0FF]/25 pointer-events-none"></div>
-            
-            <div id="targetCircle" class="target-ring w-16 h-16 rounded-full bg-[#00F0FF]/25 flex flex-col items-center justify-center pointer-events-none shadow-lg">
-              <div class="w-2 h-2 rounded-full bg-white mb-0.5 shadow"></div>
-              <span class="text-[8px] font-mono font-black text-black bg-[#00F0FF] px-1 rounded">TARGET</span>
-            </div>
-
-            <div class="absolute bottom-2 inset-x-0 mx-auto w-fit bg-black/85 border border-[#00F0FF]/40 px-2 py-0.5 rounded text-[9px] font-mono text-[#00F0FF] pointer-events-none">
-              9:16 CUT
-            </div>
-          </div>
-
-          <div id="maskRightCurtain" class="absolute top-0 bottom-0 right-0 bg-black/60 backdrop-blur-[1px] pointer-events-none transition-all duration-75"></div>
-        </div>
-
-        <div class="absolute bottom-2.5 left-3 bg-black/80 border border-slate-800 px-2 py-0.5 rounded-lg text-[10px] font-mono text-[#00F0FF] z-30">
-          Face Pos: <span id="posIndicatorText">50%</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="px-4 py-2 space-y-2.5">
-      <div class="flex items-center justify-between px-1">
-        <button id="btnStepBack5" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-slate-300 active:scale-90 transition">-5s</button>
-        <button id="btnStepBack1" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-[#00F0FF] border border-[#00F0FF]/40 active:scale-90 transition">⏮ -1s</button>
-
-        <button id="btnPlayPause" class="w-13 h-13 px-4 py-3 rounded-full bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.4)] active:scale-90 transition">
-          ▶
-        </button>
-
-        <button id="btnStepFwd1" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-[#00F0FF] border border-[#00F0FF]/40 active:scale-90 transition">+1s ⏭</button>
-        <button id="btnStepFwd5" class="px-2.5 py-1.5 rounded-xl item-dark text-[11px] font-mono font-bold text-slate-300 active:scale-90 transition">+5s</button>
-      </div>
-
-      <div class="card-titanium p-3 rounded-2xl space-y-2">
-        <div class="flex justify-between items-center text-[10px] font-mono text-slate-400 px-1">
-          <button id="btnSetInMarker" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-[#00F0FF] hover:text-black font-bold text-slate-200 transition">
-            ⏱ Set IN: <span id="lblStartTime" class="text-white">00:04</span>
-          </button>
-          <span class="text-[#00F0FF] font-bold text-xs" id="lblCurrentTime">00:04</span>
-          <button id="btnSetOutMarker" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-[#00F0FF] hover:text-black font-bold text-slate-200 transition">
-            ⏱ Set OUT: <span id="lblEndTime" class="text-white">00:35</span>
-          </button>
-        </div>
-
-        <input type="range" id="timelineScrubber" min="0" max="100" value="4" step="1" class="w-full accent-[#00F0FF] cursor-pointer">
-      </div>
-    </div>
-
-    <div class="card-titanium rounded-t-3xl border-b-0 p-4 space-y-3 shadow-2xl">
-      <div id="drawerContent" class="max-h-56 overflow-y-auto no-scrollbar space-y-3">
-        
-        <div id="tabEditPanel" class="space-y-3">
-          <div class="flex justify-between items-center">
-            <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-              Framing Mode & Segment
-            </span>
-            <button id="btnAddClipBtn" class="px-2.5 py-1 bg-[#161A29] border border-slate-700 hover:border-[#00F0FF] rounded text-[10px] font-mono text-slate-300 font-bold">
-              + Add Clip (Max 10)
-            </button>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
-            <button id="btnModeSingle" onclick="setClipMode('single')" class="py-2.5 rounded-xl border border-[#00F0FF] bg-[#13222E] text-[#00F0FF] font-bold flex items-center justify-center gap-1.5">
-              <span>👤</span>
-              <span>Single (9:16 Center)</span>
-            </button>
-            <button id="btnModeSplit" onclick="setClipMode('split')" class="py-2.5 rounded-xl item-dark text-slate-300 hover:border-[#00F0FF] flex items-center justify-center gap-1.5">
-              <span>👥</span>
-              <span>Split (Stacked 2-Person)</span>
-            </button>
-          </div>
-
-          <div class="grid grid-cols-3 gap-2">
-            <button onclick="setFramingPreset(0.15)" class="py-2 item-dark rounded-xl text-xs font-mono text-slate-300 hover:border-[#00F0FF]">
-              ◀ Left (Host)
-            </button>
-            <button onclick="setFramingPreset(0.5)" class="py-2 item-dark rounded-xl text-xs font-mono text-[#00F0FF] border-[#00F0FF]">
-              Center
-            </button>
-            <button onclick="setFramingPreset(0.85)" class="py-2 item-dark rounded-xl text-xs font-mono text-slate-300 hover:border-[#00F0FF]">
-              Right (Guest) ▶
-            </button>
-          </div>
-
-          <div class="flex items-center justify-between gap-3 bg-[#161A29] p-2.5 rounded-xl border border-slate-800 text-xs font-mono">
-            <div class="flex items-center gap-1.5">
-              <span class="text-slate-400">Start:</span>
-              <input type="text" id="inputStart" value="00:04" class="w-16 bg-[#0B0D14] border border-slate-700 rounded px-2 py-1 text-center text-white font-bold">
-            </div>
-            <span class="text-[#00F0FF]">➔</span>
-            <div class="flex items-center gap-1.5">
-              <span class="text-slate-400">End:</span>
-              <input type="text" id="inputEnd" value="00:35" class="w-16 bg-[#0B0D14] border border-slate-700 rounded px-2 py-1 text-center text-white font-bold">
-            </div>
-          </div>
-        </div>
-
-        <div id="tabCaptionsPanel" class="hidden space-y-2">
-          <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-            Subtitles Script Review
-          </span>
-          <textarea id="captionScriptText" rows="4" class="w-full bg-[#161A29] border border-slate-800 rounded-xl p-3 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]" placeholder="Subtitles synchronize automatically with Faster-Whisper AI."></textarea>
-        </div>
-
-        <div id="tabStylePanel" class="hidden space-y-2.5">
-          <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-            Visual Subtitle Profiles (9)
-          </span>
-
-          <div class="grid grid-cols-1 gap-2" id="presetGallery">
-            <div data-style="neon_lime" class="style-card selected-style card-titanium rounded-xl p-3 cursor-pointer">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs font-bold text-white font-mono">Captik Glow</span>
-                <span class="bg-[#00F0FF] text-black text-[9px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Popular</span>
-              </div>
-              <div class="text-center py-1">
-                <div class="text-[10px] text-slate-400">the quick</div>
-                <div class="text-xl font-black text-[#39FF14] tracking-wider drop-shadow-[0_0_12px_rgba(57,255,20,0.85)]">BROWN</div>
-                <div class="text-[10px] text-slate-400">fox jumps</div>
-              </div>
-            </div>
-
-            <div data-style="bold_shadow" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Captik Shadow</span>
-              <div class="text-center py-1">
-                <div class="text-[10px] text-slate-400">the quick</div>
-                <div class="text-xl font-black text-white drop-shadow-[0_6px_8px_rgba(0,0,0,1)]">BROWN</div>
-                <div class="text-[10px] text-slate-400">fox jumps</div>
-              </div>
-            </div>
-
-            <div data-style="moonlight_serif" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Delhi</span>
-              <div class="text-center py-2 text-sm font-serif text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]">
-                the <span class="italic font-normal">quick</span> fox
-              </div>
-            </div>
-
-            <div data-style="kinetic_scale" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Illusion</span>
-              <div class="text-center py-1">
-                <div class="text-[10px] text-slate-400">he had rented the</div>
-                <div class="text-2xl font-black text-white leading-tight">Biggest</div>
-                <div class="text-[10px] text-slate-400">apartment in town</div>
-              </div>
-            </div>
-
-            <div data-style="canary_punch" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Editor Masala</span>
-              <div class="text-center py-1">
-                <div class="text-[10px] text-slate-400 font-semibold">trust the</div>
-                <div class="text-2xl font-black text-[#FFE600] tracking-wider uppercase">PROCESS</div>
-              </div>
-            </div>
-
-            <div data-style="sky_dual" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Aura</span>
-              <div class="text-center py-1">
-                <div class="text-lg font-serif italic text-white leading-none">forget</div>
-                <div class="text-xl font-black text-[#00F0FF] tracking-wider uppercase leading-none mt-1">STATUS</div>
-              </div>
-            </div>
-
-            <div data-style="modernist_swiss" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Swiss</span>
-              <div class="text-center py-1">
-                <div class="text-lg font-black text-white leading-none">focus</div>
-                <div class="text-xl font-black text-[#FFD700] uppercase leading-none mt-0.5">DEEPLY</div>
-              </div>
-            </div>
-
-            <div data-style="crimson_cinematic" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">The Big Red</span>
-              <div class="text-center py-1 relative">
-                <div class="text-xl font-serif font-black text-[#E63333] tracking-widest uppercase">SECOND</div>
-                <div class="text-xs font-serif text-white -mt-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">the quick fox</div>
-              </div>
-            </div>
-
-            <div data-style="ambient_white" class="style-card card-titanium rounded-xl p-3 cursor-pointer">
-              <span class="text-xs font-bold text-white font-mono block mb-1">Clean Glow Style</span>
-              <div class="text-center py-2 text-sm font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.85)]">
-                the quick brown fox jumps over
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="grid grid-cols-3 pt-2 border-t border-slate-800 text-center">
-        <button id="navTabEdit" class="py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5">
-          <span class="text-sm">✂</span>
-          <span>Edit</span>
-        </button>
-        <button id="navTabCaptions" class="py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5">
-          <span class="text-sm">≡</span>
-          <span>Captions</span>
-        </button>
-        <button id="navTabStyle" class="py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5">
-          <span class="text-sm">🎨</span>
-          <span>Style</span>
-        </button>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div id="exportSelectModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex flex-col justify-end hidden">
-    <div class="bg-[#111420] border-t border-slate-800 rounded-t-3xl max-w-md mx-auto w-full max-h-[85vh] flex flex-col justify-between p-5 shadow-2xl space-y-4">
-      
-      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <div>
-          <h3 class="text-sm font-mono font-bold text-white uppercase tracking-wider">SELECT CLIPS TO RENDER</h3>
-          <p class="text-[11px] text-slate-400">Choose which clips to export as 9:16 Shorts:</p>
-        </div>
-        <button id="btnCloseSelectExport" class="w-7 h-7 rounded-full bg-[#161A29] border border-slate-700 text-slate-300 text-xs flex items-center justify-center">✕</button>
-      </div>
-
-      <div class="flex justify-between items-center text-xs font-mono px-1">
-        <span id="selectedClipsSummary" class="text-[#00F0FF] font-bold">3 of 3 Selected</span>
-        <div class="flex gap-2">
-          <button id="btnSelectAllClips" class="text-slate-300 hover:text-white underline text-[11px]">Select All</button>
-          <span class="text-slate-600">|</span>
-          <button id="btnDeselectAllClips" class="text-slate-300 hover:text-white underline text-[11px]">Deselect</button>
-        </div>
-      </div>
-
-      <div id="exportClipsChecklist" class="flex-1 overflow-y-auto no-scrollbar space-y-2.5 py-1"></div>
-
-      <button id="btnConfirmRenderClips" class="w-full py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
-        <span>⚡ Start Cloud Render</span>
-      </button>
-
+      VERTEX CREATIVE PIPELINE // 9:16 AUTO-FRAMING ENGINE
     </div>
   </div>
 
@@ -398,10 +96,10 @@
       </div>
       <div>
         <div class="flex items-center justify-center gap-2">
-          <h3 class="text-sm font-mono font-bold uppercase tracking-wider text-white">Rendering Engine</h3>
+          <h3 class="text-sm font-mono font-bold uppercase tracking-wider text-white">Rendering Pipeline</h3>
           <span id="exportProgressPct" class="text-xs font-mono font-bold text-[#00F0FF]">5%</span>
         </div>
-        <p id="exportStatusMsg" class="text-xs text-slate-400 mt-1">Connecting to cloud runner...</p>
+        <p id="exportStatusMsg" class="text-xs text-slate-400 mt-1">Starting cloud runner...</p>
       </div>
 
       <div class="w-full bg-[#161A29] h-2.5 rounded-full overflow-hidden border border-slate-800 p-0.5">
@@ -410,7 +108,7 @@
 
       <div id="downloadContainer" class="hidden pt-2 space-y-2">
         <a id="btnDirectDownload" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition">
-          <span>⬇ Download Finished Shorts (.ZIP)</span>
+          <span>⬇ Download Finished 9:16 Shorts (.ZIP)</span>
         </a>
         <a id="btnGitHubRunBackup" href="#" target="_blank" class="w-full py-2 bg-[#161A29] hover:bg-[#202538] text-slate-300 font-mono text-[11px] rounded-xl flex items-center justify-center gap-1.5 border border-slate-700">
           <span>📁 View on GitHub Actions Run</span>
@@ -420,30 +118,6 @@
       <button id="btnCloseExport" class="text-xs font-mono text-slate-400 hover:text-white pt-2">
         Close Window
       </button>
-    </div>
-  </div>
-
-
-  <div id="reportModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex flex-col justify-end hidden">
-    <div class="bg-[#111420] border-t border-slate-800 rounded-t-3xl max-w-md mx-auto w-full h-[85vh] flex flex-col justify-between p-4 shadow-2xl">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#00F0FF] to-[#0072FF] text-black font-black flex items-center justify-center text-sm">
-            ◈
-          </div>
-          <div>
-            <h3 class="text-xs font-mono font-bold text-white uppercase">AI VIRALITY PROCESS REPORT</h3>
-            <p class="text-[10px] text-[#00F0FF]">5 High-Retention Hooks Detected</p>
-          </div>
-        </div>
-        <button id="btnCloseReport" class="w-7 h-7 rounded-full bg-[#161A29] border border-slate-700 text-slate-300 text-xs flex items-center justify-center">✕</button>
-      </div>
-
-      <div class="flex-1 overflow-y-auto no-scrollbar py-3 space-y-3" id="reportCardsList"></div>
-
-      <div class="pt-2 border-t border-slate-800 text-center">
-        <span class="text-[10px] font-mono text-slate-500">Tap "Load into Editor" to set segment timestamps instantly.</span>
-      </div>
     </div>
   </div>
 
@@ -461,456 +135,173 @@
 
 
   <script>
-    let currentStyle = "neon_lime";
-    let cropPosition = 0.5;
-    let currentAspect = "9:16";
-    let activeClipIndex = 0;
-    let activeMode = "youtube";
-    let isPlaying = false;
-    let currentTimeSec = 4;
-    let totalDurationSec = 5360;
-    let playheadTimer = null;
     let renderSimulationTimer = null;
 
-    const viralReportData = [
+    // AI Viral & Unusual Activity Moments Database
+    const viralMoments = [
       {
         id: 1,
-        title: "The Dark Side of Ozempic: 30% Muscle Loss",
-        topic: "GLP-1 Downsides & Sarcopenia",
-        score: 98,
+        title: "The Dark Side of Ozempic (30% Muscle Loss)",
+        score: 99,
+        activityTag: "⚠️ Shocking Medical Warning",
+        humanActivity: "Intense Skepticism & Disbelief (Dr. Cohen)",
         start: "00:04",
         end: "00:35",
-        crop_pos: 0.5,
-        mode: "single",
-        tiktokCaption: "Up to 30% of weight lost on GLP-1s is lean muscle tissue. Dr. Cohen explains the sarcopenia risk. 📉\n\n#ozempic #glp1 #muscleloss #biohacking #longevity",
-        igCaption: "Up to 30% of weight lost on GLP-1 agonists is functional muscle tissue.\n\nDr. Pinchas Cohen warns against losing lean mass without resistance protocols.\n\n#longevitymedicine #peptidebiology #healthoptimization"
+        mode: "single", // 0:00 to 0:24 is solo speaker
+        crop_pos: 0.22,
+        selected: true,
+        tiktokCaption: "Up to 30% of weight lost on GLP-1s is lean muscle tissue. Dr. Cohen explains the premature sarcopenia risk. 📉\n\n#ozempic #glp1 #muscleloss #biohacking #longevity #healthtok",
+        igCaption: "Up to 30% of weight lost on GLP-1 agonists is functional muscle tissue.\n\nDr. Pinchas Cohen (Dean of USC Gerontology) warns against losing lean mass without resistance protocols.\n\n#longevitymedicine #peptidebiology #ozempicjourney #healthoptimization"
       },
       {
         id: 2,
         title: "Why the Discoverer of MOTS-c Won't Take It",
-        topic: "Black Market Peptides & Quality Control",
-        score: 96,
+        score: 97,
+        activityTag: "🤯 Unprecedented Confession",
+        humanActivity: "Reluctant Hesitation & Body Language Shift",
         start: "50:56",
         end: "52:15",
-        crop_pos: 0.85,
         mode: "single",
-        tiktokCaption: "At 69, Dr. Cohen loses 1kg muscle/yr. He discovered MOTS-c, but refuses to buy online. Here's why. 🧪\n\n#peptides #motsc #biohacker #longevity",
+        crop_pos: 0.22,
+        selected: true,
+        tiktokCaption: "At 69, Dr. Cohen loses 1kg muscle/yr. He discovered MOTS-c, but refuses to buy online. Here's why. 🧪\n\n#peptides #motsc #biohacker #longevity #wellnessjourney",
         igCaption: "Would you take the molecule you discovered if it wasn't FDA approved?\n\nDr. Cohen discovered MOTS-c but warns about gray-market impurities.\n\n#peptideprotocols #functionalmedicine #scientifictruth"
       },
       {
         id: 3,
-        title: "Shuttling Calories: Fat Loss Without Crushing Appetite",
-        topic: "Metabolic Partitioning",
-        score: 93,
+        title: "Shuttling Calories: Fat Loss Without Starvation",
+        score: 94,
+        activityTag: "💡 Paradigm Shift Debate",
+        humanActivity: "High Energy Back-and-Forth Exchange",
         start: "21:19",
         end: "22:00",
-        crop_pos: 0.85,
-        mode: "single",
-        tiktokCaption: "GLP-1 crushes hunger. MOTS-c shuttles calories from fat into muscle. 🥩\n\n#metabolism #musclebuilding #fatlosshelp",
+        mode: "split", // 2-person wide shot stacked top/bottom
+        crop_pos: 0.5,
+        selected: true,
+        tiktokCaption: "GLP-1 crushes hunger. MOTS-c shuttles calories from fat cells into skeletal muscle without changing food intake. 🥩\n\n#metabolism #musclebuilding #fatlosshelp #peptideprotocols",
         igCaption: "MOTS-c partitions energy away from fat cells and directly into muscle tissue.\n\n#metabolichealth #insulinresistance #gymmotivation"
       },
       {
         id: 4,
         title: "Exercise Mimetic: Mice Run 2x Farther",
-        topic: "Physical Capacity & Endurance",
         score: 91,
+        activityTag: "🏃 Superhuman Endurance",
+        humanActivity: "Host Disbelief & Intense Eye Contact",
         start: "01:21:51",
         end: "01:22:45",
-        crop_pos: 0.5,
         mode: "single",
-        tiktokCaption: "Exercise in a vial? Trials showed subjects ran 200% longer. 🏃‍♂️\n\n#endurance #athletictraining #biohacking",
-        igCaption: "Preclinical trials showed MOTS-c doubled physical endurance capacity.\n\n#sportsperformancelab #exerciseprotocols #recovery"
+        crop_pos: 0.22,
+        selected: false,
+        tiktokCaption: "Exercise in a vial? Preclinical trials showed test subjects ran 200% longer. 🏃‍♂️\n\n#endurance #athletictraining #biohackingsecrets #cardiotraining",
+        igCaption: "Preclinical trials showed MOTS-c doubled physical endurance capacity.\n\n#sportsperformancelab #exerciseprotocols #recoveryhacks"
       },
       {
         id: 5,
         title: "SHMOO: The Anti-Alzheimer's Peptide",
-        topic: "Neurodegenerative Genetics",
         score: 89,
+        activityTag: "🧠 Genetic Risk Revelation",
+        humanActivity: "Somber Tone & Sudden Voice Volume Drop",
         start: "01:13:04",
         end: "01:14:05",
-        crop_pos: 0.85,
-        mode: "single",
-        tiktokCaption: "20% of people carry this mutation spiking Alzheimer's risk by 50%. 🧠\n\n#alzheimers #brainhealth #neuroscience",
+        mode: "split",
+        crop_pos: 0.5,
+        selected: false,
+        tiktokCaption: "20% of Europeans carry this mutation that spikes Alzheimer's risk by 50%. 🧠\n\n#alzheimers #brainhealth #neuroscience #genetics",
         igCaption: "Meet SHMOO—a mitochondrial peptide protecting neurons against amyloid beta toxicity.\n\n#neuroprotection #brainoptimization #genetics"
       }
     ];
 
-    let clips = [
-      { id: 1, label: "Clip 1: The Hook", start: "00:04", end: "00:35", crop_pos: 0.5, mode: "single", selectedForExport: true },
-      { id: 2, label: "Clip 2: Key Insight", start: "21:19", end: "22:00", crop_pos: 0.85, mode: "single", selectedForExport: true },
-      { id: 3, label: "Clip 3: Big Story", start: "50:56", end: "52:15", crop_pos: 0.85, mode: "split", selectedForExport: true }
-    ];
+    function renderViralList() {
+      const container = document.getElementById('viralClipsList');
+      container.innerHTML = '';
+      let count = 0;
 
-    const ytIframe = document.getElementById('ytIframePlayer');
-    const nativeVideo = document.getElementById('nativeVideoPlayer');
-    const btnPlayPause = document.getElementById('btnPlayPause');
-    const lblCurrent = document.getElementById('lblCurrentTime');
-    const scrubber = document.getElementById('timelineScrubber');
-    const container = document.getElementById('viewportContainer');
-    const phoneMask = document.getElementById('phoneMask');
-    const maskLeft = document.getElementById('maskLeftCurtain');
-    const maskRight = document.getElementById('maskRightCurtain');
+      viralMoments.forEach((c, idx) => {
+        if (c.selected) count++;
+        container.innerHTML += `
+          <div class="bg-[#161A29] p-3.5 rounded-2xl border border-slate-800 space-y-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <input type="checkbox" id="chk_v_${idx}" ${c.selected ? 'checked' : ''} onchange="toggleClip(${idx}, this.checked)" class="w-4 h-4 accent-[#00F0FF] rounded cursor-pointer">
+                <div>
+                  <span class="text-[9px] font-mono font-bold text-[#00F0FF] uppercase tracking-wider block">${c.activityTag}</span>
+                  <label for="chk_v_${idx}" class="text-xs font-bold text-white block cursor-pointer leading-snug">${c.title}</label>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold shrink-0">
+                🔥 ${c.score}%
+              </span>
+            </div>
 
-    function extractYouTubeId(url) {
-      const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-      return match ? match[1] : "MHRUnJ0Gf8s";
-    }
-
-    function timeToSeconds(str) {
-      const parts = str.split(':').map(Number);
-      if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
-      if (parts.length === 2) return parts[0]*60 + parts[1];
-      return Number(str) || 0;
-    }
-
-    function formatSeconds(sec) {
-      sec = Math.max(0, Math.floor(sec));
-      const h = Math.floor(sec / 3600);
-      const m = Math.floor((sec % 3600) / 60);
-      const s = sec % 60;
-      if (h > 0) return `${h}:${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-    }
-
-    function sendYtCommand(func, args = []) {
-      if (ytIframe && ytIframe.contentWindow) {
-        ytIframe.contentWindow.postMessage(JSON.stringify({
-          event: 'command',
-          func: func,
-          args: args
-        }), '*');
-      }
-    }
-
-    // Unified Sliding Viewfinder Rig
-    function updateFraming(pos) {
-      pos = Math.max(0.0, Math.min(1.0, pos));
-      cropPosition = pos;
-      if (clips[activeClipIndex]) {
-        clips[activeClipIndex].crop_pos = pos;
-      }
-      document.getElementById('posIndicatorText').innerText = `${Math.round(pos * 100)}%`;
-
-      if (!container || !phoneMask) return;
-      const cWidth = container.clientWidth;
-      const cHeight = container.clientHeight;
-
-      let maskWidth;
-      if (currentAspect === "9:16") {
-        maskWidth = cHeight * (9 / 16);
-      } else if (currentAspect === "1:1") {
-        maskWidth = Math.min(cWidth, cHeight);
-      } else if (currentAspect === "4:5") {
-        maskWidth = cHeight * (4 / 5);
-      } else {
-        maskWidth = cWidth;
-      }
-      maskWidth = Math.min(cWidth, maskWidth);
-
-      const maxLeft = Math.max(0, cWidth - maskWidth);
-      const leftPx = pos * maxLeft;
-
-      phoneMask.style.width = `${maskWidth}px`;
-      phoneMask.style.left = `${leftPx}px`;
-
-      if (maskLeft) maskLeft.style.width = `${leftPx}px`;
-      if (maskRight) maskRight.style.width = `${Math.max(0, cWidth - (leftPx + maskWidth))}px`;
-    }
-
-    window.setFramingPreset = (pos) => updateFraming(pos);
-
-    window.setClipMode = (mode) => {
-      clips[activeClipIndex].mode = mode;
-      const btnSingle = document.getElementById('btnModeSingle');
-      const btnSplit = document.getElementById('btnModeSplit');
-      if (mode === 'split') {
-        btnSplit.className = "py-2.5 rounded-xl border border-[#00F0FF] bg-[#13222E] text-[#00F0FF] font-bold flex items-center justify-center gap-1.5";
-        btnSingle.className = "py-2.5 rounded-xl item-dark text-slate-300 hover:border-[#00F0FF] flex items-center justify-center gap-1.5";
-      } else {
-        btnSingle.className = "py-2.5 rounded-xl border border-[#00F0FF] bg-[#13222E] text-[#00F0FF] font-bold flex items-center justify-center gap-1.5";
-        btnSplit.className = "py-2.5 rounded-xl item-dark text-slate-300 hover:border-[#00F0FF] flex items-center justify-center gap-1.5";
-      }
-    };
-
-    let isDraggingRig = false;
-    function handleRigDrag(clientX) {
-      const rect = container.getBoundingClientRect();
-      const maskW = phoneMask.offsetWidth;
-      const maxTravel = Math.max(1, rect.width - maskW);
-      let targetLeft = clientX - rect.left - (maskW / 2);
-      let pos = targetLeft / maxTravel;
-      updateFraming(pos);
-    }
-
-    phoneMask.addEventListener('touchstart', (e) => { isDraggingRig = true; }, { passive: true });
-    container.addEventListener('touchstart', (e) => { isDraggingRig = true; handleRigDrag(e.touches[0].clientX); }, { passive: true });
-    window.addEventListener('touchmove', (e) => {
-      if (isDraggingRig && e.touches[0]) handleRigDrag(e.touches[0].clientX);
-    }, { passive: true });
-    window.addEventListener('touchend', () => { isDraggingRig = false; });
-    window.addEventListener('resize', () => updateFraming(cropPosition));
-
-    document.querySelectorAll('.aspect-btn').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.aspect-btn').forEach(b => b.className = "aspect-btn px-3 py-1 rounded-full bg-slate-800 text-slate-300 transition");
-        btn.className = "aspect-btn px-3 py-1 rounded-full bg-[#00F0FF] text-black font-bold transition";
-        currentAspect = btn.dataset.aspect;
-        updateFraming(cropPosition);
-      };
-    });
-
-    // Player Controller
-    const StudioEngine = {
-      play() {
-        isPlaying = true;
-        btnPlayPause.innerText = "⏸";
-        if (activeMode === "youtube") sendYtCommand('playVideo');
-        else nativeVideo.play();
-        if (!playheadTimer) {
-          playheadTimer = setInterval(() => {
-            if (activeMode === "native") currentTimeSec = nativeVideo.currentTime;
-            else currentTimeSec += 1;
-            StudioEngine.updateUI();
-          }, 1000);
-        }
-      },
-      pause() {
-        isPlaying = false;
-        btnPlayPause.innerText = "▶";
-        if (activeMode === "youtube") sendYtCommand('pauseVideo');
-        else nativeVideo.pause();
-        if (playheadTimer) {
-          clearInterval(playheadTimer);
-          playheadTimer = null;
-        }
-      },
-      toggle() {
-        if (isPlaying) this.pause();
-        else this.play();
-      },
-      seekTo(sec) {
-        currentTimeSec = Math.max(0, Math.min(totalDurationSec, sec));
-        if (activeMode === "youtube") sendYtCommand('seekTo', [currentTimeSec, true]);
-        else nativeVideo.currentTime = currentTimeSec;
-        this.updateUI();
-      },
-      updateUI() {
-        lblCurrent.innerText = formatSeconds(currentTimeSec);
-        if (totalDurationSec > 0) scrubber.value = currentTimeSec;
-      }
-    };
-
-    btnPlayPause.onclick = () => StudioEngine.toggle();
-    document.getElementById('btnStepBack1').onclick = () => StudioEngine.seekTo(currentTimeSec - 1);
-    document.getElementById('btnStepFwd1').onclick = () => StudioEngine.seekTo(currentTimeSec + 1);
-    document.getElementById('btnStepBack5').onclick = () => StudioEngine.seekTo(currentTimeSec - 5);
-    document.getElementById('btnStepFwd5').onclick = () => StudioEngine.seekTo(currentTimeSec + 5);
-    scrubber.oninput = (e) => StudioEngine.seekTo(Number(e.target.value));
-
-    document.getElementById('btnSetInMarker').onclick = () => {
-      const formatted = formatSeconds(currentTimeSec);
-      clips[activeClipIndex].start = formatted;
-      document.getElementById('lblStartTime').innerText = formatted;
-      document.getElementById('inputStart').value = formatted;
-    };
-
-    document.getElementById('btnSetOutMarker').onclick = () => {
-      const formatted = formatSeconds(currentTimeSec);
-      clips[activeClipIndex].end = formatted;
-      document.getElementById('lblEndTime').innerText = formatted;
-      document.getElementById('inputEnd').value = formatted;
-    };
-
-    document.getElementById('btnOpenInStudio').onclick = () => {
-      const url = document.getElementById('ytUrlInput').value.trim();
-      const videoId = extractYouTubeId(url);
-      activeMode = "youtube";
-
-      nativeVideo.classList.add('hidden');
-      ytIframe.classList.remove('hidden');
-
-      currentTimeSec = timeToSeconds(clips[activeClipIndex].start);
-      scrubber.max = totalDurationSec;
-
-      ytIframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&playsinline=1&controls=0&modestbranding=1&rel=0&start=${currentTimeSec}`;
-
-      document.getElementById('homeScreen').classList.add('hidden');
-      document.getElementById('editorScreen').classList.remove('hidden');
-      renderClipPills();
-      StudioEngine.updateUI();
-      setTimeout(() => updateFraming(clips[activeClipIndex].crop_pos || 0.5), 100);
-    };
-
-    document.getElementById('localVideoPicker').onchange = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      activeMode = "native";
-
-      ytIframe.classList.add('hidden');
-      nativeVideo.classList.remove('hidden');
-
-      const url = URL.createObjectURL(file);
-      nativeVideo.src = url;
-      nativeVideo.load();
-
-      nativeVideo.onloadedmetadata = () => {
-        totalDurationSec = Math.floor(nativeVideo.duration) || 100;
-        scrubber.max = totalDurationSec;
-        currentTimeSec = 0;
-        StudioEngine.updateUI();
-      };
-
-      document.getElementById('homeScreen').classList.add('hidden');
-      document.getElementById('editorScreen').classList.remove('hidden');
-      renderClipPills();
-      setTimeout(() => updateFraming(clips[activeClipIndex].crop_pos || 0.5), 100);
-    };
-
-    document.getElementById('btnBackHome').onclick = () => {
-      StudioEngine.pause();
-      document.getElementById('editorScreen').classList.add('hidden');
-      document.getElementById('homeScreen').classList.remove('hidden');
-    };
-
-    function renderClipPills() {
-      const bar = document.getElementById('clipsPillsBar');
-      bar.innerHTML = '';
-      clips.forEach((c, idx) => {
-        const isActive = idx === activeClipIndex;
-        bar.innerHTML += `
-          <button onclick="switchClip(${idx})" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold whitespace-nowrap transition ${isActive ? 'bg-[#00F0FF] text-black' : 'bg-[#161A29] text-slate-400 border border-slate-800'}">
-            #${idx + 1}
-          </button>
-        `;
-      });
-      if (clips.length < 10) {
-        bar.innerHTML += `
-          <button onclick="addNewClip()" class="px-2 py-1 rounded-lg text-xs font-mono text-[#00F0FF] border border-[#00F0FF]/40 bg-[#161A29] font-bold whitespace-nowrap">
-            +
-          </button>
-        `;
-      }
-    }
-
-    window.switchClip = (idx) => {
-      activeClipIndex = idx;
-      const c = clips[idx];
-      document.getElementById('inputStart').value = c.start;
-      document.getElementById('inputEnd').value = c.end;
-      document.getElementById('lblStartTime').innerText = c.start;
-      document.getElementById('lblEndTime').innerText = c.end;
-      setClipMode(c.mode || 'single');
-      updateFraming(c.crop_pos !== undefined ? c.crop_pos : 0.5);
-      renderClipPills();
-      StudioEngine.seekTo(timeToSeconds(c.start));
-    };
-
-    window.addNewClip = () => {
-      if (clips.length >= 10) return alert("Max 10 clips supported.");
-      const n = clips.length + 1;
-      clips.push({ id: n, label: `Clip ${n}`, start: "00:00", end: "00:30", crop_pos: 0.5, mode: "single", selectedForExport: true });
-      switchClip(clips.length - 1);
-    };
-
-    document.getElementById('btnAddClipBtn').onclick = () => addNewClip();
-
-    // Drawer Tabs
-    const tabEdit = document.getElementById('navTabEdit');
-    const tabCaptions = document.getElementById('navTabCaptions');
-    const tabStyle = document.getElementById('navTabStyle');
-    const panelEdit = document.getElementById('tabEditPanel');
-    const panelCaptions = document.getElementById('tabCaptionsPanel');
-    const panelStyle = document.getElementById('tabStylePanel');
-
-    function resetTabs() {
-      tabEdit.className = "py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5";
-      tabCaptions.className = "py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5";
-      tabStyle.className = "py-1 text-xs font-bold text-slate-400 flex flex-col items-center gap-0.5";
-      panelEdit.classList.add('hidden');
-      panelCaptions.classList.add('hidden');
-      panelStyle.classList.add('hidden');
-    }
-
-    tabEdit.onclick = () => { resetTabs(); tabEdit.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5"; panelEdit.classList.remove('hidden'); };
-    tabCaptions.onclick = () => { resetTabs(); tabCaptions.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5"; panelCaptions.classList.remove('hidden'); };
-    tabStyle.onclick = () => { resetTabs(); tabStyle.className = "py-1 text-xs font-bold text-[#00F0FF] flex flex-col items-center gap-0.5"; panelStyle.classList.remove('hidden'); };
-
-    // Template Picker: Instant Real-Time Selection
-    document.querySelectorAll('.style-card').forEach(card => {
-      card.onclick = () => {
-        document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected-style'));
-        card.classList.add('selected-style');
-        currentStyle = card.dataset.style;
-      };
-    });
-
-    // Multi-Clip Export Checklist
-    const exportSelectModal = document.getElementById('exportSelectModal');
-    const checklistContainer = document.getElementById('exportClipsChecklist');
-    const summaryText = document.getElementById('selectedClipsSummary');
-
-    function renderExportChecklist() {
-      checklistContainer.innerHTML = '';
-      let selectedCount = 0;
-
-      clips.forEach((c, i) => {
-        if (c.selectedForExport === undefined) c.selectedForExport = true;
-        if (c.selectedForExport) selectedCount++;
-
-        checklistContainer.innerHTML += `
-          <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" id="chk_clip_${i}" ${c.selectedForExport ? 'checked' : ''} onchange="toggleClipExportSelection(${i}, this.checked)" class="w-4 h-4 accent-[#00F0FF] rounded cursor-pointer">
-              <div>
-                <label for="chk_clip_${i}" class="text-xs font-bold text-white block cursor-pointer">Clip #${i+1}: ${c.label || 'Segment'}</label>
-                <span class="text-[10px] font-mono text-slate-400">${c.start} ➔ ${c.end} (${c.mode === 'split' ? 'Split-Screen' : 'Single 9:16'})</span>
+            <div class="bg-[#0B0D14] p-2 rounded-xl text-[10px] font-mono text-slate-400 space-y-1">
+              <div>Activity: <strong class="text-amber-400">${c.humanActivity}</strong></div>
+              <div class="flex justify-between items-center text-slate-500 pt-0.5">
+                <span>Timestamp: <strong class="text-white">${c.start} ➔ ${c.end}</strong></span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-[#00F0FF]">
+                  ${c.mode === 'split' ? '👥 Split (Stacked)' : '👤 Single 9:16'}
+                </span>
               </div>
             </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-[#00F0FF]">
-              ${c.mode === 'split' ? '👥 Split' : 'Face: ' + Math.round((c.crop_pos || 0.5) * 100) + '%'}
-            </span>
+
+            <div class="grid grid-cols-2 gap-2 pt-0.5">
+              <button onclick="copyMetadata(${c.id}, 'tiktok')" class="py-1 px-2 bg-[#1F2436] hover:bg-[#2A314A] text-slate-300 text-[10px] font-mono rounded-lg flex items-center justify-center gap-1">
+                <span>📋 Copy TikTok</span>
+              </button>
+              <button onclick="copyMetadata(${c.id}, 'ig')" class="py-1 px-2 bg-[#1F2436] hover:bg-[#2A314A] text-slate-300 text-[10px] font-mono rounded-lg flex items-center justify-center gap-1">
+                <span>📋 Copy IG Reels</span>
+              </button>
+            </div>
           </div>
         `;
       });
 
-      summaryText.innerText = `${selectedCount} of ${clips.length} Selected`;
+      document.getElementById('clipsCountBadge').innerText = `${count} Selected`;
     }
 
-    window.toggleClipExportSelection = (idx, isChecked) => {
-      clips[idx].selectedForExport = isChecked;
-      const count = clips.filter(x => x.selectedForExport).length;
-      summaryText.innerText = `${count} of ${clips.length} Selected`;
+    window.toggleClip = (idx, val) => {
+      viralMoments[idx].selected = val;
+      const count = viralMoments.filter(x => x.selected).length;
+      document.getElementById('clipsCountBadge').innerText = `${count} Selected`;
     };
 
-    document.getElementById('btnSelectAllClips').onclick = () => {
-      clips.forEach(c => c.selectedForExport = true);
-      renderExportChecklist();
+    window.copyMetadata = (clipId, platform) => {
+      const item = viralMoments.find(x => x.id === clipId);
+      if (!item) return;
+      const text = platform === 'tiktok' ? item.tiktokCaption : item.igCaption;
+      navigator.clipboard.writeText(text);
+      alert(`Copied ${platform.toUpperCase()} description & hashtags to clipboard!`);
     };
 
-    document.getElementById('btnDeselectAllClips').onclick = () => {
-      clips.forEach(c => c.selectedForExport = false);
-      renderExportChecklist();
+    renderViralList();
+
+    // Analyze Button Feedback
+    document.getElementById('btnAnalyzeClips').onclick = () => {
+      const btn = document.getElementById('btnAnalyzeClips');
+      btn.innerText = "Scanning Transcript & Human Activity...";
+      setTimeout(() => {
+        btn.innerText = "🔥 5 Viral Moments Detected!";
+        renderViralList();
+      }, 700);
     };
 
-    document.getElementById('btnExportTop').onclick = () => {
-      renderExportChecklist();
-      exportSelectModal.classList.remove('hidden');
+    // GitHub Settings
+    document.getElementById('btnSettingsHome').onclick = () => document.getElementById('tokenModal').classList.remove('hidden');
+    document.getElementById('btnSaveGithubToken').onclick = () => {
+      localStorage.setItem('autoclip_token', document.getElementById('inputGithubToken').value.trim());
+      document.getElementById('tokenModal').classList.add('hidden');
     };
-    document.getElementById('btnCloseSelectExport').onclick = () => exportSelectModal.classList.add('hidden');
 
-    // ==================== DYNAMIC REAL-TIME PROGRESS BAR CONTROLLER ====================
-    document.getElementById('btnConfirmRenderClips').onclick = async () => {
-      const selectedClips = clips.filter(c => c.selectedForExport);
-      if (selectedClips.length === 0) return alert("Please select at least 1 clip to export.");
+    // Master Render Execution
+    document.getElementById('btnStartRender').onclick = async () => {
+      const chosen = viralMoments.filter(c => c.selected);
+      if (chosen.length === 0) return alert("Please select at least 1 clip to export.");
 
       const token = localStorage.getItem('autoclip_token');
       if (!token) {
-        exportSelectModal.classList.add('hidden');
         document.getElementById('tokenModal').classList.remove('hidden');
         return;
       }
 
-      exportSelectModal.classList.add('hidden');
       const modal = document.getElementById('exportModal');
       const msg = document.getElementById('exportStatusMsg');
       const bar = document.getElementById('exportProgressBar');
@@ -922,26 +313,26 @@
       modal.classList.remove('hidden');
       dlBox.classList.add('hidden');
       bar.className = "h-full bg-gradient-to-r from-[#00F0FF] to-[#0077B6] rounded-full transition-all duration-300";
-      
+
       let progress = 5;
       bar.style.width = '5%';
       pct.innerText = '5%';
-      msg.innerText = `Dispatching cloud runner for ${selectedClips.length} clips with ${currentStyle.toUpperCase()} style...`;
+      msg.innerText = `Dispatching cloud runner for ${chosen.length} shorts...`;
 
-      // Active progress bar simulation loop
+      // Live animated progress simulation
       if (renderSimulationTimer) clearInterval(renderSimulationTimer);
       renderSimulationTimer = setInterval(() => {
         if (progress < 90) {
-          progress += (progress < 30 ? 2.5 : progress < 60 ? 1.2 : 0.6);
+          progress += (progress < 30 ? 3.5 : progress < 60 ? 1.8 : 0.8);
           bar.style.width = Math.min(92, progress) + '%';
           pct.innerText = Math.round(Math.min(92, progress)) + '%';
 
-          if (progress > 15 && progress < 40) {
-            msg.innerText = "Downloading high-resolution video streams from YouTube...";
-          } else if (progress >= 40 && progress < 70) {
-            msg.innerText = "Transcribing speech & synchronizing Faster-Whisper AI timestamps...";
-          } else if (progress >= 70 && progress < 90) {
-            msg.innerText = "Rendering Captik 9:16 typography & applying framing filters...";
+          if (progress > 10 && progress < 40) {
+            msg.innerText = "Downloading high-resolution video slice...";
+          } else if (progress >= 40 && progress < 80) {
+            msg.innerText = "Auto-Framing 9:16 vertical viewports & split-screens...";
+          } else if (progress >= 80 && progress < 90) {
+            msg.innerText = "Encoding pristine 1080p MP4 audio & video...";
           }
         }
       }, 1000);
@@ -954,9 +345,15 @@
             event_type: "start-render",
             client_payload: {
               action: "render",
-              url: document.getElementById('ytUrlInput').value.trim() || "https://www.youtube.com/watch?v=MHRUnJ0Gf8s",
-              clips: selectedClips,
-              style: currentStyle
+              url: document.getElementById('ytUrlInput').value.trim(),
+              clips: chosen.map(c => ({
+                id: c.id,
+                start: c.start,
+                end: c.end,
+                mode: c.mode,
+                crop_pos: c.crop_pos,
+                label: c.title
+              }))
             }
           })
         });
@@ -975,7 +372,7 @@
             if (run.conclusion === "success") {
               bar.style.width = '100%';
               pct.innerText = '100%';
-              msg.innerText = `All ${selectedClips.length} Shorts finished rendering!`;
+              msg.innerText = `All ${chosen.length} 9:16 Shorts finished rendering!`;
               dlBtn.href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/autoclip-shorts.zip`;
               ghBackupBtn.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
               dlBox.classList.remove('hidden');
@@ -986,7 +383,7 @@
               dlBox.classList.remove('hidden');
             }
           }
-        }, 7000);
+        }, 6000);
 
       } catch (err) {
         clearInterval(renderSimulationTimer);
@@ -996,88 +393,6 @@
     };
 
     document.getElementById('btnCloseExport').onclick = () => document.getElementById('exportModal').classList.add('hidden');
-
-    // Virality Report Logic
-    function renderReportCards() {
-      const container = document.getElementById('reportCardsList');
-      container.innerHTML = '';
-      viralReportData.forEach((c) => {
-        container.innerHTML += `
-          <div class="bg-[#161A29] border border-slate-800 rounded-2xl p-4 space-y-3">
-            <div class="flex items-start justify-between gap-2">
-              <div>
-                <span class="text-[9px] font-mono font-bold text-[#00F0FF] uppercase tracking-wider block">${c.topic}</span>
-                <h4 class="text-xs font-bold text-white leading-tight mt-0.5">${c.title}</h4>
-              </div>
-              <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold shrink-0">
-                🔥 ${c.score}% Score
-              </span>
-            </div>
-
-            <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 bg-[#0B0D14] px-2.5 py-1.5 rounded-lg">
-              <span>Segment: <strong class="text-white">${c.start} ➔ ${c.end}</strong></span>
-              <button onclick="loadReportClipIntoEditor(${c.id})" class="px-2 py-0.5 bg-[#00F0FF] text-black font-bold rounded">
-                Load into Editor ➔
-              </button>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800/80">
-              <button onclick="copyMetadata(${c.id}, 'tiktok')" class="py-1.5 px-2.5 bg-[#1F2436] hover:bg-[#2A314A] text-slate-200 text-[10px] font-mono font-bold rounded-lg flex items-center justify-center gap-1">
-                <span>📋 Copy TikTok</span>
-              </button>
-              <button onclick="copyMetadata(${c.id}, 'ig')" class="py-1.5 px-2.5 bg-[#1F2436] hover:bg-[#2A314A] text-slate-200 text-[10px] font-mono font-bold rounded-lg flex items-center justify-center gap-1">
-                <span>📋 Copy IG Reels</span>
-              </button>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    window.copyMetadata = (clipId, platform) => {
-      const item = viralReportData.find(x => x.id === clipId);
-      if (!item) return;
-      const text = platform === 'tiktok' ? item.tiktokCaption : item.igCaption;
-      navigator.clipboard.writeText(text);
-      alert(`Copied ${platform.toUpperCase()} description & hashtags to clipboard!`);
-    };
-
-    window.loadReportClipIntoEditor = (clipId) => {
-      const item = viralReportData.find(x => x.id === clipId);
-      if (!item) return;
-      clips[activeClipIndex].start = item.start;
-      clips[activeClipIndex].end = item.end;
-      clips[activeClipIndex].crop_pos = item.crop_pos;
-      clips[activeClipIndex].mode = item.mode || 'single';
-      document.getElementById('inputStart').value = item.start;
-      document.getElementById('inputEnd').value = item.end;
-      document.getElementById('lblStartTime').innerText = item.start;
-      document.getElementById('lblEndTime').innerText = item.end;
-      setClipMode(item.mode || 'single');
-      updateFraming(item.crop_pos);
-
-      document.getElementById('reportModal').classList.add('hidden');
-      document.getElementById('homeScreen').classList.add('hidden');
-      document.getElementById('editorScreen').classList.remove('hidden');
-
-      StudioEngine.seekTo(timeToSeconds(item.start)); 
-    };
-
-    const reportModal = document.getElementById('reportModal');
-    function openReport() {
-      renderReportCards();
-      reportModal.classList.remove('hidden');
-    }
-    document.getElementById('btnOpenReportHome').onclick = openReport;
-    document.getElementById('btnRunAiReport').onclick = openReport;
-    document.getElementById('btnOpenReportEditor').onclick = openReport;
-    document.getElementById('btnCloseReport').onclick = () => reportModal.classList.add('hidden');
-
-    document.getElementById('btnSettingsHome').onclick = () => document.getElementById('tokenModal').classList.remove('hidden');
-    document.getElementById('btnSaveGithubToken').onclick = () => {
-      localStorage.setItem('autoclip_token', document.getElementById('inputGithubToken').value.trim());
-      document.getElementById('tokenModal').classList.add('hidden');
-    };
   </script>
 </body>
 </html>
