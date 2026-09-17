@@ -6,7 +6,7 @@ import subprocess
 import cv2
 import numpy as np
 
-print("[*] Starting VERTEX PRO Neural Auto-Framer...")
+print("[*] Starting VERTEX PRO Multi-Frame Auto-Framer...")
 
 # 1. Cookies Setup
 cookies_path = None
@@ -54,26 +54,26 @@ for f in glob.glob("output/*"):
     try: os.remove(f)
     except: pass
 
-# 3. Load YuNet Face Detector
+# 3. YuNet Face Detector Helper
 model_path = "models/face_detection_yunet.onnx"
 detector = None
 
 def get_face_center_x(frame, w, h):
     global detector
     if detector is None and os.path.exists(model_path):
-        detector = cv2.FaceDetectorYN.create(model_path, "", (w, h), score_threshold=0.5)
+        detector = cv2.FaceDetectorYN.create(model_path, "", (w, h), score_threshold=0.45)
     
     if detector is not None:
         detector.setInputSize((w, h))
         _, faces = detector.detect(frame)
         if faces is not None and len(faces) > 0:
-            # Find largest face (dominant speaker)
+            # Pick the largest face in frame (active speaker)
             best_face = max(faces, key=lambda f: f[2] * f[3])
             fx, fy, fw, fh = best_face[0:4]
             return int(fx + fw / 2)
-    return w // 2
+    return None
 
-# 4. Shot Detection & Dynamic Speaker Tracking
+# 4. Multi-Frame Shot Detection & Anti-Plant Speaker Tracking
 def detect_shots_and_frame(video_path):
     cap = cv2.VideoCapture(video_path)
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)) or 1920
@@ -82,7 +82,7 @@ def detect_shots_and_frame(video_path):
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     duration = max(0.1, total_frames / fps)
 
-    # Detect camera cuts via color histogram difference
+    # Detect camera angle cuts via color histogram difference
     shot_boundaries = [0.0]
     prev_hist = None
     frame_idx = 0
@@ -99,7 +99,7 @@ def detect_shots_and_frame(video_path):
                 correlation = cv2.compareHist(prev_hist, hist, cv2.HISTCMP_CORREL)
                 if correlation < 0.62:
                     cut_time = frame_idx / fps
-                    if cut_time - shot_boundaries[-1] > 1.0:
+                    if cut_time - shot_boundaries[-1] > 1.2:
                         shot_boundaries.append(cut_time)
             prev_hist = hist
         frame_idx += 1
@@ -109,26 +109,37 @@ def detect_shots_and_frame(video_path):
     max_x = max(0, width - crop_w)
     shots_info = []
 
+    # Sample 7 distributed frames per cut to identify speaker position
     for i in range(len(shot_boundaries) - 1):
         s_start = shot_boundaries[i]
         s_end = shot_boundaries[i + 1]
-        mid_sec = (s_start + s_end) / 2
-        mid_frame = int(mid_sec * fps)
 
-        cap.set(cv2.CAP_PROP_POS_FRAMES, mid_frame)
-        ret, frame = cap.read()
-        target_crop_x = (width - crop_w) // 2
+        sample_times = np.linspace(s_start + 0.15, s_end - 0.15, 7)
+        detected_x_positions = []
 
-        if ret:
-            face_x = get_face_center_x(frame, width, height)
-            target_crop_x = max(0, min(max_x, face_x - (crop_w // 2)))
+        for st in sample_times:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, int(st * fps))
+            ret, frame = cap.read()
+            if ret:
+                x_pos = get_face_center_x(frame, width, height)
+                # Ignore detections landing dead-center in the 200px middle background gap
+                if x_pos is not None and abs(x_pos - (width // 2)) > 100:
+                    detected_x_positions.append(x_pos)
 
+        # Calculate final framing anchor
+        if detected_x_positions:
+            final_x = int(np.median(detected_x_positions))
+        else:
+            # Fallback for side-profile angles: Left guest (22%) on start, right host (78%) on cuts
+            final_x = int(width * 0.22) if i == 0 else int(width * 0.78)
+
+        target_crop_x = max(0, min(max_x, final_x - (crop_w // 2)))
         shots_info.append({"start": s_start, "end": s_end, "crop_x": target_crop_x})
 
     cap.release()
     return width, height, crop_w, shots_info
 
-# 5. Process Each Clip
+# 5. Process and Auto-Frame All Clips
 for clip_item in clips:
     cid = clip_item.get('id', 1)
     start = clip_item.get('start', '00:04')
@@ -159,11 +170,11 @@ for clip_item in clips:
         raise FileNotFoundError(f"Could not find download file for clip {cid}")
     source_video = downloaded[0]
 
-    # Run AI Camera-Cut & Speaker Tracking
+    # Run Multi-Frame Face & Shot Tracking
     print(f"[*] Running Scene-Aware Auto-Framing...")
     vid_w, vid_h, crop_w, shots = detect_shots_and_frame(source_video)
 
-    # Build Multi-Shot FFmpeg Filter (Trimming video + audio together prevents desync)
+    # Build synchronized Video + Audio trimming and cropping filters
     v_parts = []
     a_parts = []
     v_tags = ""
@@ -186,7 +197,7 @@ for clip_item in clips:
         f"{a_tags}concat=n={len(shots)}:v=0:a=1[outa]"
     )
 
-    print(f"[*] Rendering {len(shots)} framed shots to 9:16 vertical short...")
+    print(f"[*] Rendering {len(shots)} auto-framed shots to 9:16 vertical short...")
     cmd_render = [
         "ffmpeg", "-y", "-i", source_video,
         "-filter_complex", filter_complex,
@@ -199,4 +210,3 @@ for clip_item in clips:
     print(f"[✓] Rendered Clean 9:16 Short: {out_mp4}")
 
 print("\n[*] All clips processed successfully with Auto-Framing!")
-
