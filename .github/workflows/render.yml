@@ -28,10 +28,15 @@ jobs:
           curl -fsSL https://deno.land/install.sh | sh
           echo "$HOME/.deno/bin" >> $GITHUB_PATH
 
-      - name: Install AI Tracking Libraries
+      - name: Download High-Precision YuNet Face Detector
+        run: |
+          mkdir -p models
+          curl -sL "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx" -o models/face_detection_yunet.onnx
+
+      - name: Install Video Processing Libraries
         run: |
           pip install --upgrade pip
-          pip install yt-dlp yt-dlp-ejs mediapipe opencv-python-headless numpy
+          pip install yt-dlp yt-dlp-ejs "opencv-python-headless==4.10.0.84" numpy
 
       - name: Run Auto-Framing Engine
         env:
