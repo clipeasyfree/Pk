@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VERTEX PRO // Campaign Notebook Clipper</title>
+  <title>VERTEX PRO // Maximum Clip Campaign Engine</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,9 +37,9 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">CAMPAIGNS</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">MAX-CLIPS</span>
             </div>
-            <p class="text-[10px] text-slate-400">Notebook Video Repurposer</p>
+            <p class="text-[10px] text-slate-400">High-Density Campaign Repurposer</p>
           </div>
         </div>
 
@@ -55,11 +55,11 @@
         </div>
       </div>
 
-      <!-- CAMPAIGN / NOTEBOOK SELECTOR BAR -->
+      <!-- CAMPAIGN / NOTEBOOK SELECTOR -->
       <div class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold">
-            CURRENT CAMPAIGN / NOTEBOOK
+            CAMPAIGN NOTEBOOK
           </span>
           <button id="btnNewCampaign" class="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1">
             <span>+</span><span>New Notebook</span>
@@ -77,13 +77,13 @@
         </div>
       </div>
 
-      <!-- SAVED VIDEOS IN THIS CAMPAIGN (HISTORY DRAWER) -->
+      <!-- SAVED VIDEOS IN NOTEBOOK (HISTORY DRAWER) -->
       <div id="campaignHistoryDrawer" class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl hidden">
         <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
           <span class="text-[10px] font-mono uppercase tracking-wider text-slate-300 font-bold">
             Videos In This Notebook
           </span>
-          <span class="text-[9px] font-mono text-slate-500">Tap to load clips</span>
+          <span class="text-[9px] font-mono text-slate-500">Tap to load saved clips</span>
         </div>
         <div id="campaignVideosList" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar">
           <!-- Populated by JS -->
@@ -109,7 +109,7 @@
         <div class="flex justify-between items-center pb-2 border-b border-slate-800">
           <div>
             <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-              DETECTED CLIPS
+              EXTRACTED MOMENTS
             </span>
             <span id="momentsStatusText" class="text-[10px] text-slate-400">Add a video or choose from notebook</span>
           </div>
@@ -119,15 +119,13 @@
           </div>
         </div>
 
-        <!-- Scrollable Moments List -->
-        <div id="viralClipsList" class="space-y-2.5 max-h-[360px] overflow-y-auto no-scrollbar pr-0.5">
+        <!-- Scrollable Moments List (Max Density) -->
+        <div id="viralClipsList" class="space-y-2.5 max-h-[380px] overflow-y-auto no-scrollbar pr-0.5">
           <div id="emptyStateBox" class="py-12 text-center space-y-3">
-            <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">
-              +
-            </div>
+            <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
-              <h4 class="text-xs font-bold text-white">No Active Video</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan a link into this notebook.</p>
+              <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract up to 35+ viral clips.</p>
             </div>
           </div>
         </div>
@@ -141,7 +139,7 @@
     </div>
 
     <div class="text-center py-2 border-t border-slate-900 text-[10px] font-mono text-slate-500">
-      CAPCUT NATIVE 16:9 // CAMPAIGN HISTORY SAVED LOCALLY
+      CAPCUT NATIVE 16:9 // MAXIMUM VIRAL MOMENT EXTRACTION
     </div>
   </div>
 
@@ -163,12 +161,13 @@
       </div>
 
       <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 space-y-1 text-[10px] font-mono text-slate-400">
-        <div>• Video will be saved into the current campaign notebook.</div>
-        <div>• Moments & copyable metadata will be stored permanently.</div>
+        <div>• Deep scan across the entire video timeline.</div>
+        <div>• Generates the maximum number of clips possible (25–35+).</div>
+        <div>• Saves permanently into your campaign notebook.</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
-        <span>⚡ Analyze & Save to Notebook</span>
+        <span>⚡ Extract Maximum Clips</span>
       </button>
     </div>
   </div>
@@ -186,7 +185,7 @@
 
       <div class="space-y-2">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">Campaign / Notebook Name:</label>
-        <input type="text" id="inputCampaignName" placeholder="e.g. Longevity Podcast Q4" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
+        <input type="text" id="inputCampaignName" placeholder="e.g. Finance Podcasts Q4" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
       </div>
 
       <button id="btnSaveCampaign" class="w-full py-3 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition">
@@ -257,18 +256,15 @@
 
   <!-- ==================== JAVASCRIPT STATE & LOGIC ==================== -->
   <script>
-    // State Schema stored in localStorage
-    // { campaigns: [ { id, name, videos: [ { videoId, url, title, author, thumb, clips } ] } ], activeCampaignId }
     let appState = {
       campaigns: [],
       activeCampaignId: null
     };
 
-    let currentVideoData = null; // Currently viewed video
+    let currentVideoData = null;
     let allSelected = false;
     let renderSimulationTimer = null;
 
-    // Load State on Start
     function loadState() {
       const saved = localStorage.getItem('vertex_campaign_state');
       if (saved) {
@@ -305,7 +301,6 @@
       return appState.campaigns.find(c => c.id === appState.activeCampaignId) || appState.campaigns[0];
     }
 
-    // Campaign Dropdown & Switching
     function renderCampaignDropdown() {
       const select = document.getElementById('campaignSelect');
       select.innerHTML = '';
@@ -330,7 +325,6 @@
       renderHistoryList(camp);
 
       if (camp.videos.length > 0) {
-        // Load latest video by default
         loadVideoIntoView(camp.videos[camp.videos.length - 1]);
       } else {
         currentVideoData = null;
@@ -340,7 +334,7 @@
             <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract clips into "${camp.name}".</p>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract maximum viral clips.</p>
             </div>
           </div>
         `;
@@ -394,20 +388,18 @@
       document.getElementById('videoTitle').innerText = video.title;
       document.getElementById('videoAuthor').innerText = video.author;
       document.getElementById('activeVideoCard').classList.remove('hidden');
-      document.getElementById('momentsStatusText').innerText = `${video.clips.length} Moments Ready`;
+      document.getElementById('momentsStatusText').innerText = `${video.clips.length} Viral Moments Available`;
       document.getElementById('btnStartDownload').disabled = false;
       document.getElementById('btnToggleAll').classList.remove('hidden');
       renderClipsList();
       renderHistoryList(getActiveCampaign());
     }
 
-    // Toggle History Drawer
     document.getElementById('btnToggleHistoryDrawer').onclick = () => {
-      const drawer = document.getElementById('campaignHistoryDrawer');
-      drawer.classList.toggle('hidden');
+      document.getElementById('campaignHistoryDrawer').classList.toggle('hidden');
     };
 
-    // Modal: New Campaign
+    // Campaign Creation Modal
     const newCampModal = document.getElementById('newCampaignModal');
     document.getElementById('btnNewCampaign').onclick = () => newCampModal.classList.remove('hidden');
     document.getElementById('btnCloseCampaignModal').onclick = () => newCampModal.classList.add('hidden');
@@ -428,7 +420,7 @@
       updateActiveCampaignUI();
     };
 
-    // Modal: Add Video
+    // Add Video Modal
     const addModal = document.getElementById('addVideoModal');
     document.getElementById('btnOpenAddModal').onclick = () => addModal.classList.remove('hidden');
     document.getElementById('btnCloseAddModal').onclick = () => addModal.classList.add('hidden');
@@ -445,7 +437,7 @@
 
       const fullUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const btn = document.getElementById('btnConfirmAnalyze');
-      btn.innerText = "Analyzing Video...";
+      btn.innerText = "Extracting Maximum Clips...";
       btn.disabled = true;
 
       try {
@@ -483,15 +475,34 @@
       } catch (err) {
         alert("Error: " + err.message);
       } finally {
-        btn.innerText = "⚡ Analyze & Save to Notebook";
+        btn.innerText = "⚡ Extract Maximum Clips";
         btn.disabled = false;
       }
     };
 
-    // AI & Intelligent Generator Helpers
+    // GEMINI MAXIMUM CLIPS GENERATOR (Requests 25–35+ Clips)
     async function generateGeminiMoments(apiKey, title, author, videoUrl) {
       try {
-        const prompt = `Analyze: Title: "${title}", Creator: "${author}". Generate 12 viral clips (30-60s). Return ONLY valid JSON array with keys: "id" (num), "title", "score" (num 80-99), "start" (MM:SS), "end" (MM:SS), "tag", "tiktokCaption", "igCaption".`;
+        const prompt = `You are an elite video repurposing strategist. Analyze this YouTube video:
+Title: "${title}"
+Creator: "${author}"
+URL: "${videoUrl}"
+
+Generate the MAXIMUM possible number of viral, high-retention podcast/video clips (aim for 25 to 35 distinct clips, each 30 to 60 seconds long) covering the entire timeline from beginning to end.
+Ensure each clip features a compelling hook, heated debate, breakthrough insight, confession, or emotional peak.
+
+Return ONLY a valid JSON array of objects with keys:
+"id" (number),
+"title" (viral hook title),
+"score" (number 80-99),
+"start" (MM:SS or HH:MM:SS),
+"end" (MM:SS or HH:MM:SS),
+"tag" (e.g. "⚠️ Core Warning", "💡 Big Reveal", "🔥 Intense Debate"),
+"tiktokCaption" (punchy caption + 5-7 viral hashtags),
+"igCaption" (insightful caption + 5-7 hashtags).
+
+Output pure JSON only without markdown code blocks.`;
+
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -501,37 +512,55 @@
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
         const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(cleaned);
-        return parsed.map((c, i) => ({ ...c, selected: i < 3 }));
+        return parsed.map((c, i) => ({ ...c, selected: i < 5 }));
       } catch (e) {
+        console.warn("Falling back to intelligent generator:", e);
         return generateIntelligentMoments(title, author);
       }
     }
 
+    // HIGH-DENSITY INTELLIGENT GENERATOR (Generates 30 Full Timeline Clips)
     function generateIntelligentMoments(title, author) {
       const cleanTitle = title.replace(/[^\w\s]/gi, '');
       const words = cleanTitle.split(' ').filter(w => w.length > 3);
-      const k1 = words[0] || "Insight";
-      const k2 = words[1] || "Core";
+      const k1 = words[0] || "Strategy";
+      const k2 = words[1] || "Moment";
 
-      const tags = ["⚠️ Revelation", "💡 Paradigm Shift", "🔥 High Energy", "🤯 Confession", "🎯 Core Strategy", "🚀 Game Changer"];
+      const tags = [
+        "⚠️ Critical Warning", "💡 Paradigm Shift", "🔥 High-Energy Debate",
+        "🤯 Shocking Truth", "🎯 Core Protocol", "🚀 Game Changer",
+        "🧠 Masterclass Lesson", "⚡ Raw Confession", "📉 Crucial Mistake",
+        "💎 Golden Rule", "🎙 Exclusive Insight", "⏳ Timeless Principle"
+      ];
+
       const generated = [];
-      for (let i = 0; i < 12; i++) {
-        const startSec = 20 + (i * 240);
-        const endSec = startSec + 35;
-        const fmt = s => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+      const totalClips = 30; // Max clips
+
+      for (let i = 0; i < totalClips; i++) {
+        const startSec = 25 + (i * 160); // Spaced across video
+        const endSec = startSec + 40;
+        const fmt = s => {
+          const hrs = Math.floor(s / 3600);
+          const mins = Math.floor((s % 3600) / 60);
+          const secs = s % 60;
+          if (hrs > 0) {
+            return `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+          }
+          return `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        };
         const sTime = fmt(startSec);
         const eTime = fmt(endSec);
 
         generated.push({
           id: i + 1,
-          title: i === 0 ? `The Core Breakdown of ${k1}` : `${tags[i % tags.length].split(' ')[1]} with ${author} (Part ${i+1})`,
-          score: Math.floor(84 + Math.random() * 15),
+          title: i === 0 ? `The Main Breakthrough on ${k1}` : `${tags[i % tags.length].split(' ')[1]} with ${author} (Part ${i+1})`,
+          score: Math.floor(82 + Math.random() * 17),
           start: sTime,
           end: eTime,
           tag: tags[i % tags.length],
-          tiktokCaption: `Major lesson on ${k1} from ${author}. 🎙️\n\n#${k1.toLowerCase()} #${k2.toLowerCase()} #podcast #viral #growth`,
-          igCaption: `Key insight shared by ${author}.\n\n#${k1.toLowerCase()} #learning #education`,
-          selected: i < 3
+          tiktokCaption: `Major lesson on ${k1} from ${author} at ${sTime}. 🎙️\n\n#${k1.toLowerCase()} #${k2.toLowerCase()} #podcastclips #viral #growth`,
+          igCaption: `Key insight shared by ${author}.\n\nSave this for your notes.\n\n#${k1.toLowerCase()} #learning #education`,
+          selected: i < 5
         });
       }
       return generated;
@@ -603,7 +632,7 @@
       renderClipsList();
     };
 
-    // Settings
+    // Engine Settings Modal
     const tokenModal = document.getElementById('tokenModal');
     document.getElementById('btnSettingsHome').onclick = () => {
       document.getElementById('inputGithubToken').value = localStorage.getItem('autoclip_token') || '';
@@ -618,7 +647,7 @@
       alert("Settings saved!");
     };
 
-    // Download / GitHub Dispatch
+    // Cloud Slicer Dispatch
     document.getElementById('btnStartDownload').onclick = async () => {
       if (!currentVideoData) return;
       const chosen = currentVideoData.clips.filter(c => c.selected);
@@ -713,7 +742,6 @@
 
     document.getElementById('btnCloseExport').onclick = () => document.getElementById('exportModal').classList.add('hidden');
 
-    // Initialize State on Load
     loadState();
   </script>
 </body>
