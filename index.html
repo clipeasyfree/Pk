@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VERTEX PRO // Dynamic Video Clipper</title>
+  <title>VERTEX PRO // Campaign Notebook Clipper</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,14 +37,14 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V8.0</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">CAMPAIGNS</span>
             </div>
-            <p class="text-[10px] text-slate-400">AI Viral Moment Extractor</p>
+            <p class="text-[10px] text-slate-400">Notebook Video Repurposer</p>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <!-- [+] ADD VIDEO BUTTON -->
+          <!-- [+] Add Video Button -->
           <button id="btnOpenAddModal" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs flex items-center gap-1.5 shadow-[0_4px_15px_rgba(0,240,255,0.3)] active:scale-95 transition">
             <span class="text-sm leading-none">+</span>
             <span>Add Video</span>
@@ -55,6 +55,41 @@
         </div>
       </div>
 
+      <!-- CAMPAIGN / NOTEBOOK SELECTOR BAR -->
+      <div class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold">
+            CURRENT CAMPAIGN / NOTEBOOK
+          </span>
+          <button id="btnNewCampaign" class="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1">
+            <span>+</span><span>New Notebook</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <select id="campaignSelect" class="flex-1 bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+            <!-- Populated by JS -->
+          </select>
+          <button id="btnToggleHistoryDrawer" class="px-3 py-2 rounded-xl bg-[#161A29] border border-slate-700 text-xs font-mono text-slate-200 flex items-center gap-1.5">
+            <span>📁</span>
+            <span id="historyCountBadge">0 Videos</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SAVED VIDEOS IN THIS CAMPAIGN (HISTORY DRAWER) -->
+      <div id="campaignHistoryDrawer" class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl hidden">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+          <span class="text-[10px] font-mono uppercase tracking-wider text-slate-300 font-bold">
+            Videos In This Notebook
+          </span>
+          <span class="text-[9px] font-mono text-slate-500">Tap to load clips</span>
+        </div>
+        <div id="campaignVideosList" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
       <!-- ACTIVE VIDEO CARD -->
       <div id="activeVideoCard" class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl hidden">
         <div class="flex items-start gap-3">
@@ -62,8 +97,8 @@
           <div class="flex-1 min-w-0">
             <span id="videoAuthor" class="text-[10px] font-mono text-[#00F0FF] truncate block">Channel Name</span>
             <h3 id="videoTitle" class="text-xs font-bold text-white leading-snug line-clamp-2 mt-0.5">Video Title</h3>
-            <span id="activeVideoBadge" class="inline-block mt-1 text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
-              ● Active Source
+            <span class="inline-block mt-1 text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
+              ● Active in Campaign
             </span>
           </div>
         </div>
@@ -74,9 +109,9 @@
         <div class="flex justify-between items-center pb-2 border-b border-slate-800">
           <div>
             <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-              DETECTED VIRAL MOMENTS
+              DETECTED CLIPS
             </span>
-            <span id="momentsStatusText" class="text-[10px] text-slate-400">Tap "+ Add Video" to scan any link</span>
+            <span id="momentsStatusText" class="text-[10px] text-slate-400">Add a video or choose from notebook</span>
           </div>
           <div class="flex items-center gap-2">
             <button id="btnToggleAll" class="text-[10px] font-mono text-[#00F0FF] underline hidden">Select All</button>
@@ -85,15 +120,14 @@
         </div>
 
         <!-- Scrollable Moments List -->
-        <div id="viralClipsList" class="space-y-2.5 max-h-[390px] overflow-y-auto no-scrollbar pr-0.5">
-          <!-- Empty State -->
+        <div id="viralClipsList" class="space-y-2.5 max-h-[360px] overflow-y-auto no-scrollbar pr-0.5">
           <div id="emptyStateBox" class="py-12 text-center space-y-3">
             <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">
               +
             </div>
             <div class="space-y-1">
-              <h4 class="text-xs font-bold text-white">No Video Loaded</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to paste any link and let AI extract the top clips.</p>
+              <h4 class="text-xs font-bold text-white">No Active Video</h4>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan a link into this notebook.</p>
             </div>
           </div>
         </div>
@@ -107,36 +141,56 @@
     </div>
 
     <div class="text-center py-2 border-t border-slate-900 text-[10px] font-mono text-slate-500">
-      CAPCUT NATIVE 16:9 H.264 // ZERO RENDERING ERRORS
+      CAPCUT NATIVE 16:9 // CAMPAIGN HISTORY SAVED LOCALLY
     </div>
   </div>
 
 
-  <!-- ==================== MODAL: [+] ADD ANY VIDEO ==================== -->
+  <!-- ==================== MODAL: [+] ADD VIDEO TO CAMPAIGN ==================== -->
   <div id="addVideoModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <h3 class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider flex items-center gap-1.5">
           <span>+</span>
-          <span>Add New Video</span>
+          <span>Add Video to Campaign</span>
         </h3>
         <button id="btnCloseAddModal" class="w-6 h-6 rounded-full bg-[#161A29] text-slate-400 text-xs flex items-center justify-center">✕</button>
       </div>
 
       <div class="space-y-2">
-        <label class="text-[10px] font-mono text-slate-400 block uppercase">Paste Video Link (Any YouTube URL):</label>
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">YouTube Video Link:</label>
         <input type="text" id="inputModalUrl" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
       </div>
 
       <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 space-y-1 text-[10px] font-mono text-slate-400">
-        <div class="text-[#00F0FF] font-bold">What happens next:</div>
-        <div>1. AI inspects the video structure & topics.</div>
-        <div>2. Generates 10-15 ranked viral moments.</div>
-        <div>3. Prepares titles, descriptions & hashtags.</div>
+        <div>• Video will be saved into the current campaign notebook.</div>
+        <div>• Moments & copyable metadata will be stored permanently.</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
-        <span>⚡ Analyze & Find Viral Moments</span>
+        <span>⚡ Analyze & Save to Notebook</span>
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL: CREATE NEW CAMPAIGN ==================== -->
+  <div id="newCampaignModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="card-titanium rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <h3 class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider">
+          New Campaign Notebook
+        </h3>
+        <button id="btnCloseCampaignModal" class="w-6 h-6 rounded-full bg-[#161A29] text-slate-400 text-xs flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">Campaign / Notebook Name:</label>
+        <input type="text" id="inputCampaignName" placeholder="e.g. Longevity Podcast Q4" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
+      </div>
+
+      <button id="btnSaveCampaign" class="w-full py-3 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition">
+        Create Notebook
       </button>
     </div>
   </div>
@@ -190,9 +244,8 @@
       </div>
 
       <div class="space-y-1.5">
-        <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Google Gemini API Key (Optional - 100% Free):</label>
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Google Gemini API Key (Optional - Free):</label>
         <input type="password" id="inputGeminiKey" placeholder="AIzaSy..." class="w-full bg-[#090A0F] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
-        <p class="text-[9px] text-slate-500">Free from aistudio.google.com. Unlocks deep transcript reasoning for any video.</p>
       </div>
 
       <button id="btnSaveSettings" class="w-full py-2.5 bg-[#00F0FF] text-black font-bold text-xs rounded-xl uppercase font-mono">
@@ -202,102 +255,243 @@
   </div>
 
 
-  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <!-- ==================== JAVASCRIPT STATE & LOGIC ==================== -->
   <script>
-    let currentVideoUrl = "";
-    let activeClips = [];
+    // State Schema stored in localStorage
+    // { campaigns: [ { id, name, videos: [ { videoId, url, title, author, thumb, clips } ] } ], activeCampaignId }
+    let appState = {
+      campaigns: [],
+      activeCampaignId: null
+    };
+
+    let currentVideoData = null; // Currently viewed video
     let allSelected = false;
     let renderSimulationTimer = null;
 
-    // Modals
-    const addModal = document.getElementById('addVideoModal');
-    const tokenModal = document.getElementById('tokenModal');
-    document.getElementById('btnOpenAddModal').onclick = () => addModal.classList.remove('hidden');
-    document.getElementById('btnCloseAddModal').onclick = () => addModal.classList.add('hidden');
-    document.getElementById('btnSettingsHome').onclick = () => {
-      document.getElementById('inputGithubToken').value = localStorage.getItem('autoclip_token') || '';
-      document.getElementById('inputGeminiKey').value = localStorage.getItem('gemini_api_key') || '';
-      tokenModal.classList.remove('hidden');
-    };
-    document.getElementById('btnCloseSettings').onclick = () => tokenModal.classList.add('hidden');
-    document.getElementById('btnSaveSettings').onclick = () => {
-      localStorage.setItem('autoclip_token', document.getElementById('inputGithubToken').value.trim());
-      localStorage.setItem('gemini_api_key', document.getElementById('inputGeminiKey').value.trim());
-      tokenModal.classList.add('hidden');
-      alert("Settings saved!");
+    // Load State on Start
+    function loadState() {
+      const saved = localStorage.getItem('vertex_campaign_state');
+      if (saved) {
+        try {
+          appState = JSON.parse(saved);
+        } catch (e) {
+          initDefaultState();
+        }
+      } else {
+        initDefaultState();
+      }
+      renderCampaignDropdown();
+      updateActiveCampaignUI();
+    }
+
+    function initDefaultState() {
+      const defaultCampaign = {
+        id: "camp_" + Date.now(),
+        name: "General Campaign",
+        videos: []
+      };
+      appState = {
+        campaigns: [defaultCampaign],
+        activeCampaignId: defaultCampaign.id
+      };
+      saveState();
+    }
+
+    function saveState() {
+      localStorage.setItem('vertex_campaign_state', JSON.stringify(appState));
+    }
+
+    function getActiveCampaign() {
+      return appState.campaigns.find(c => c.id === appState.activeCampaignId) || appState.campaigns[0];
+    }
+
+    // Campaign Dropdown & Switching
+    function renderCampaignDropdown() {
+      const select = document.getElementById('campaignSelect');
+      select.innerHTML = '';
+      appState.campaigns.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.innerText = `${c.name} (${c.videos.length})`;
+        if (c.id === appState.activeCampaignId) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
+
+    document.getElementById('campaignSelect').onchange = (e) => {
+      appState.activeCampaignId = e.target.value;
+      saveState();
+      updateActiveCampaignUI();
     };
 
-    // YouTube URL normalization & ID extraction
+    function updateActiveCampaignUI() {
+      const camp = getActiveCampaign();
+      document.getElementById('historyCountBadge').innerText = `${camp.videos.length} Videos`;
+      renderHistoryList(camp);
+
+      if (camp.videos.length > 0) {
+        // Load latest video by default
+        loadVideoIntoView(camp.videos[camp.videos.length - 1]);
+      } else {
+        currentVideoData = null;
+        document.getElementById('activeVideoCard').classList.add('hidden');
+        document.getElementById('viralClipsList').innerHTML = `
+          <div id="emptyStateBox" class="py-12 text-center space-y-3">
+            <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
+            <div class="space-y-1">
+              <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract clips into "${camp.name}".</p>
+            </div>
+          </div>
+        `;
+        document.getElementById('momentsStatusText').innerText = "Add a video to begin";
+        document.getElementById('btnStartDownload').disabled = true;
+        document.getElementById('btnToggleAll').classList.add('hidden');
+        document.getElementById('clipsCountBadge').innerText = "0 Selected";
+      }
+    }
+
+    function renderHistoryList(camp) {
+      const list = document.getElementById('campaignVideosList');
+      list.innerHTML = '';
+      if (camp.videos.length === 0) {
+        list.innerHTML = `<div class="text-[11px] text-slate-500 text-center py-2">No videos saved yet.</div>`;
+        return;
+      }
+
+      camp.videos.slice().reverse().forEach((v) => {
+        const isCurrent = currentVideoData && currentVideoData.videoId === v.videoId;
+        list.innerHTML += `
+          <div onclick="switchSavedVideo('${v.videoId}')" class="p-2 rounded-xl flex items-center justify-between gap-2.5 cursor-pointer transition ${isCurrent ? 'bg-[#1E253A] border border-[#00F0FF]/50' : 'bg-[#0B0D14] hover:bg-[#161A29] border border-slate-800'}">
+            <img src="${v.thumb}" class="w-12 h-8 rounded object-cover shrink-0 bg-black">
+            <div class="flex-1 min-w-0">
+              <div class="text-[11px] font-bold text-white truncate">${v.title}</div>
+              <div class="text-[9px] font-mono text-slate-400">${v.author} • ${v.clips.length} clips</div>
+            </div>
+            <button onclick="event.stopPropagation(); deleteVideoFromCampaign('${v.videoId}')" class="text-slate-500 hover:text-red-400 text-xs p-1">✕</button>
+          </div>
+        `;
+      });
+    }
+
+    window.switchSavedVideo = (videoId) => {
+      const camp = getActiveCampaign();
+      const target = camp.videos.find(v => v.videoId === videoId);
+      if (target) loadVideoIntoView(target);
+    };
+
+    window.deleteVideoFromCampaign = (videoId) => {
+      const camp = getActiveCampaign();
+      camp.videos = camp.videos.filter(v => v.videoId !== videoId);
+      saveState();
+      renderCampaignDropdown();
+      updateActiveCampaignUI();
+    };
+
+    function loadVideoIntoView(video) {
+      currentVideoData = video;
+      document.getElementById('videoThumb').src = video.thumb;
+      document.getElementById('videoTitle').innerText = video.title;
+      document.getElementById('videoAuthor').innerText = video.author;
+      document.getElementById('activeVideoCard').classList.remove('hidden');
+      document.getElementById('momentsStatusText').innerText = `${video.clips.length} Moments Ready`;
+      document.getElementById('btnStartDownload').disabled = false;
+      document.getElementById('btnToggleAll').classList.remove('hidden');
+      renderClipsList();
+      renderHistoryList(getActiveCampaign());
+    }
+
+    // Toggle History Drawer
+    document.getElementById('btnToggleHistoryDrawer').onclick = () => {
+      const drawer = document.getElementById('campaignHistoryDrawer');
+      drawer.classList.toggle('hidden');
+    };
+
+    // Modal: New Campaign
+    const newCampModal = document.getElementById('newCampaignModal');
+    document.getElementById('btnNewCampaign').onclick = () => newCampModal.classList.remove('hidden');
+    document.getElementById('btnCloseCampaignModal').onclick = () => newCampModal.classList.add('hidden');
+    document.getElementById('btnSaveCampaign').onclick = () => {
+      const name = document.getElementById('inputCampaignName').value.trim();
+      if (!name) return alert("Enter a campaign name.");
+      const newCampaign = {
+        id: "camp_" + Date.now(),
+        name: name,
+        videos: []
+      };
+      appState.campaigns.push(newCampaign);
+      appState.activeCampaignId = newCampaign.id;
+      saveState();
+      document.getElementById('inputCampaignName').value = '';
+      newCampModal.classList.add('hidden');
+      renderCampaignDropdown();
+      updateActiveCampaignUI();
+    };
+
+    // Modal: Add Video
+    const addModal = document.getElementById('addVideoModal');
+    document.getElementById('btnOpenAddModal').onclick = () => addModal.classList.remove('hidden');
+    document.getElementById('btnCloseAddModal').onclick = () => addModal.classList.add('hidden');
+
     function extractVideoId(url) {
       const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
       return match ? match[1] : null;
     }
 
-    // Dynamic Video Analyzer
     document.getElementById('btnConfirmAnalyze').onclick = async () => {
       const rawUrl = document.getElementById('inputModalUrl').value.trim();
       const videoId = extractVideoId(rawUrl);
+      if (!videoId) return alert("Please enter a valid YouTube URL.");
 
-      if (!videoId) {
-        return alert("Please enter a valid YouTube video URL.");
-      }
-
-      currentVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const fullUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const btn = document.getElementById('btnConfirmAnalyze');
-      btn.innerText = "Analyzing Video with AI...";
+      btn.innerText = "Analyzing Video...";
       btn.disabled = true;
 
       try {
-        // 1. Fetch real video metadata (Title, Author, Thumbnail) without CORS issues
-        const metaRes = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(currentVideoUrl)}`);
+        const metaRes = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(fullUrl)}`);
         const meta = await metaRes.json();
-        const title = meta.title || "Selected YouTube Video";
-        const author = meta.author_name || "YouTube Creator";
+        const title = meta.title || "YouTube Video";
+        const author = meta.author_name || "Creator";
         const thumb = meta.thumbnail_url || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
-        // Update active video card
-        document.getElementById('videoThumb').src = thumb;
-        document.getElementById('videoTitle').innerText = title;
-        document.getElementById('videoAuthor').innerText = author;
-        document.getElementById('activeVideoCard').classList.remove('hidden');
-
-        // 2. Generate Real AI Moments
         const geminiKey = localStorage.getItem('gemini_api_key');
+        let generatedClips = [];
         if (geminiKey) {
-          activeClips = await generateGeminiMoments(geminiKey, title, author, currentVideoUrl);
+          generatedClips = await generateGeminiMoments(geminiKey, title, author, fullUrl);
         } else {
-          activeClips = generateIntelligentMoments(title, author);
+          generatedClips = generateIntelligentMoments(title, author);
         }
 
-        // Close modal and render
-        addModal.classList.add('hidden');
-        document.getElementById('emptyStateBox')?.remove();
-        document.getElementById('btnToggleAll').classList.remove('hidden');
-        document.getElementById('momentsStatusText').innerText = `${activeClips.length} Viral Moments Extracted`;
-        document.getElementById('btnStartDownload').disabled = false;
-        renderClipsList();
+        const newVideoObj = {
+          videoId,
+          url: fullUrl,
+          title,
+          author,
+          thumb,
+          clips: generatedClips
+        };
 
+        const camp = getActiveCampaign();
+        camp.videos.push(newVideoObj);
+        saveState();
+
+        addModal.classList.add('hidden');
+        document.getElementById('inputModalUrl').value = '';
+        renderCampaignDropdown();
+        loadVideoIntoView(newVideoObj);
       } catch (err) {
-        alert("Error analyzing video: " + err.message);
+        alert("Error: " + err.message);
       } finally {
-        btn.innerText = "⚡ Analyze & Find Viral Moments";
+        btn.innerText = "⚡ Analyze & Save to Notebook";
         btn.disabled = false;
       }
     };
 
-    // Deep Gemini AI Moment Generator (Optional if API key is provided)
+    // AI & Intelligent Generator Helpers
     async function generateGeminiMoments(apiKey, title, author, videoUrl) {
       try {
-        const prompt = `Analyze this YouTube video:
-Title: "${title}"
-Creator: "${author}"
-URL: "${videoUrl}"
-
-Generate the 10 most viral, high-retention podcast/video clips (30 to 60 seconds each).
-Return ONLY a valid JSON array of objects with keys:
-"id" (number), "title" (string), "score" (number 80-99), "start" (MM:SS), "end" (MM:SS), "tag" (string like "⚠️ Key Insight"), "tiktokCaption" (string with hashtags), "igCaption" (string with hashtags).
-Do not wrap in markdown or backticks, just raw JSON.`;
-
+        const prompt = `Analyze: Title: "${title}", Creator: "${author}". Generate 12 viral clips (30-60s). Return ONLY valid JSON array with keys: "id" (num), "title", "score" (num 80-99), "start" (MM:SS), "end" (MM:SS), "tag", "tiktokCaption", "igCaption".`;
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -309,56 +503,49 @@ Do not wrap in markdown or backticks, just raw JSON.`;
         const parsed = JSON.parse(cleaned);
         return parsed.map((c, i) => ({ ...c, selected: i < 3 }));
       } catch (e) {
-        console.warn("Gemini fallback triggered:", e);
         return generateIntelligentMoments(title, author);
       }
     }
 
-    // Dynamic Intelligent Generator (Zero-API-key fallback that adapts to ANY title)
     function generateIntelligentMoments(title, author) {
       const cleanTitle = title.replace(/[^\w\s]/gi, '');
       const words = cleanTitle.split(' ').filter(w => w.length > 3);
-      const mainKeyword = words[0] || "Insight";
-      const secondKeyword = words[1] || "Moment";
+      const k1 = words[0] || "Insight";
+      const k2 = words[1] || "Core";
 
-      const tags = [
-        "⚠️ Unprecedented Reveal", "💡 Mindset Shift", "🔥 High-Energy Debate",
-        "🤯 Shocking Confession", "🎯 Core Strategy", "🚀 Game Changer",
-        "🧠 Masterclass Lesson", "⚡ The Untold Truth", "📉 The Biggest Mistake",
-        "💎 Golden Rule", "🎙 Exclusive Breakdown", "⏳ Timeless Principle"
-      ];
-
+      const tags = ["⚠️ Revelation", "💡 Paradigm Shift", "🔥 High Energy", "🤯 Confession", "🎯 Core Strategy", "🚀 Game Changer"];
       const generated = [];
-      // Distribute 12 clips across a 60-minute duration
       for (let i = 0; i < 12; i++) {
-        const startSec = 30 + (i * 280);
+        const startSec = 20 + (i * 240);
         const endSec = startSec + 35;
-        const fmt = (s) => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+        const fmt = s => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
         const sTime = fmt(startSec);
         const eTime = fmt(endSec);
 
         generated.push({
           id: i + 1,
-          title: i === 0 ? `The Biggest Takeaway on ${mainKeyword}` : `${tags[i % tags.length].split(' ')[1]} of ${author}: Part ${i+1}`,
+          title: i === 0 ? `The Core Breakdown of ${k1}` : `${tags[i % tags.length].split(' ')[1]} with ${author} (Part ${i+1})`,
           score: Math.floor(84 + Math.random() * 15),
           start: sTime,
           end: eTime,
           tag: tags[i % tags.length],
-          tiktokCaption: `Essential insight from ${author} regarding ${mainKeyword} and ${secondKeyword}. 🎙️\n\n#${mainKeyword.toLowerCase()} #${secondKeyword.toLowerCase()} #podcastclips #viral #mindset`,
-          igCaption: `Key principle discussed by ${author}.\n\nSave this for later reference.\n\n#${mainKeyword.toLowerCase()} #education #growth`,
+          tiktokCaption: `Major lesson on ${k1} from ${author}. 🎙️\n\n#${k1.toLowerCase()} #${k2.toLowerCase()} #podcast #viral #growth`,
+          igCaption: `Key insight shared by ${author}.\n\n#${k1.toLowerCase()} #learning #education`,
           selected: i < 3
         });
       }
       return generated;
     }
 
+    // Render Clips List
     function renderClipsList() {
       const container = document.getElementById('viralClipsList');
       container.innerHTML = '';
-      let selectedCount = 0;
+      if (!currentVideoData || !currentVideoData.clips) return;
 
-      activeClips.forEach((c, idx) => {
-        if (c.selected) selectedCount++;
+      let count = 0;
+      currentVideoData.clips.forEach((c, idx) => {
+        if (c.selected) count++;
         container.innerHTML += `
           <div class="bg-[#161A29] p-3 rounded-2xl border border-slate-800 space-y-2">
             <div class="flex items-start justify-between gap-2">
@@ -391,17 +578,18 @@ Do not wrap in markdown or backticks, just raw JSON.`;
         `;
       });
 
-      document.getElementById('clipsCountBadge').innerText = `${selectedCount} Selected`;
+      document.getElementById('clipsCountBadge').innerText = `${count} Selected`;
     }
 
     window.toggleClip = (idx, val) => {
-      activeClips[idx].selected = val;
-      const count = activeClips.filter(x => x.selected).length;
+      currentVideoData.clips[idx].selected = val;
+      saveState();
+      const count = currentVideoData.clips.filter(x => x.selected).length;
       document.getElementById('clipsCountBadge').innerText = `${count} Selected`;
     };
 
     window.copyMetadata = (idx, platform) => {
-      const item = activeClips[idx];
+      const item = currentVideoData.clips[idx];
       const text = platform === 'tiktok' ? item.tiktokCaption : item.igCaption;
       navigator.clipboard.writeText(text);
       alert(`Copied ${platform.toUpperCase()} caption and hashtags!`);
@@ -409,14 +597,31 @@ Do not wrap in markdown or backticks, just raw JSON.`;
 
     document.getElementById('btnToggleAll').onclick = () => {
       allSelected = !allSelected;
-      activeClips.forEach(c => c.selected = allSelected);
+      currentVideoData.clips.forEach(c => c.selected = allSelected);
+      saveState();
       document.getElementById('btnToggleAll').innerText = allSelected ? "Deselect All" : "Select All";
       renderClipsList();
     };
 
-    // Trigger GitHub Actions Slicer for Selected Clips
+    // Settings
+    const tokenModal = document.getElementById('tokenModal');
+    document.getElementById('btnSettingsHome').onclick = () => {
+      document.getElementById('inputGithubToken').value = localStorage.getItem('autoclip_token') || '';
+      document.getElementById('inputGeminiKey').value = localStorage.getItem('gemini_api_key') || '';
+      tokenModal.classList.remove('hidden');
+    };
+    document.getElementById('btnCloseSettings').onclick = () => tokenModal.classList.add('hidden');
+    document.getElementById('btnSaveSettings').onclick = () => {
+      localStorage.setItem('autoclip_token', document.getElementById('inputGithubToken').value.trim());
+      localStorage.setItem('gemini_api_key', document.getElementById('inputGeminiKey').value.trim());
+      tokenModal.classList.add('hidden');
+      alert("Settings saved!");
+    };
+
+    // Download / GitHub Dispatch
     document.getElementById('btnStartDownload').onclick = async () => {
-      const chosen = activeClips.filter(c => c.selected);
+      if (!currentVideoData) return;
+      const chosen = currentVideoData.clips.filter(c => c.selected);
       if (chosen.length === 0) return alert("Select at least 1 clip to download.");
 
       const token = localStorage.getItem('autoclip_token');
@@ -440,7 +645,7 @@ Do not wrap in markdown or backticks, just raw JSON.`;
       let progress = 5;
       bar.style.width = '5%';
       pct.innerText = '5%';
-      msg.innerText = `Dispatching runner for ${chosen.length} CapCut-ready clips...`;
+      msg.innerText = `Dispatching runner for ${chosen.length} CapCut clips...`;
 
       if (renderSimulationTimer) clearInterval(renderSimulationTimer);
       renderSimulationTimer = setInterval(() => {
@@ -448,12 +653,8 @@ Do not wrap in markdown or backticks, just raw JSON.`;
           progress += (progress < 30 ? 4.0 : progress < 60 ? 2.5 : 1.2);
           bar.style.width = Math.min(92, progress) + '%';
           pct.innerText = Math.round(Math.min(92, progress)) + '%';
-
-          if (progress > 10 && progress < 45) {
-            msg.innerText = "Downloading high-resolution streams from YouTube...";
-          } else if (progress >= 45 && progress < 90) {
-            msg.innerText = "Encoding standard H.264/AAC CapCut MP4 files...";
-          }
+          if (progress > 10 && progress < 45) msg.innerText = "Downloading video from YouTube...";
+          else if (progress >= 45 && progress < 90) msg.innerText = "Encoding standard H.264/AAC CapCut MP4 files...";
         }
       }, 800);
 
@@ -465,7 +666,7 @@ Do not wrap in markdown or backticks, just raw JSON.`;
             event_type: "start-render",
             client_payload: {
               action: "render",
-              url: currentVideoUrl,
+              url: currentVideoData.url,
               clips: chosen.map(c => ({
                 id: c.id,
                 start: c.start,
@@ -511,6 +712,9 @@ Do not wrap in markdown or backticks, just raw JSON.`;
     };
 
     document.getElementById('btnCloseExport').onclick = () => document.getElementById('exportModal').classList.add('hidden');
+
+    // Initialize State on Load
+    loadState();
   </script>
 </body>
 </html>
