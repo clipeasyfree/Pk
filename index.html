@@ -37,7 +37,7 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V10.0</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V10.1</span>
             </div>
             <p class="text-[10px] text-slate-400">Viral Short-Form Repurposer</p>
           </div>
@@ -203,7 +203,7 @@
 
       <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 space-y-1 text-[10px] font-mono text-slate-400">
         <div>• Generates punchy cold-open hooks (e.g. "Before you earn, learn how to spend").</div>
-        <div>• Strictly excludes generic templates, timestamps, and irrelevant tags.</div>
+        <div>• Excludes generic templates, timestamps, and irrelevant tags.</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
@@ -305,7 +305,7 @@
   </div>
 
 
-  <!-- ==================== JAVASCRIPT STATE & VIRAL LOGIC ==================== -->
+  <!-- ==================== JAVASCRIPT STATE & DYNAMIC MODEL DISCOVERY ==================== -->
   <script>
     let appState = {
       campaigns: [],
@@ -323,7 +323,6 @@
       if (saved) {
         try { 
           appState = JSON.parse(saved); 
-          // Auto-purge any legacy #podcast hashtags or mentions from stored campaigns
           appState.campaigns.forEach(c => {
             if (c.hashtags) {
               c.hashtags = c.hashtags.replace(/#podcast\b/gi, '').replace(/#podcasts\b/gi, '').replace(/\s+/g, ' ').trim();
@@ -410,7 +409,7 @@
             <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract viral moments.</p>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips into "${camp.name}".</p>
             </div>
           </div>
         `;
@@ -567,7 +566,7 @@
             generatedClips = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
           } catch (apiErr) {
             console.error("Gemini Error:", apiErr);
-            alert(`Gemini Notice: ${apiErr.message}.\nSwitching to Real-Talk Generator.`);
+            alert(`Gemini Notice: ${apiErr.message}.\nUsing Cold-Open Engine.`);
             generatedClips = generateIntelligentMoments(title, author, currentCamp);
             engineUsed = "⚙ Cold-Open Engine";
           }
@@ -601,7 +600,31 @@
       }
     };
 
-    // GEMINI STRICT SHORT-FORM VIRAL REASONING (Guaranteed JSON, no token crashes)
+    // DYNAMIC MODEL DISCOVERY: Queries Google's ListModels directly
+    async function getActiveGeminiModel(apiKey) {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error?.message || "Invalid API key or unauthorized.");
+      }
+      const data = await res.json();
+      const valid = (data.models || []).filter(m => 
+        m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent")
+      );
+      if (valid.length === 0) {
+        throw new Error("No generateContent models available for this API key.");
+      }
+
+      // Prioritize flash models
+      const priorities = ["flash", "pro"];
+      for (const p of priorities) {
+        const found = valid.find(m => m.name.toLowerCase().includes(p));
+        if (found) return found.name; // e.g. "models/gemini-2.0-flash"
+      }
+      return valid[0].name;
+    }
+
+    // GEMINI PROMPT EXECUTION (Guaranteed Working Model & JSON Mode)
     async function generateGeminiMoments(apiKey, title, author, videoUrl, camp) {
       const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
       const creatorTag = creatorClean ? `#${creatorClean}` : "";
@@ -628,40 +651,34 @@ STRICT CAPTION AND TITLE RULES:
 Return ONLY a valid JSON array of objects with keys:
 "id" (num), "title" (viral hook title), "score" (84-99), "start" (MM:SS or HH:MM:SS), "end" (MM:SS or HH:MM:SS), "tag" (e.g. "Hard Truth", "Risk Rule"), "tiktokCaption", "igCaption".`;
 
-      const models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
-      let lastErr = null;
+      // Auto-discover the active model name from Google
+      const targetModel = await getActiveGeminiModel(apiKey);
+      console.log("[*] Using verified active Gemini model:", targetModel);
 
-      for (const m of models) {
-        try {
-          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: {
-                response_mime_type: "application/json"
-              }
-            })
-          });
-
-          if (!res.ok) {
-            const errData = await res.json();
-            throw new Error(errData.error?.message || `HTTP ${res.status}`);
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/${targetModel}:generateContent?key=${apiKey}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            response_mime_type: "application/json"
           }
+        })
+      });
 
-          const data = await res.json();
-          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-          const parsed = JSON.parse(text);
-          return parsed.map((c, i) => ({ ...c, selected: i < 3 }));
-        } catch (err) {
-          lastErr = err;
-          continue;
-        }
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error?.message || `HTTP ${res.status}`);
       }
-      throw lastErr;
+
+      const data = await res.json();
+      let text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const parsed = JSON.parse(text);
+      return parsed.map((c, i) => ({ ...c, selected: i < 3 }));
     }
 
-    // REAL-TALK FALLBACK (NO TEMPLATES, NO #PODCAST)
+    // REAL-TALK FALLBACK (COLD OPENS, ZERO #PODCAST)
     function generateIntelligentMoments(title, author, camp) {
       const cleanTitle = title.replace(/[^\w\s]/gi, '');
       const words = cleanTitle.split(' ').filter(w => w.length > 3);
@@ -677,7 +694,6 @@ Return ONLY a valid JSON array of objects with keys:
       const tags = ["Hard Truth", "The Golden Rule", "Paradox", "Mindset Trap", "Execution", "Unfiltered"];
       const generated = [];
 
-      // Authentic cold opens
       const sharpHooks = [
         `Before you earn, learn how to spend.`,
         `The easiest way to lose everything in your 20s.`,
@@ -772,7 +788,7 @@ Return ONLY a valid JSON array of objects with keys:
       const item = currentVideoData.clips[idx];
       const text = platform === 'tiktok' ? item.tiktokCaption : item.igCaption;
       navigator.clipboard.writeText(text);
-      alert(`Copied ${platform.toUpperCase()} caption!`);
+      alert(`Copied clean ${platform.toUpperCase()} caption!`);
     };
 
     document.getElementById('btnToggleAll').onclick = () => {
