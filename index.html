@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VERTEX PRO // Campaign Studio</title>
+  <title>VERTEX PRO // Viral Campaign Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,9 +37,9 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V9.0</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">PRO-CLIPPER</span>
             </div>
-            <p class="text-[10px] text-slate-400">Custom Campaign Clipper</p>
+            <p class="text-[10px] text-slate-400">Viral Hook & Campaign Engine</p>
           </div>
         </div>
 
@@ -64,7 +64,7 @@
             <button id="btnNewCampaign" class="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1">
               <span>+</span><span>New</span>
             </button>
-            <button id="btnDeleteCampaign" class="text-[10px] font-mono text-rose-400 hover:text-rose-300 flex items-center gap-1" title="Delete current campaign">
+            <button id="btnDeleteCampaign" class="text-[10px] font-mono text-rose-400 hover:text-rose-300 flex items-center gap-1">
               <span>🗑</span><span>Delete</span>
             </button>
           </div>
@@ -82,7 +82,7 @@
 
         <!-- Campaign Rules Summary Pill -->
         <div id="campaignRulesPill" class="text-[9px] font-mono text-slate-400 bg-[#0B0D14] px-2.5 py-1 rounded-lg border border-slate-800 flex justify-between items-center">
-          <span class="truncate" id="campaignRulesText">Rules: Default Creator Style</span>
+          <span class="truncate" id="campaignRulesText">Rules: High-Retention Viral Hooks</span>
           <span class="text-[#00F0FF] shrink-0 font-bold ml-2 cursor-pointer" id="btnEditCampaignRules">Edit Rules</span>
         </div>
       </div>
@@ -107,9 +107,14 @@
           <div class="flex-1 min-w-0">
             <span id="videoAuthor" class="text-[10px] font-mono text-[#00F0FF] truncate block">Channel Name</span>
             <h3 id="videoTitle" class="text-xs font-bold text-white leading-snug line-clamp-2 mt-0.5">Video Title</h3>
-            <span class="inline-block mt-1 text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
-              ● Active
-            </span>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
+                ● Active
+              </span>
+              <span id="aiEngineBadge" class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30 font-bold">
+                ⚡ Gemini AI
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -119,7 +124,7 @@
         <div class="flex justify-between items-center pb-2 border-b border-slate-800">
           <div>
             <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-              DETECTED CLIPS
+              EXTRACTED CLIPS
             </span>
             <span id="momentsStatusText" class="text-[10px] text-slate-400">Add a video or pick from notebook</span>
           </div>
@@ -149,7 +154,7 @@
     </div>
 
     <div class="text-center py-2 border-t border-slate-900 text-[10px] font-mono text-slate-500">
-      TURBO ENGINE // CAPCUT NATIVE 16:9 H.264
+      CAPCUT NATIVE 16:9 // AUTHENTIC VIRAL HOOK GENERATION
     </div>
   </div>
 
@@ -180,7 +185,7 @@
   </div>
 
 
-  <!-- ==================== MODAL: [+] ADD VIDEO TO CAMPAIGN ==================== -->
+  <!-- ==================== MODAL: [+] ADD VIDEO ==================== -->
   <div id="addVideoModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
@@ -197,18 +202,19 @@
       </div>
 
       <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 space-y-1 text-[10px] font-mono text-slate-400">
-        <div>• Clips will be formatted according to this campaign's rules.</div>
-        <div>• Real human captions without timestamps or emoji spam.</div>
+        <div>• Analyzes video topic & creator context.</div>
+        <div>• Generates punchy 1-line hooks (no boilerplate fluff).</div>
+        <div>• Custom tags & creator hashtags applied automatically.</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
-        <span>⚡ Extract Viral Clips</span>
+        <span>⚡ Analyze & Extract Clips</span>
       </button>
     </div>
   </div>
 
 
-  <!-- ==================== MODAL: CREATE / EDIT CAMPAIGN & REQUIREMENTS ==================== -->
+  <!-- ==================== MODAL: CREATE / EDIT CAMPAIGN ==================== -->
   <div id="campaignModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-3xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
@@ -220,17 +226,17 @@
 
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">1. Campaign / Client Name:</label>
-        <input type="text" id="inputCampaignName" placeholder="e.g. Health & Longevity Q4" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+        <input type="text" id="inputCampaignName" placeholder="e.g. Finance & Trading Clips" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
       </div>
 
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Required Campaign Hashtags:</label>
-        <input type="text" id="inputCampaignHashtags" placeholder="#longevity #healthtips #biohacking" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+        <input type="text" id="inputCampaignHashtags" placeholder="#money #trading #finance #discipline" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
       </div>
 
       <div class="space-y-1.5">
-        <label class="text-[10px] font-mono text-slate-400 block uppercase">3. Custom Description Rules / Tone:</label>
-        <textarea id="inputCampaignPrompt" rows="3" placeholder="e.g. Write punchy 1-sentence hooks like a real human. Focus on the core argument. Max 1 natural emoji." class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]"></textarea>
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">3. Clipper / Tone Directives:</label>
+        <textarea id="inputCampaignPrompt" rows="3" placeholder="e.g. Sharp 1-line paradoxes or rules like 'Before you earn, learn how to spend.' No generic intros. Cold open style only." class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]"></textarea>
       </div>
 
       <button id="btnSaveCampaign" class="w-full py-3 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition">
@@ -288,8 +294,9 @@
       </div>
 
       <div class="space-y-1.5">
-        <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Google Gemini API Key (Optional - Free):</label>
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Google Gemini API Key (Required for AI Reasoning):</label>
         <input type="password" id="inputGeminiKey" placeholder="AIzaSy..." class="w-full bg-[#090A0F] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+        <p class="text-[9px] text-slate-500">Get your free key at aistudio.google.com</p>
       </div>
 
       <button id="btnSaveSettings" class="w-full py-2.5 bg-[#00F0FF] text-black font-bold text-xs rounded-xl uppercase font-mono">
@@ -299,7 +306,7 @@
   </div>
 
 
-  <!-- ==================== JAVASCRIPT STATE & LOGIC ==================== -->
+  <!-- ==================== JAVASCRIPT STATE & VIRAL LOGIC ==================== -->
   <script>
     let appState = {
       campaigns: [],
@@ -327,9 +334,9 @@
     function initDefaultState() {
       const defaultCampaign = {
         id: "camp_" + Date.now(),
-        name: "General Campaign",
-        hashtags: "#podcast #viral #growth",
-        instructions: "Write natural, human-sounding hooks. No timestamps, max 1 subtle emoji.",
+        name: "Finance & Discipline",
+        hashtags: "#money #trading #finance #discipline #wealth",
+        instructions: "Punchy 1-line cold opens. Sharp contrast or paradoxes (e.g. 'Before you earn, learn how to spend'). Zero robotic phrases, zero timestamps.",
         videos: []
       };
       appState = {
@@ -365,29 +372,21 @@
       updateActiveCampaignUI();
     };
 
-    // Delete Campaign Button
     document.getElementById('btnDeleteCampaign').onclick = () => {
       const camp = getActiveCampaign();
-      if (!confirm(`Are you sure you want to delete the campaign "${camp.name}"? This cannot be undone.`)) {
-        return;
-      }
-
+      if (!confirm(`Delete campaign "${camp.name}"?`)) return;
       appState.campaigns = appState.campaigns.filter(c => c.id !== camp.id);
-      if (appState.campaigns.length === 0) {
-        initDefaultState();
-      } else {
-        appState.activeCampaignId = appState.campaigns[0].id;
-        saveState();
-      }
+      if (appState.campaigns.length === 0) initDefaultState();
+      else appState.activeCampaignId = appState.campaigns[0].id;
+      saveState();
       renderCampaignDropdown();
       updateActiveCampaignUI();
-      alert("Campaign deleted.");
     };
 
     function updateActiveCampaignUI() {
       const camp = getActiveCampaign();
       document.getElementById('historyCountBadge').innerText = `${camp.videos.length} Videos`;
-      document.getElementById('campaignRulesText').innerText = `Tags: ${camp.hashtags || 'None'} • Rules: ${camp.instructions ? camp.instructions.slice(0, 32) + '...' : 'Human style'}`;
+      document.getElementById('campaignRulesText').innerText = `Tags: ${camp.hashtags || 'None'} • Tone: ${camp.instructions ? camp.instructions.slice(0, 30) + '...' : 'Cold-open viral'}`;
       renderHistoryList(camp);
 
       if (camp.videos.length > 0) {
@@ -454,6 +453,7 @@
       document.getElementById('videoTitle').innerText = video.title;
       document.getElementById('videoAuthor').innerText = video.author;
       document.getElementById('activeVideoCard').classList.remove('hidden');
+      document.getElementById('aiEngineBadge').innerText = video.sourceEngine || "⚡ Gemini AI";
       document.getElementById('momentsStatusText').innerText = `${video.clips.length} Clips Available`;
       document.getElementById('btnStartDownload').disabled = false;
       document.getElementById('btnToggleAll').classList.remove('hidden');
@@ -465,7 +465,7 @@
       document.getElementById('campaignHistoryDrawer').classList.toggle('hidden');
     };
 
-    // Campaign Modal (Create or Edit Rules)
+    // Campaign Modal Setup
     const campModal = document.getElementById('campaignModal');
     document.getElementById('btnNewCampaign').onclick = () => {
       editingCampaignMode = false;
@@ -534,7 +534,7 @@
 
       const fullUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const btn = document.getElementById('btnConfirmAnalyze');
-      btn.innerText = "Extracting Clips...";
+      btn.innerText = "Analyzing Video with AI...";
       btn.disabled = true;
 
       try {
@@ -547,11 +547,20 @@
         const currentCamp = getActiveCampaign();
         const geminiKey = localStorage.getItem('gemini_api_key');
         let generatedClips = [];
+        let engineUsed = "⚡ Gemini AI";
 
         if (geminiKey) {
-          generatedClips = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
+          try {
+            generatedClips = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
+          } catch (apiErr) {
+            console.warn("Gemini Error:", apiErr);
+            alert("Gemini API Error (" + apiErr.message + "). Using Smart Creator Fallback.");
+            generatedClips = generateIntelligentMoments(title, author, currentCamp);
+            engineUsed = "⚙ Smart Fallback";
+          }
         } else {
           generatedClips = generateIntelligentMoments(title, author, currentCamp);
+          engineUsed = "⚙ Smart Fallback";
         }
 
         const newVideoObj = {
@@ -560,6 +569,7 @@
           title,
           author,
           thumb,
+          sourceEngine: engineUsed,
           clips: generatedClips
         };
 
@@ -573,58 +583,98 @@
       } catch (err) {
         alert("Error: " + err.message);
       } finally {
-        btn.innerText = "⚡ Extract Viral Clips";
+        btn.innerText = "⚡ Analyze & Extract Clips";
         btn.disabled = false;
       }
     };
 
-    // GEMINI PROMPT (Zero timestamps in captions, real human tone, custom hashtags applied)
+    // GEMINI PROMPT (STRICT SHORT-FORM VIRAL REASONING)
     async function generateGeminiMoments(apiKey, title, author, videoUrl, camp) {
-      try {
-        const prompt = `You are a professional social media manager writing authentic, human captions for short-form clips.
+      const creatorTag = "#" + author.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const prompt = `You are a top-tier viral clipping editor who runs high-converting TikTok and Reels accounts for creators like TJR, Alex Hormozi, and Steven Bartlett.
+
 Video Title: "${title}"
 Creator: "${author}"
-Campaign Specific Instructions: "${camp.instructions || 'Casual, punchy, human tone. No cringe, no timestamps, max 1 subtle emoji.'}"
-Campaign Required Hashtags: "${camp.hashtags || '#podcast #viral #growth'}"
+Campaign Directives: "${camp.instructions || 'Punchy, cold-open 1-liners. Sharp rules and contrast. No generic fluff.'}"
+Required Campaign Hashtags: "${camp.hashtags || '#money #trading #finance'}"
 
-Task:
-Generate 25 to 30 high-retention video moments (30 to 60s each).
-IMPORTANT CAPTION RULES:
-1. DO NOT mention timestamps in the description (NEVER write "at 00:25" or anything like that).
-2. Write like a real human who actually watched the video. No cheesy robotic phrases like "Major lesson on Teaching from TJR!".
-3. Use at most ONE subtle emoji or zero emojis.
-4. Include the campaign hashtags naturally.
+TASK:
+Identify 25-30 distinct viral clips (30 to 60 seconds each) across the timeline.
+
+RULES FOR TITLES & CAPTIONS:
+1. BANNED: Never write "This changed how I think", "Major lesson on", "Key insight from", or mention timestamps ("at 00:25").
+2. REQUIRED STYLE: Write authentic, punchy cold opens and counter-intuitive rules. Examples:
+   - "Before you earn, learn how to spend."
+   - "The easiest way to lose $10,000 in your 20s."
+   - "Why saving money is actually keeping you broke."
+3. HASHTAGS: Combine the creator tag (${creatorTag}), the required campaign hashtags, and 2-3 specific viral keywords. Max 6 hashtags total.
+4. EMOJIS: Maximum 1 subtle emoji, or none.
 
 Return ONLY a valid JSON array of objects with keys:
-"id" (num), "title" (catchy hook), "score" (82-99), "start" (MM:SS), "end" (MM:SS), "tag" (e.g. "Key Insight", "Counter-intuitive"), "tiktokCaption", "igCaption".
-Output pure JSON only without markdown formatting.`;
+"id" (num), "title" (viral hook title), "score" (84-99), "start" (MM:SS or HH:MM:SS), "end" (MM:SS or HH:MM:SS), "tag" (e.g. "Hard Truth", "Money Rule"), "tiktokCaption", "igCaption".`;
 
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
-        const data = await res.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
-        const parsed = JSON.parse(cleaned);
-        return parsed.map((c, i) => ({ ...c, selected: i < 3 }));
-      } catch (e) {
-        return generateIntelligentMoments(title, author, camp);
+      // Try gemini-2.0-flash first, fallback to gemini-1.5-flash
+      const models = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+      let lastErr = null;
+
+      for (const m of models) {
+        try {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: {
+                response_mime_type: "application/json"
+              }
+            })
+          });
+
+          if (!res.ok) {
+            const errData = await res.json();
+            throw new Error(errData.error?.message || `HTTP ${res.status}`);
+          }
+
+          const data = await res.json();
+          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          const parsed = JSON.parse(text);
+          return parsed.map((c, i) => ({ ...c, selected: i < 3 }));
+        } catch (err) {
+          lastErr = err;
+          continue;
+        }
       }
+      throw lastErr;
     }
 
-    // HUMAN-LIKE FALLBACK GENERATOR (No robotic timestamps, no emoji overload)
+    // HIGH-LEVEL SMART FALLBACK (REALISTIC VIRAL HOOKS)
     function generateIntelligentMoments(title, author, camp) {
       const cleanTitle = title.replace(/[^\w\s]/gi, '');
       const words = cleanTitle.split(' ').filter(w => w.length > 3);
-      const topic = words[0] || "Consistency";
-      const tags = ["Core Principle", "Perspective Shift", "Honest Breakdown", "Debated Point", "The Real Process"];
-      const customTags = camp.hashtags ? camp.hashtags.trim() : "#podcast #mindset #growth";
+      const topic = words[0] || "Money";
+      const topic2 = words[1] || "Spending";
+      
+      const creatorTag = "#" + author.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const customTags = camp.hashtags ? camp.hashtags.trim() : "#money #discipline #finance";
+      const combinedTags = `${creatorTag} ${customTags}`.replace(/\s+/g, ' ');
 
+      const tags = ["Hard Truth", "The Golden Rule", "Paradox", "Mindset Trap", "Execution", "Unfiltered"];
       const generated = [];
+
+      // High-retention authentic hooks instead of templates
+      const humanHooks = [
+        `Before you earn, learn how to spend.`,
+        `The easiest way to lose everything in your 20s.`,
+        `Why working harder is the wrong approach to ${topic.toLowerCase()}.`,
+        `The one rule about ${topic2.toLowerCase()} nobody follows until it's too late.`,
+        `Stop saving money like a broke person.`,
+        `The uncomfortable truth about making real money.`,
+        `What you actually need to cut out before trying to scale.`,
+        `The difference between looking wealthy and actually having leverage.`
+      ];
+
       for (let i = 0; i < 25; i++) {
-        const startSec = 20 + (i * 180);
+        const startSec = 20 + (i * 170);
         const endSec = startSec + 40;
         const fmt = s => {
           const hrs = Math.floor(s / 3600);
@@ -634,25 +684,17 @@ Output pure JSON only without markdown formatting.`;
           return `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
         };
 
-        // Real human-written style hooks
-        const humanHooks = [
-          `Most people get this completely wrong about ${topic.toLowerCase()}. Here's the realistic approach from ${author}.`,
-          `This completely changed how I think about ${topic.toLowerCase()}.`,
-          `The hard truth about ${topic.toLowerCase()} nobody wants to admit.`,
-          `If you only take one piece of advice from ${author}, make it this one.`,
-          `Why conventional wisdom about ${topic.toLowerCase()} usually fails in practice.`
-        ];
         const chosenHook = humanHooks[i % humanHooks.length];
 
         generated.push({
           id: i + 1,
-          title: i === 0 ? `The Truth About ${topic}` : `${tags[i % tags.length]}: Part ${i+1}`,
-          score: Math.floor(82 + Math.random() * 17),
+          title: chosenHook,
+          score: Math.floor(84 + Math.random() * 15),
           start: fmt(startSec),
           end: fmt(endSec),
           tag: tags[i % tags.length],
-          tiktokCaption: `${chosenHook}\n\n${customTags}`,
-          igCaption: `${chosenHook}\n\nSave this if you needed to hear it today.\n\n${customTags}`,
+          tiktokCaption: `${chosenHook}\n\n${combinedTags}`,
+          igCaption: `${chosenHook}\n\n${combinedTags}`,
           selected: i < 3
         });
       }
@@ -757,7 +799,7 @@ Output pure JSON only without markdown formatting.`;
       dock.classList.remove('hidden');
     };
 
-    // CLIP-BY-CLIP CONTINUOUS PROGRESS DOWNLOAD ENGINE
+    // Download Engine
     document.getElementById('btnStartDownload').onclick = async () => {
       if (!currentVideoData) return;
       const chosen = currentVideoData.clips.filter(c => c.selected);
@@ -784,7 +826,6 @@ Output pure JSON only without markdown formatting.`;
       dockSpinner.className = "w-3 h-3 rounded-full bg-[#00F0FF] animate-ping shrink-0";
       bar.className = "h-full bg-gradient-to-r from-[#00F0FF] to-[#0077B6] rounded-full transition-all duration-300";
 
-      // Dynamic clip-by-clip progress tracking
       let currentProgress = 5;
       const totalClips = chosen.length;
       let activeClipNum = 1;
@@ -797,11 +838,8 @@ Output pure JSON only without markdown formatting.`;
       dockStatus.innerText = `Starting runner...`;
 
       if (renderSimulationTimer) clearInterval(renderSimulationTimer);
-      
-      // Each clip gets an equal segment of progress between 15% and 94%
       renderSimulationTimer = setInterval(() => {
         if (currentProgress < 96) {
-          // Smooth increment without stalling at 91%
           currentProgress += (currentProgress < 20 ? 3.0 : currentProgress < 85 ? 1.4 : 0.4);
           const pVal = Math.round(Math.min(96, currentProgress));
           const pStr = pVal + '%';
@@ -812,10 +850,9 @@ Output pure JSON only without markdown formatting.`;
           dockPct.innerText = pStr;
 
           if (currentProgress < 18) {
-            msg.innerText = "Initializing cloud environment...";
-            dockStatus.innerText = "Initializing...";
+            msg.innerText = "Downloading video stream...";
+            dockStatus.innerText = "Downloading video...";
           } else {
-            // Calculate which clip is currently being downloaded/transcoded
             const progressSpan = 96 - 18;
             const clipChunk = progressSpan / totalClips;
             activeClipNum = Math.min(totalClips, Math.floor((currentProgress - 18) / clipChunk) + 1);
