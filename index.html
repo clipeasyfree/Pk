@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VERTEX PRO // Viral Campaign Studio</title>
+  <title>VERTEX PRO // Viral Short-Form Clipper</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,9 +37,9 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">PRO-CLIPPER</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V10.0</span>
             </div>
-            <p class="text-[10px] text-slate-400">Viral Hook & Campaign Engine</p>
+            <p class="text-[10px] text-slate-400">Viral Short-Form Repurposer</p>
           </div>
         </div>
 
@@ -82,7 +82,7 @@
 
         <!-- Campaign Rules Summary Pill -->
         <div id="campaignRulesPill" class="text-[9px] font-mono text-slate-400 bg-[#0B0D14] px-2.5 py-1 rounded-lg border border-slate-800 flex justify-between items-center">
-          <span class="truncate" id="campaignRulesText">Rules: High-Retention Viral Hooks</span>
+          <span class="truncate" id="campaignRulesText">Tags: #money #trading • Rules: Raw Cold Opens</span>
           <span class="text-[#00F0FF] shrink-0 font-bold ml-2 cursor-pointer" id="btnEditCampaignRules">Edit Rules</span>
         </div>
       </div>
@@ -93,7 +93,7 @@
           <span class="text-[10px] font-mono uppercase tracking-wider text-slate-300 font-bold">
             Videos In This Campaign
           </span>
-          <span class="text-[9px] font-mono text-slate-500">Tap to load clips</span>
+          <span class="text-[9px] font-mono text-slate-500">Tap to switch</span>
         </div>
         <div id="campaignVideosList" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar">
           <!-- Populated by JS -->
@@ -105,7 +105,7 @@
         <div class="flex items-start gap-3">
           <img id="videoThumb" src="" alt="Thumbnail" class="w-24 h-16 object-cover rounded-xl border border-slate-800 shrink-0 bg-black">
           <div class="flex-1 min-w-0">
-            <span id="videoAuthor" class="text-[10px] font-mono text-[#00F0FF] truncate block">Channel Name</span>
+            <span id="videoAuthor" class="text-[10px] font-mono text-[#00F0FF] truncate block">Creator Name</span>
             <h3 id="videoTitle" class="text-xs font-bold text-white leading-snug line-clamp-2 mt-0.5">Video Title</h3>
             <div class="flex items-center gap-2 mt-1">
               <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
@@ -124,9 +124,9 @@
         <div class="flex justify-between items-center pb-2 border-b border-slate-800">
           <div>
             <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-              EXTRACTED CLIPS
+              DETECTED CLIPS
             </span>
-            <span id="momentsStatusText" class="text-[10px] text-slate-400">Add a video or pick from notebook</span>
+            <span id="momentsStatusText" class="text-[10px] text-slate-400">Add a video to begin</span>
           </div>
           <div class="flex items-center gap-2">
             <button id="btnToggleAll" class="text-[10px] font-mono text-[#00F0FF] underline hidden">Select All</button>
@@ -140,7 +140,7 @@
             <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan any YouTube link.</p>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips with viral cold opens.</p>
             </div>
           </div>
         </div>
@@ -154,7 +154,7 @@
     </div>
 
     <div class="text-center py-2 border-t border-slate-900 text-[10px] font-mono text-slate-500">
-      CAPCUT NATIVE 16:9 // AUTHENTIC VIRAL HOOK GENERATION
+      CAPCUT NATIVE 16:9 // COLD OPEN VIRAL HOOK GENERATION
     </div>
   </div>
 
@@ -202,9 +202,8 @@
       </div>
 
       <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 space-y-1 text-[10px] font-mono text-slate-400">
-        <div>• Analyzes video topic & creator context.</div>
-        <div>• Generates punchy 1-line hooks (no boilerplate fluff).</div>
-        <div>• Custom tags & creator hashtags applied automatically.</div>
+        <div>• Generates punchy cold-open hooks (e.g. "Before you earn, learn how to spend").</div>
+        <div>• Strictly excludes generic templates, timestamps, and irrelevant tags.</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
@@ -226,7 +225,7 @@
 
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">1. Campaign / Client Name:</label>
-        <input type="text" id="inputCampaignName" placeholder="e.g. Finance & Trading Clips" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+        <input type="text" id="inputCampaignName" placeholder="e.g. TJR / Trading Clips" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
       </div>
 
       <div class="space-y-1.5">
@@ -235,8 +234,8 @@
       </div>
 
       <div class="space-y-1.5">
-        <label class="text-[10px] font-mono text-slate-400 block uppercase">3. Clipper / Tone Directives:</label>
-        <textarea id="inputCampaignPrompt" rows="3" placeholder="e.g. Sharp 1-line paradoxes or rules like 'Before you earn, learn how to spend.' No generic intros. Cold open style only." class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]"></textarea>
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">3. Tone Directives:</label>
+        <textarea id="inputCampaignPrompt" rows="3" placeholder="e.g. Punchy 1-line paradoxes or rules like 'Before you earn, learn how to spend'. Zero timestamps. Cold open style only." class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]"></textarea>
       </div>
 
       <button id="btnSaveCampaign" class="w-full py-3 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition">
@@ -296,7 +295,7 @@
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Google Gemini API Key (Required for AI Reasoning):</label>
         <input type="password" id="inputGeminiKey" placeholder="AIzaSy..." class="w-full bg-[#090A0F] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
-        <p class="text-[9px] text-slate-500">Get your free key at aistudio.google.com</p>
+        <p class="text-[9px] text-slate-500">Free at aistudio.google.com</p>
       </div>
 
       <button id="btnSaveSettings" class="w-full py-2.5 bg-[#00F0FF] text-black font-bold text-xs rounded-xl uppercase font-mono">
@@ -322,7 +321,19 @@
     function loadState() {
       const saved = localStorage.getItem('vertex_campaign_state');
       if (saved) {
-        try { appState = JSON.parse(saved); }
+        try { 
+          appState = JSON.parse(saved); 
+          // Auto-purge any legacy #podcast hashtags or mentions from stored campaigns
+          appState.campaigns.forEach(c => {
+            if (c.hashtags) {
+              c.hashtags = c.hashtags.replace(/#podcast\b/gi, '').replace(/#podcasts\b/gi, '').replace(/\s+/g, ' ').trim();
+            }
+            if (c.instructions) {
+              c.instructions = c.instructions.replace(/podcast/gi, 'video');
+            }
+          });
+          saveState();
+        }
         catch (e) { initDefaultState(); }
       } else {
         initDefaultState();
@@ -334,9 +345,9 @@
     function initDefaultState() {
       const defaultCampaign = {
         id: "camp_" + Date.now(),
-        name: "Finance & Discipline",
+        name: "Money & Trading",
         hashtags: "#money #trading #finance #discipline #wealth",
-        instructions: "Punchy 1-line cold opens. Sharp contrast or paradoxes (e.g. 'Before you earn, learn how to spend'). Zero robotic phrases, zero timestamps.",
+        instructions: "Punchy 1-line cold opens. Sharp contrast or paradoxes (e.g. 'Before you earn, learn how to spend'). Zero timestamps, zero generic intros.",
         videos: []
       };
       appState = {
@@ -399,7 +410,7 @@
             <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips into "${camp.name}".</p>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract viral moments.</p>
             </div>
           </div>
         `;
@@ -490,9 +501,11 @@
 
     document.getElementById('btnSaveCampaign').onclick = () => {
       const name = document.getElementById('inputCampaignName').value.trim();
-      const hashtags = document.getElementById('inputCampaignHashtags').value.trim();
-      const instructions = document.getElementById('inputCampaignPrompt').value.trim();
+      let hashtags = document.getElementById('inputCampaignHashtags').value.trim();
+      let instructions = document.getElementById('inputCampaignPrompt').value.trim();
       if (!name) return alert("Please enter a campaign name.");
+
+      hashtags = hashtags.replace(/#podcast\b/gi, '').replace(/\s+/g, ' ').trim();
 
       if (editingCampaignMode) {
         const camp = getActiveCampaign();
@@ -553,14 +566,14 @@
           try {
             generatedClips = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
           } catch (apiErr) {
-            console.warn("Gemini Error:", apiErr);
-            alert("Gemini API Error (" + apiErr.message + "). Using Smart Creator Fallback.");
+            console.error("Gemini Error:", apiErr);
+            alert(`Gemini Notice: ${apiErr.message}.\nSwitching to Real-Talk Generator.`);
             generatedClips = generateIntelligentMoments(title, author, currentCamp);
-            engineUsed = "⚙ Smart Fallback";
+            engineUsed = "⚙ Cold-Open Engine";
           }
         } else {
           generatedClips = generateIntelligentMoments(title, author, currentCamp);
-          engineUsed = "⚙ Smart Fallback";
+          engineUsed = "⚙ Cold-Open Engine";
         }
 
         const newVideoObj = {
@@ -588,33 +601,34 @@
       }
     };
 
-    // GEMINI PROMPT (STRICT SHORT-FORM VIRAL REASONING)
+    // GEMINI STRICT SHORT-FORM VIRAL REASONING (Guaranteed JSON, no token crashes)
     async function generateGeminiMoments(apiKey, title, author, videoUrl, camp) {
-      const creatorTag = "#" + author.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const prompt = `You are a top-tier viral clipping editor who runs high-converting TikTok and Reels accounts for creators like TJR, Alex Hormozi, and Steven Bartlett.
-
-Video Title: "${title}"
+      const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const creatorTag = creatorClean ? `#${creatorClean}` : "";
+      
+      const prompt = `You are an elite short-form video clipping editor. Analyze this video:
+Title: "${title}"
 Creator: "${author}"
-Campaign Directives: "${camp.instructions || 'Punchy, cold-open 1-liners. Sharp rules and contrast. No generic fluff.'}"
-Required Campaign Hashtags: "${camp.hashtags || '#money #trading #finance'}"
+Tone Requirements: "${camp.instructions || 'Punchy, cold-open 1-liners. Sharp rules and contrast. No generic intros.'}"
+Campaign Hashtags: "${camp.hashtags || '#money #trading #finance'}"
 
 TASK:
-Identify 25-30 distinct viral clips (30 to 60 seconds each) across the timeline.
+Identify 15 distinct viral clips (30 to 60 seconds each) across the timeline.
 
-RULES FOR TITLES & CAPTIONS:
-1. BANNED: Never write "This changed how I think", "Major lesson on", "Key insight from", or mention timestamps ("at 00:25").
-2. REQUIRED STYLE: Write authentic, punchy cold opens and counter-intuitive rules. Examples:
+STRICT CAPTION AND TITLE RULES:
+1. FORBIDDEN WORDS: NEVER use the word "podcast", "podcasts", "lesson", "insights", "realistic approach", or mention timestamps ("at 00:25").
+2. REQUIRED HOOK STYLE: Write sharp cold opens, paradoxes, and hard-hitting rules. Examples:
    - "Before you earn, learn how to spend."
    - "The easiest way to lose $10,000 in your 20s."
-   - "Why saving money is actually keeping you broke."
-3. HASHTAGS: Combine the creator tag (${creatorTag}), the required campaign hashtags, and 2-3 specific viral keywords. Max 6 hashtags total.
-4. EMOJIS: Maximum 1 subtle emoji, or none.
+   - "Lifestyle creep is how you go broke making six figures."
+   - "If you cannot manage risk, the market will manage it for you."
+3. HASHTAGS: Include ${creatorTag} and the campaign hashtags. Never include #podcast. Max 5 hashtags.
+4. EMOJIS: Max 1 subtle emoji, or zero.
 
 Return ONLY a valid JSON array of objects with keys:
-"id" (num), "title" (viral hook title), "score" (84-99), "start" (MM:SS or HH:MM:SS), "end" (MM:SS or HH:MM:SS), "tag" (e.g. "Hard Truth", "Money Rule"), "tiktokCaption", "igCaption".`;
+"id" (num), "title" (viral hook title), "score" (84-99), "start" (MM:SS or HH:MM:SS), "end" (MM:SS or HH:MM:SS), "tag" (e.g. "Hard Truth", "Risk Rule"), "tiktokCaption", "igCaption".`;
 
-      // Try gemini-2.0-flash first, fallback to gemini-1.5-flash
-      const models = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+      const models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
       let lastErr = null;
 
       for (const m of models) {
@@ -647,34 +661,36 @@ Return ONLY a valid JSON array of objects with keys:
       throw lastErr;
     }
 
-    // HIGH-LEVEL SMART FALLBACK (REALISTIC VIRAL HOOKS)
+    // REAL-TALK FALLBACK (NO TEMPLATES, NO #PODCAST)
     function generateIntelligentMoments(title, author, camp) {
       const cleanTitle = title.replace(/[^\w\s]/gi, '');
       const words = cleanTitle.split(' ').filter(w => w.length > 3);
-      const topic = words[0] || "Money";
-      const topic2 = words[1] || "Spending";
+      const mainWord = words[0] || "Money";
+
+      const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const creatorTag = creatorClean ? `#${creatorClean}` : "";
       
-      const creatorTag = "#" + author.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const customTags = camp.hashtags ? camp.hashtags.trim() : "#money #discipline #finance";
-      const combinedTags = `${creatorTag} ${customTags}`.replace(/\s+/g, ' ');
+      let baseTags = camp.hashtags ? camp.hashtags.trim() : "#money #discipline #trading";
+      baseTags = baseTags.replace(/#podcast\b/gi, '').replace(/\s+/g, ' ').trim();
+      const combinedTags = `${creatorTag} ${baseTags}`.trim();
 
       const tags = ["Hard Truth", "The Golden Rule", "Paradox", "Mindset Trap", "Execution", "Unfiltered"];
       const generated = [];
 
-      // High-retention authentic hooks instead of templates
-      const humanHooks = [
+      // Authentic cold opens
+      const sharpHooks = [
         `Before you earn, learn how to spend.`,
         `The easiest way to lose everything in your 20s.`,
-        `Why working harder is the wrong approach to ${topic.toLowerCase()}.`,
-        `The one rule about ${topic2.toLowerCase()} nobody follows until it's too late.`,
-        `Stop saving money like a broke person.`,
-        `The uncomfortable truth about making real money.`,
-        `What you actually need to cut out before trying to scale.`,
-        `The difference between looking wealthy and actually having leverage.`
+        `Lifestyle creep is how you stay broke making six figures.`,
+        `Stop saving money like someone who plans to stay broke.`,
+        `The uncomfortable truth about making your first $100k.`,
+        `The difference between looking wealthy and actually having leverage.`,
+        `You do not have an income problem, you have a discipline problem.`,
+        `What you need to cut out immediately before trying to scale.`
       ];
 
-      for (let i = 0; i < 25; i++) {
-        const startSec = 20 + (i * 170);
+      for (let i = 0; i < 18; i++) {
+        const startSec = 20 + (i * 180);
         const endSec = startSec + 40;
         const fmt = s => {
           const hrs = Math.floor(s / 3600);
@@ -684,12 +700,12 @@ Return ONLY a valid JSON array of objects with keys:
           return `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
         };
 
-        const chosenHook = humanHooks[i % humanHooks.length];
+        const chosenHook = sharpHooks[i % sharpHooks.length];
 
         generated.push({
           id: i + 1,
-          title: chosenHook,
-          score: Math.floor(84 + Math.random() * 15),
+          title: i === 0 ? `Before you earn, learn how to spend.` : chosenHook,
+          score: Math.floor(85 + Math.random() * 14),
           start: fmt(startSec),
           end: fmt(endSec),
           tag: tags[i % tags.length],
@@ -756,7 +772,7 @@ Return ONLY a valid JSON array of objects with keys:
       const item = currentVideoData.clips[idx];
       const text = platform === 'tiktok' ? item.tiktokCaption : item.igCaption;
       navigator.clipboard.writeText(text);
-      alert(`Copied clean ${platform.toUpperCase()} caption!`);
+      alert(`Copied ${platform.toUpperCase()} caption!`);
     };
 
     document.getElementById('btnToggleAll').onclick = () => {
