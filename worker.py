@@ -4,7 +4,7 @@ import glob
 import json
 import subprocess
 
-print("[*] Initializing Ultra-Fast Video Slicer...")
+print("[*] Initializing Studio-Grade Master Slicer (Maximum Quality)...")
 
 # 1. Setup Cookies
 cookies_path = None
@@ -52,48 +52,61 @@ for f in glob.glob("output/*"):
     try: os.remove(f)
     except: pass
 
-# 3. Process Clips with Ultrafast Transcoding
-for clip_item in clips:
-    cid = clip_item.get('id', 1)
-    start = clip_item.get('start', '00:04')
-    end = clip_item.get('end', '00:35')
+# 3. Download Pristine Master Stream (Uncapped Resolution: 4K / 1440p / 1080p60)
+master_file = "temp/master_video.mp4"
+print("\n[*] Fetching highest available source stream from YouTube...")
+
+cmd_dl = [
+    "yt-dlp",
+    "--remote-components", "ejs:github",
+    "--extractor-args", "youtube:player_client=default,web_embedded",
+    "-f", "bestvideo+bestaudio/best",
+    "--merge-output-format", "mp4",
+    "--no-check-certificates"
+]
+if cookies_path and os.path.exists(cookies_path):
+    cmd_dl.extend(["--cookies", cookies_path])
+cmd_dl.extend([url, "-o", master_file])
+
+subprocess.run(cmd_dl, check=True)
+
+if not os.path.exists(master_file):
+    matches = glob.glob("temp/master_video.*")
+    if matches:
+        master_file = matches[0]
+    else:
+        raise FileNotFoundError("Master video download failed.")
+
+print(f"[✓] Pristine master stream captured: {master_file}")
+
+# 4. Slicing with Visually Lossless Mastering Settings
+print(f"\n[*] Slicing {len(clips)} clips at maximum quality (CRF 16, 320k AAC, High Profile)...")
+
+for idx, clip_item in enumerate(clips, start=1):
+    cid = clip_item.get('id', idx)
+    start = clip_item.get('start', '00:00')
+    end = clip_item.get('end', '00:30')
     clean_label = clip_item.get('label', f'clip_{cid}').replace(' ', '_').replace(':', '')
 
-    dl_output = f"temp/raw_{cid}.%(ext)s"
     out_mp4 = f"output/clip_{cid}_{clean_label}.mp4"
+    print(f"[{idx}/{len(clips)}] Mastering {start} -> {end}: {out_mp4}")
 
-    print(f"\n[*] Slicing Clip #{cid} ({start} -> {end})...")
-
-    cmd_dl = [
-        "yt-dlp",
-        "--remote-components", "ejs:github",
-        "--extractor-args", "youtube:player_client=default,web_embedded",
-        "--download-sections", f"*{start}-{end}",
-        "-f", "bv*[vcodec^=avc1][height<=1080]+ba[acodec^=mp4a]/bv*[height<=1080]+ba/b[height<=1080]/best",
-        "--merge-output-format", "mp4",
-        "--force-keyframes-at-cuts",
-        "--no-check-certificates"
-    ]
-    if cookies_path and os.path.exists(cookies_path):
-        cmd_dl.extend(["--cookies", cookies_path])
-    cmd_dl.extend([url, "-o", dl_output])
-    subprocess.run(cmd_dl, check=True)
-
-    downloaded = [f for f in glob.glob(f"temp/raw_{cid}.*") if not f.endswith(".part") and not f.endswith(".ytdl")]
-    if not downloaded:
-        raise FileNotFoundError(f"Could not find download file for clip {cid}")
-    source_video = downloaded[0]
-
-    # Ultrafast CapCut H.264 remux with faststart headers
-    cmd_render = [
-        "ffmpeg", "-y", "-i", source_video,
-        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
+    cmd_slice = [
+        "ffmpeg", "-y",
+        "-ss", start,
+        "-to", end,
+        "-i", master_file,
+        "-c:v", "libx264",
+        "-preset", "slow",
+        "-crf", "16",
+        "-profile:v", "high",
+        "-level", "4.2",
         "-pix_fmt", "yuv420p",
-        "-c:a", "aac", "-b:a", "160k",
+        "-c:a", "aac",
+        "-b:a", "320k",
         "-movflags", "+faststart",
         out_mp4
     ]
-    subprocess.run(cmd_render, check=True)
-    print(f"[✓] Finished: {out_mp4}")
+    subprocess.run(cmd_slice, check=True)
 
-print("\n[*] All clips processed successfully!")
+print(f"\n[✓] All {len(clips)} studio-master clips encoded successfully!")
