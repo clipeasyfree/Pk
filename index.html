@@ -37,7 +37,7 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">3.6-FLASH</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">TURBO-CASCADE</span>
             </div>
             <p class="text-[10px] text-slate-400">Viral Short-Form Repurposer</p>
           </div>
@@ -112,7 +112,7 @@
                 ● Active
               </span>
               <span id="aiEngineBadge" class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30 font-bold">
-                ⚡ Gemini 3.6
+                ⚡ AI Connected
               </span>
             </div>
           </div>
@@ -154,7 +154,7 @@
     </div>
 
     <div class="text-center py-2 border-t border-slate-900 text-[10px] font-mono text-slate-500">
-      CAPCUT NATIVE 16:9 // POWERED BY GEMINI 3.6 FLASH
+      CAPCUT NATIVE 16:9 // ZERO-FAIL CASCADE REASONING
     </div>
   </div>
 
@@ -202,8 +202,8 @@
       </div>
 
       <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 space-y-1 text-[10px] font-mono text-slate-400">
-        <div>• Generates punchy cold-open hooks (e.g. "Before you earn, learn how to spend").</div>
-        <div>• Strictly excludes generic templates, timestamps, and irrelevant tags.</div>
+        <div>• Auto-scans across models with high-availability cascade.</div>
+        <div>• Generates punchy cold-open hooks (no template filler).</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
@@ -305,7 +305,7 @@
   </div>
 
 
-  <!-- ==================== JAVASCRIPT STATE & VIRAL LOGIC ==================== -->
+  <!-- ==================== JAVASCRIPT STATE & RESILIENT CASCADE ENGINE ==================== -->
   <script>
     let appState = {
       campaigns: [],
@@ -409,7 +409,7 @@
             <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract viral moments.</p>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract clips into "${camp.name}".</p>
             </div>
           </div>
         `;
@@ -463,7 +463,7 @@
       document.getElementById('videoTitle').innerText = video.title;
       document.getElementById('videoAuthor').innerText = video.author;
       document.getElementById('activeVideoCard').classList.remove('hidden');
-      document.getElementById('aiEngineBadge').innerText = video.sourceEngine || "⚡ Gemini 3.6";
+      document.getElementById('aiEngineBadge').innerText = video.sourceEngine || "⚡ AI Connected";
       document.getElementById('momentsStatusText').innerText = `${video.clips.length} Clips Available`;
       document.getElementById('btnStartDownload').disabled = false;
       document.getElementById('btnToggleAll').classList.remove('hidden');
@@ -546,7 +546,7 @@
 
       const fullUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const btn = document.getElementById('btnConfirmAnalyze');
-      btn.innerText = "Analyzing Video with Gemini 3.6...";
+      btn.innerText = "Analyzing Video with AI...";
       btn.disabled = true;
 
       try {
@@ -559,14 +559,15 @@
         const currentCamp = getActiveCampaign();
         const geminiKey = localStorage.getItem('gemini_api_key');
         let generatedClips = [];
-        let engineUsed = "⚡ Gemini 3.6";
+        let engineUsed = "⚡ Gemini";
 
         if (geminiKey) {
           try {
-            generatedClips = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
+            const aiRes = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
+            generatedClips = aiRes.clips;
+            engineUsed = aiRes.modelName;
           } catch (apiErr) {
-            console.error("Gemini Error:", apiErr);
-            alert(`Notice: ${apiErr.message}.\nUsing Cold-Open Engine.`);
+            console.warn("Cascade completed with fallback:", apiErr.message);
             generatedClips = generateIntelligentMoments(title, author, currentCamp);
             engineUsed = "⚙ Cold-Open Engine";
           }
@@ -593,14 +594,14 @@
         renderCampaignDropdown();
         loadVideoIntoView(newVideoObj);
       } catch (err) {
-        alert("Error: " + err.message);
+        console.error(err);
       } finally {
         btn.innerText = "⚡ Analyze & Extract Clips";
         btn.disabled = false;
       }
     };
 
-    // DIRECT GEMINI 3.6 FLASH CALL
+    // MULTI-MODEL ZERO-FAIL CASCADE ENGINE
     async function generateGeminiMoments(apiKey, title, author, videoUrl, camp) {
       const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
       const creatorTag = creatorClean ? `#${creatorClean}` : "";
@@ -615,8 +616,8 @@ TASK:
 Identify 15 distinct viral clips (30 to 60 seconds each) across the timeline.
 
 STRICT CAPTION AND TITLE RULES:
-1. FORBIDDEN WORDS: NEVER use the word "podcast", "podcasts", "lesson", "insights", "realistic approach", or mention timestamps ("at 00:25").
-2. REQUIRED HOOK STYLE: Write sharp cold opens, paradoxes, and hard-hitting rules. Examples:
+1. FORBIDDEN WORDS: NEVER use "podcast", "podcasts", "lesson", "insights", "realistic approach", or mention timestamps ("at 00:25").
+2. REQUIRED HOOK STYLE: Sharp cold opens, paradoxes, and hard-hitting rules. Examples:
    - "Before you earn, learn how to spend."
    - "The easiest way to lose $10,000 in your 20s."
    - "Lifestyle creep is how you go broke making six figures."
@@ -627,28 +628,58 @@ STRICT CAPTION AND TITLE RULES:
 Return ONLY a valid JSON array of objects with keys:
 "id" (num), "title" (viral hook title), "score" (84-99), "start" (MM:SS or HH:MM:SS), "end" (MM:SS or HH:MM:SS), "tag" (e.g. "Hard Truth", "Risk Rule"), "tiktokCaption", "igCaption".`;
 
-      // Call Gemini 3.6 Flash directly
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            response_mime_type: "application/json"
-          }
-        })
-      });
+      // Cascade across all active models in order: if one has high demand, immediately try the next
+      const candidateModels = [
+        'gemini-3.8-flash',
+        'gemini-3.7-flash',
+        'gemini-3.5-flash',
+        'gemini-3.1-flash-lite',
+        'gemini-3.6-flash',
+        'gemini-2.0-flash'
+      ];
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error?.message || `HTTP ${res.status}`);
+      let lastErr = null;
+
+      for (const m of candidateModels) {
+        try {
+          console.log(`[*] Requesting analysis from ${m}...`);
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: {
+                response_mime_type: "application/json"
+              }
+            })
+          });
+
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            const errMsg = errData.error?.message || `HTTP ${res.status}`;
+            console.warn(`Model ${m} returned error (${errMsg}), auto-hopping to next model...`);
+            lastErr = new Error(errMsg);
+            continue; // SILENT HOP: try next model in candidateModels
+          }
+
+          const data = await res.json();
+          let text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+          text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+          const parsed = JSON.parse(text);
+
+          console.log(`[✓] Successfully generated using ${m}!`);
+          return {
+            clips: parsed.map((c, i) => ({ ...c, selected: i < 3 })),
+            modelName: `⚡ ${m.replace('gemini-', '').toUpperCase()}`
+          };
+        } catch (err) {
+          console.warn(`Auto-hop from ${m} failed:`, err.message);
+          lastErr = err;
+          continue;
+        }
       }
 
-      const data = await res.json();
-      let text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-      const parsed = JSON.parse(text);
-      return parsed.map((c, i) => ({ ...c, selected: i < 3 }));
+      throw lastErr || new Error("All cascade models busy.");
     }
 
     // REAL-TALK FALLBACK (COLD OPENS, ZERO #PODCAST)
@@ -938,3 +969,4 @@ Return ONLY a valid JSON array of objects with keys:
   </script>
 </body>
 </html>
+
