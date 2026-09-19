@@ -3,59 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VERTEX PRO // Viral Short-Form Clipper</title>
+  <title>VERTEX PRO // Glass Campaign Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #090A0F;
+      background-color: #06070B;
       color: #F1F5F9;
       -webkit-tap-highlight-color: transparent;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .card-titanium { background-color: #111420; border: 1px solid #1E2335; }
-    .card-titanium:hover { border-color: #2D354F; }
-    .item-dark { background-color: #161A29; border: 1px solid #232A3F; }
+
+    /* Glassmorphic Acrylic Containers */
+    .glass-panel {
+      background: rgba(17, 21, 37, 0.45);
+      backdrop-filter: blur(20px) saturate(190%);
+      -webkit-backdrop-filter: blur(20px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+    }
+    .glass-panel:hover {
+      border-color: rgba(0, 240, 255, 0.25);
+    }
+
+    /* Sub-elements & Cards */
+    .glass-item {
+      background: rgba(22, 28, 48, 0.4);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .glass-item:hover {
+      background: rgba(28, 36, 62, 0.55);
+      border-color: rgba(0, 240, 255, 0.2);
+    }
+
+    /* Floating Dock Glass */
+    .glass-dock {
+      background: rgba(11, 14, 25, 0.75);
+      backdrop-filter: blur(24px) saturate(200%);
+      -webkit-backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.65);
+    }
+
+    /* Modal Glass */
+    .glass-modal {
+      background: rgba(13, 16, 28, 0.85);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 16px 50px 0 rgba(0, 0, 0, 0.7);
+    }
+
+    /* Glowing Ambient Background Elements */
+    .ambient-glow-1 {
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, rgba(0, 114, 255, 0.05) 50%, transparent 75%);
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: 10%;
+      right: -80px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(112, 0, 255, 0.12) 0%, rgba(0, 240, 255, 0.04) 50%, transparent 80%);
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden select-none pb-24">
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden select-none pb-24 relative">
+
+  <!-- Ambient Light Blobs for Glass Refraction -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
 
   <!-- ==================== MAIN WORKSPACE ==================== -->
-  <div class="max-w-md mx-auto w-full min-h-screen p-4 flex flex-col justify-between">
+  <div class="max-w-md mx-auto w-full min-h-screen p-4 flex flex-col justify-between relative z-10">
     <div class="space-y-4 pt-2">
       
       <!-- Header -->
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-2.5">
-          <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#00F0FF] to-[#0072FF] text-black font-black text-sm flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.4)]">
+          <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#00F0FF] to-[#0072FF] text-black font-black text-sm flex items-center justify-center shadow-[0_0_25px_rgba(0,240,255,0.45)]">
             ◈
           </div>
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">TURBO-CASCADE</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">GLASS-UI</span>
             </div>
             <p class="text-[10px] text-slate-400">Viral Short-Form Repurposer</p>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <button id="btnOpenAddModal" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs flex items-center gap-1.5 shadow-[0_4px_15px_rgba(0,240,255,0.3)] active:scale-95 transition">
+          <button id="btnOpenAddModal" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs flex items-center gap-1.5 shadow-[0_4px_18px_rgba(0,240,255,0.35)] active:scale-95 transition">
             <span class="text-sm leading-none">+</span>
             <span>Add Video</span>
           </button>
-          <button id="btnSettingsHome" class="w-8 h-8 rounded-xl item-dark flex items-center justify-center text-xs text-slate-300">
+          <button id="btnSettingsHome" class="w-8 h-8 rounded-xl glass-item flex items-center justify-center text-xs text-slate-300">
             ⚙
           </button>
         </div>
       </div>
 
-      <!-- CAMPAIGN / NOTEBOOK SELECTOR & CONTROLS -->
-      <div class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl">
+      <!-- CAMPAIGN SELECTOR -->
+      <div class="glass-panel rounded-2xl p-3.5 space-y-2.5 shadow-xl">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold">
             ACTIVE CAMPAIGN
@@ -71,39 +140,36 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <select id="campaignSelect" class="flex-1 bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
-            <!-- Populated by JS -->
+          <select id="campaignSelect" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
           </select>
-          <button id="btnToggleHistoryDrawer" class="px-3 py-2 rounded-xl bg-[#161A29] border border-slate-700 text-xs font-mono text-slate-200 flex items-center gap-1.5">
+          <button id="btnToggleHistoryDrawer" class="px-3 py-2 rounded-xl glass-item text-xs font-mono text-slate-200 flex items-center gap-1.5">
             <span>📁</span>
             <span id="historyCountBadge">0 Videos</span>
           </button>
         </div>
 
-        <!-- Campaign Rules Summary Pill -->
-        <div id="campaignRulesPill" class="text-[9px] font-mono text-slate-400 bg-[#0B0D14] px-2.5 py-1 rounded-lg border border-slate-800 flex justify-between items-center">
-          <span class="truncate" id="campaignRulesText">Tags: #money #trading • Rules: Raw Cold Opens</span>
+        <div id="campaignRulesPill" class="text-[9px] font-mono text-slate-300 bg-black/30 px-2.5 py-1.5 rounded-lg border border-white/5 flex justify-between items-center">
+          <span class="truncate" id="campaignRulesText">Rules: Raw Cold Opens</span>
           <span class="text-[#00F0FF] shrink-0 font-bold ml-2 cursor-pointer" id="btnEditCampaignRules">Edit Rules</span>
         </div>
       </div>
 
       <!-- SAVED VIDEOS DRAWER -->
-      <div id="campaignHistoryDrawer" class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl hidden">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+      <div id="campaignHistoryDrawer" class="glass-panel rounded-2xl p-3.5 space-y-2.5 shadow-xl hidden">
+        <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
           <span class="text-[10px] font-mono uppercase tracking-wider text-slate-300 font-bold">
             Videos In This Campaign
           </span>
           <span class="text-[9px] font-mono text-slate-500">Tap to switch</span>
         </div>
         <div id="campaignVideosList" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar">
-          <!-- Populated by JS -->
         </div>
       </div>
 
       <!-- ACTIVE VIDEO CARD -->
-      <div id="activeVideoCard" class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl hidden">
+      <div id="activeVideoCard" class="glass-panel rounded-2xl p-3.5 space-y-2.5 shadow-xl hidden">
         <div class="flex items-start gap-3">
-          <img id="videoThumb" src="" alt="Thumbnail" class="w-24 h-16 object-cover rounded-xl border border-slate-800 shrink-0 bg-black">
+          <img id="videoThumb" src="" alt="Thumbnail" class="w-24 h-16 object-cover rounded-xl border border-white/10 shrink-0 bg-black">
           <div class="flex-1 min-w-0">
             <span id="videoAuthor" class="text-[10px] font-mono text-[#00F0FF] truncate block">Creator Name</span>
             <h3 id="videoTitle" class="text-xs font-bold text-white leading-snug line-clamp-2 mt-0.5">Video Title</h3>
@@ -120,8 +186,8 @@
       </div>
 
       <!-- VIRAL MOMENTS CATALOG -->
-      <div class="card-titanium rounded-2xl p-4 space-y-3 shadow-xl">
-        <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+      <div class="glass-panel rounded-2xl p-4 space-y-3 shadow-xl">
+        <div class="flex justify-between items-center pb-2 border-b border-white/10">
           <div>
             <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
               DETECTED CLIPS
@@ -130,37 +196,50 @@
           </div>
           <div class="flex items-center gap-2">
             <button id="btnToggleAll" class="text-[10px] font-mono text-[#00F0FF] underline hidden">Select All</button>
-            <span id="clipsCountBadge" class="text-xs font-mono font-bold text-[#00F0FF] bg-[#161A29] px-2 py-0.5 rounded border border-slate-700">0 Selected</span>
+            <span id="clipsCountBadge" class="text-xs font-mono font-bold text-[#00F0FF] glass-item px-2 py-0.5 rounded border border-white/10">0 Selected</span>
           </div>
         </div>
 
         <!-- Scrollable Moments List -->
-        <div id="viralClipsList" class="space-y-2.5 max-h-[380px] overflow-y-auto no-scrollbar pr-0.5">
+        <div id="viralClipsList" class="space-y-2.5 max-h-[340px] overflow-y-auto no-scrollbar pr-0.5">
           <div id="emptyStateBox" class="py-12 text-center space-y-3">
-            <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
+            <div class="w-12 h-12 mx-auto rounded-2xl glass-item flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips with viral cold opens.</p>
+              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips with viral cold opens.</p>
             </div>
           </div>
         </div>
 
+        <!-- QUALITY SELECTOR OPTION -->
+        <div class="bg-black/35 p-2.5 rounded-xl border border-white/5 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs">⚙</span>
+            <span class="text-[10px] font-mono uppercase text-slate-300 font-bold">Quality Profile:</span>
+          </div>
+          <select id="qualitySelect" class="glass-item border border-white/10 rounded-lg px-2.5 py-1 text-[11px] font-mono text-[#00F0FF] focus:outline-none">
+            <option value="balanced" selected>💎 Balanced HD (1080p • Recommended)</option>
+            <option value="fast">⚡ Turbo Mobile (720p • Smallest & Fastest)</option>
+            <option value="master">👑 Studio Master (1080p • CRF 16 Lossless)</option>
+          </select>
+        </div>
+
         <!-- Download Action Button -->
-        <button id="btnStartDownload" disabled class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_8px_25px_rgba(16,185,129,0.3)] active:scale-[0.98] transition disabled:opacity-40 disabled:pointer-events-none mt-2">
+        <button id="btnStartDownload" disabled class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_8px_25px_rgba(16,185,129,0.35)] active:scale-[0.98] transition disabled:opacity-40 disabled:pointer-events-none">
           <span>⬇ Download Selected Clips (.MP4)</span>
         </button>
       </div>
 
     </div>
 
-    <div class="text-center py-2 border-t border-slate-900 text-[10px] font-mono text-slate-500">
-      CAPCUT NATIVE 16:9 // ZERO-FAIL CASCADE REASONING
+    <div class="text-center py-2 border-t border-white/5 text-[10px] font-mono text-slate-500">
+      CAPCUT NATIVE 16:9 // FROSTED GLASS EDITING STUDIO
     </div>
   </div>
 
 
   <!-- ==================== PERSISTENT BOTTOM DOCK / PROGRESS BAR ==================== -->
-  <div id="bottomDockBar" class="fixed bottom-3 left-4 right-4 max-w-md mx-auto card-titanium p-3 rounded-2xl border border-[#00F0FF]/30 shadow-2xl z-40 hidden flex items-center justify-between gap-3">
+  <div id="bottomDockBar" class="fixed bottom-3 left-4 right-4 max-w-md mx-auto glass-dock p-3 rounded-2xl shadow-2xl z-40 hidden flex items-center justify-between gap-3">
     <div class="flex items-center gap-2.5 min-w-0 flex-1">
       <div id="dockSpinner" class="w-3 h-3 rounded-full bg-[#00F0FF] animate-ping shrink-0"></div>
       <div class="min-w-0 flex-1">
@@ -168,17 +247,17 @@
           <span id="dockStatusText" class="text-white truncate font-bold">Initializing...</span>
           <span id="dockPct" class="text-[#00F0FF] font-bold">5%</span>
         </div>
-        <div class="w-full bg-[#0B0D14] h-1.5 rounded-full overflow-hidden mt-1 border border-slate-800">
+        <div class="w-full bg-black/50 h-1.5 rounded-full overflow-hidden mt-1 border border-white/10">
           <div id="dockProgressBar" class="h-full bg-gradient-to-r from-[#00F0FF] to-emerald-400 transition-all duration-300" style="width: 5%;"></div>
         </div>
       </div>
     </div>
 
     <div class="flex items-center gap-1.5 shrink-0">
-      <a id="btnDockDirectDownload" href="#" target="_blank" class="hidden px-3 py-1.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-[11px] rounded-xl uppercase active:scale-95 transition">
+      <a id="btnDockDirectDownload" href="#" target="_blank" class="hidden px-3 py-1.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-[11px] rounded-xl uppercase active:scale-95 transition shadow-[0_2px_12px_rgba(16,185,129,0.4)]">
         ⬇ Download
       </a>
-      <button id="btnReopenModal" class="px-2.5 py-1.5 bg-[#161A29] hover:bg-[#202538] text-slate-300 font-mono text-[10px] rounded-xl border border-slate-700">
+      <button id="btnReopenModal" class="px-2.5 py-1.5 glass-item hover:bg-white/10 text-slate-300 font-mono text-[10px] rounded-xl">
         View
       </button>
     </div>
@@ -186,27 +265,27 @@
 
 
   <!-- ==================== MODAL: [+] ADD VIDEO ==================== -->
-  <div id="addVideoModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-    <div class="card-titanium rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+  <div id="addVideoModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-modal rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <h3 class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider flex items-center gap-1.5">
           <span>+</span>
           <span>Add Video to Campaign</span>
         </h3>
-        <button id="btnCloseAddModal" class="w-6 h-6 rounded-full bg-[#161A29] text-slate-400 text-xs flex items-center justify-center">✕</button>
+        <button id="btnCloseAddModal" class="w-6 h-6 rounded-full glass-item text-slate-400 text-xs flex items-center justify-center">✕</button>
       </div>
 
       <div class="space-y-2">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">YouTube Video Link:</label>
-        <input type="text" id="inputModalUrl" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
+        <input type="text" id="inputModalUrl" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
       </div>
 
-      <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 space-y-1 text-[10px] font-mono text-slate-400">
+      <div class="bg-black/30 p-3 rounded-xl border border-white/5 space-y-1 text-[10px] font-mono text-slate-400">
         <div>• Auto-scans across models with high-availability cascade.</div>
         <div>• Generates punchy cold-open hooks (no template filler).</div>
       </div>
 
-      <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
+      <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-[0_4px_20px_rgba(0,240,255,0.3)] active:scale-95 transition flex items-center justify-center gap-2">
         <span>⚡ Analyze & Extract Clips</span>
       </button>
     </div>
@@ -214,28 +293,28 @@
 
 
   <!-- ==================== MODAL: CREATE / EDIT CAMPAIGN ==================== -->
-  <div id="campaignModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-    <div class="card-titanium rounded-3xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+  <div id="campaignModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-modal rounded-3xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <h3 id="campaignModalTitle" class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider">
           Campaign Rules & Setup
         </h3>
-        <button id="btnCloseCampaignModal" class="w-6 h-6 rounded-full bg-[#161A29] text-slate-400 text-xs flex items-center justify-center">✕</button>
+        <button id="btnCloseCampaignModal" class="w-6 h-6 rounded-full glass-item text-slate-400 text-xs flex items-center justify-center">✕</button>
       </div>
 
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">1. Campaign / Client Name:</label>
-        <input type="text" id="inputCampaignName" placeholder="e.g. TJR / Trading Clips" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+        <input type="text" id="inputCampaignName" placeholder="e.g. TJR / Trading Clips" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
       </div>
 
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Required Campaign Hashtags:</label>
-        <input type="text" id="inputCampaignHashtags" placeholder="#money #trading #finance #discipline" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+        <input type="text" id="inputCampaignHashtags" placeholder="#money #trading #finance #discipline" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
       </div>
 
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">3. Tone Directives:</label>
-        <textarea id="inputCampaignPrompt" rows="3" placeholder="e.g. Punchy 1-line paradoxes or rules like 'Before you earn, learn how to spend'. Zero timestamps. Cold open style only." class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]"></textarea>
+        <textarea id="inputCampaignPrompt" rows="3" placeholder="e.g. Punchy 1-line paradoxes or rules like 'Before you earn, learn how to spend'. Zero timestamps. Cold open style only." class="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]"></textarea>
       </div>
 
       <button id="btnSaveCampaign" class="w-full py-3 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition">
@@ -246,8 +325,8 @@
 
 
   <!-- ==================== MAIN DOWNLOAD PROGRESS MODAL ==================== -->
-  <div id="exportModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="card-titanium rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
+  <div id="exportModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-modal rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
       <div class="w-12 h-12 mx-auto rounded-2xl bg-[#00F0FF]/15 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] text-xl">
         ◈
       </div>
@@ -259,7 +338,7 @@
         <p id="exportStatusMsg" class="text-xs text-slate-400 mt-1 font-mono">Initializing runner...</p>
       </div>
 
-      <div class="w-full bg-[#161A29] h-2.5 rounded-full overflow-hidden border border-slate-800 p-0.5">
+      <div class="w-full bg-black/50 h-2.5 rounded-full overflow-hidden border border-white/10 p-0.5">
         <div id="exportProgressBar" class="h-full bg-gradient-to-r from-[#00F0FF] to-[#0077B6] rounded-full transition-all duration-300" style="width: 5%;"></div>
       </div>
 
@@ -267,7 +346,7 @@
         <a id="btnDirectDownload" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition">
           <span>⬇ Download CapCut Clips (.ZIP)</span>
         </a>
-        <a id="btnGitHubRunBackup" href="#" target="_blank" class="w-full py-2 bg-[#161A29] hover:bg-[#202538] text-slate-300 font-mono text-[11px] rounded-xl flex items-center justify-center gap-1.5 border border-slate-700">
+        <a id="btnGitHubRunBackup" href="#" target="_blank" class="w-full py-2 glass-item hover:bg-white/10 text-slate-300 font-mono text-[11px] rounded-xl flex items-center justify-center gap-1.5 border border-white/10">
           <span>📁 View on GitHub Actions Run</span>
         </a>
       </div>
@@ -280,21 +359,21 @@
 
 
   <!-- ==================== ENGINE SETTINGS MODAL ==================== -->
-  <div id="tokenModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
-    <div class="card-titanium rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+  <div id="tokenModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-modal rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <h3 class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider">Engine Settings</h3>
-        <button id="btnCloseSettings" class="w-6 h-6 rounded-full bg-[#161A29] text-slate-400 text-xs flex items-center justify-center">✕</button>
+        <button id="btnCloseSettings" class="w-6 h-6 rounded-full glass-item text-slate-400 text-xs flex items-center justify-center">✕</button>
       </div>
 
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">1. GitHub Access Token (Required):</label>
-        <input type="password" id="inputGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-[#090A0F] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+        <input type="password" id="inputGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
       </div>
 
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Google Gemini API Key (Required for AI Reasoning):</label>
-        <input type="password" id="inputGeminiKey" placeholder="AIzaSy..." class="w-full bg-[#090A0F] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+        <input type="password" id="inputGeminiKey" placeholder="AIzaSy..." class="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
         <p class="text-[9px] text-slate-500">Free at aistudio.google.com</p>
       </div>
 
@@ -305,7 +384,7 @@
   </div>
 
 
-  <!-- ==================== JAVASCRIPT STATE & RESILIENT CASCADE ENGINE ==================== -->
+  <!-- ==================== JAVASCRIPT STATE & DISPATCH LOGIC ==================== -->
   <script>
     let appState = {
       campaigns: [],
@@ -406,10 +485,10 @@
         document.getElementById('activeVideoCard').classList.add('hidden');
         document.getElementById('viralClipsList').innerHTML = `
           <div id="emptyStateBox" class="py-12 text-center space-y-3">
-            <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
+            <div class="w-12 h-12 mx-auto rounded-2xl glass-item flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract clips into "${camp.name}".</p>
+              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to extract clips into "${camp.name}".</p>
             </div>
           </div>
         `;
@@ -431,7 +510,7 @@
       camp.videos.slice().reverse().forEach((v) => {
         const isCurrent = currentVideoData && currentVideoData.videoId === v.videoId;
         list.innerHTML += `
-          <div onclick="switchSavedVideo('${v.videoId}')" class="p-2 rounded-xl flex items-center justify-between gap-2.5 cursor-pointer transition ${isCurrent ? 'bg-[#1E253A] border border-[#00F0FF]/50' : 'bg-[#0B0D14] hover:bg-[#161A29] border border-slate-800'}">
+          <div onclick="switchSavedVideo('${v.videoId}')" class="p-2 rounded-xl flex items-center justify-between gap-2.5 cursor-pointer transition ${isCurrent ? 'bg-white/10 border border-[#00F0FF]/50' : 'bg-black/40 hover:bg-white/5 border border-white/5'}">
             <img src="${v.thumb}" class="w-12 h-8 rounded object-cover shrink-0 bg-black">
             <div class="flex-1 min-w-0">
               <div class="text-[11px] font-bold text-white truncate">${v.title}</div>
@@ -628,7 +707,6 @@ STRICT CAPTION AND TITLE RULES:
 Return ONLY a valid JSON array of objects with keys:
 "id" (num), "title" (viral hook title), "score" (84-99), "start" (MM:SS or HH:MM:SS), "end" (MM:SS or HH:MM:SS), "tag" (e.g. "Hard Truth", "Risk Rule"), "tiktokCaption", "igCaption".`;
 
-      // Cascade across all active models in order: if one has high demand, immediately try the next
       const candidateModels = [
         'gemini-3.8-flash',
         'gemini-3.7-flash',
@@ -642,7 +720,6 @@ Return ONLY a valid JSON array of objects with keys:
 
       for (const m of candidateModels) {
         try {
-          console.log(`[*] Requesting analysis from ${m}...`);
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -656,10 +733,8 @@ Return ONLY a valid JSON array of objects with keys:
 
           if (!res.ok) {
             const errData = await res.json().catch(() => ({}));
-            const errMsg = errData.error?.message || `HTTP ${res.status}`;
-            console.warn(`Model ${m} returned error (${errMsg}), auto-hopping to next model...`);
-            lastErr = new Error(errMsg);
-            continue; // SILENT HOP: try next model in candidateModels
+            lastErr = new Error(errData.error?.message || `HTTP ${res.status}`);
+            continue;
           }
 
           const data = await res.json();
@@ -667,13 +742,11 @@ Return ONLY a valid JSON array of objects with keys:
           text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
           const parsed = JSON.parse(text);
 
-          console.log(`[✓] Successfully generated using ${m}!`);
           return {
             clips: parsed.map((c, i) => ({ ...c, selected: i < 3 })),
             modelName: `⚡ ${m.replace('gemini-', '').toUpperCase()}`
           };
         } catch (err) {
-          console.warn(`Auto-hop from ${m} failed:`, err.message);
           lastErr = err;
           continue;
         }
@@ -682,12 +755,9 @@ Return ONLY a valid JSON array of objects with keys:
       throw lastErr || new Error("All cascade models busy.");
     }
 
-    // REAL-TALK FALLBACK (COLD OPENS, ZERO #PODCAST)
+    // REAL-TALK FALLBACK
     function generateIntelligentMoments(title, author, camp) {
       const cleanTitle = title.replace(/[^\w\s]/gi, '');
-      const words = cleanTitle.split(' ').filter(w => w.length > 3);
-      const mainWord = words[0] || "Money";
-
       const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
       const creatorTag = creatorClean ? `#${creatorClean}` : "";
       
@@ -737,7 +807,7 @@ Return ONLY a valid JSON array of objects with keys:
       return generated;
     }
 
-    // Render Clips List
+    // Render Clips List in Glass
     function renderClipsList() {
       const container = document.getElementById('viralClipsList');
       container.innerHTML = '';
@@ -747,7 +817,7 @@ Return ONLY a valid JSON array of objects with keys:
       currentVideoData.clips.forEach((c, idx) => {
         if (c.selected) count++;
         container.innerHTML += `
-          <div class="bg-[#161A29] p-3 rounded-2xl border border-slate-800 space-y-2">
+          <div class="glass-item p-3 rounded-2xl space-y-2 transition">
             <div class="flex items-start justify-between gap-2">
               <div class="flex items-center gap-2.5">
                 <input type="checkbox" id="chk_${idx}" ${c.selected ? 'checked' : ''} onchange="toggleClip(${idx}, this.checked)" class="w-4 h-4 accent-[#00F0FF] rounded cursor-pointer">
@@ -761,16 +831,16 @@ Return ONLY a valid JSON array of objects with keys:
               </span>
             </div>
 
-            <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 bg-[#0B0D14] px-2.5 py-1.5 rounded-xl">
+            <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 bg-black/40 px-2.5 py-1.5 rounded-xl border border-white/5">
               <span>Timestamp: <strong class="text-white">${c.start} ➔ ${c.end}</strong></span>
               <span class="text-[9px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">CapCut 16:9 Ready</span>
             </div>
 
             <div class="grid grid-cols-2 gap-2 pt-0.5">
-              <button onclick="copyMetadata(${idx}, 'tiktok')" class="py-1 px-2 bg-[#1F2436] hover:bg-[#2A314A] text-slate-300 text-[10px] font-mono rounded-lg flex items-center justify-center gap-1">
+              <button onclick="copyMetadata(${idx}, 'tiktok')" class="py-1 px-2 bg-white/5 hover:bg-white/10 text-slate-300 text-[10px] font-mono rounded-lg flex items-center justify-center gap-1 border border-white/5 transition">
                 <span>📋 Copy TikTok</span>
               </button>
-              <button onclick="copyMetadata(${idx}, 'ig')" class="py-1 px-2 bg-[#1F2436] hover:bg-[#2A314A] text-slate-300 text-[10px] font-mono rounded-lg flex items-center justify-center gap-1">
+              <button onclick="copyMetadata(${idx}, 'ig')" class="py-1 px-2 bg-white/5 hover:bg-white/10 text-slate-300 text-[10px] font-mono rounded-lg flex items-center justify-center gap-1 border border-white/5 transition">
                 <span>📋 Copy IG Reels</span>
               </button>
             </div>
@@ -835,7 +905,7 @@ Return ONLY a valid JSON array of objects with keys:
       dock.classList.remove('hidden');
     };
 
-    // Download Engine
+    // Download Engine with Selected Quality
     document.getElementById('btnStartDownload').onclick = async () => {
       if (!currentVideoData) return;
       const chosen = currentVideoData.clips.filter(c => c.selected);
@@ -846,6 +916,8 @@ Return ONLY a valid JSON array of objects with keys:
         document.getElementById('btnSettingsHome').click();
         return;
       }
+
+      const selectedQuality = document.getElementById('qualitySelect').value;
 
       const modal = document.getElementById('exportModal');
       const msg = document.getElementById('exportStatusMsg');
@@ -870,7 +942,7 @@ Return ONLY a valid JSON array of objects with keys:
       dockBar.style.width = '5%';
       pct.innerText = '5%';
       dockPct.innerText = '5%';
-      msg.innerText = `Starting runner for ${totalClips} clips...`;
+      msg.innerText = `Starting runner (${selectedQuality.toUpperCase()} profile)...`;
       dockStatus.innerText = `Starting runner...`;
 
       if (renderSimulationTimer) clearInterval(renderSimulationTimer);
@@ -886,8 +958,8 @@ Return ONLY a valid JSON array of objects with keys:
           dockPct.innerText = pStr;
 
           if (currentProgress < 18) {
-            msg.innerText = "Downloading video stream...";
-            dockStatus.innerText = "Downloading video...";
+            msg.innerText = "Downloading source stream...";
+            dockStatus.innerText = "Downloading source...";
           } else {
             const progressSpan = 96 - 18;
             const clipChunk = progressSpan / totalClips;
@@ -909,6 +981,7 @@ Return ONLY a valid JSON array of objects with keys:
             event_type: "start-render",
             client_payload: {
               action: "render",
+              quality: selectedQuality,
               url: currentVideoData.url,
               clips: chosen.map(c => ({
                 id: c.id,
@@ -937,7 +1010,7 @@ Return ONLY a valid JSON array of objects with keys:
               dockBar.style.width = '100%';
               pct.innerText = '100%';
               dockPct.innerText = '100%';
-              msg.innerText = `✓ All ${totalClips} clips downloaded & ready for CapCut!`;
+              msg.innerText = `✓ All ${totalClips} clips ready!`;
               dockStatus.innerText = "✓ Ready to download!";
               dockSpinner.className = "w-3 h-3 rounded-full bg-emerald-400 shrink-0";
 
@@ -969,4 +1042,3 @@ Return ONLY a valid JSON array of objects with keys:
   </script>
 </body>
 </html>
-
