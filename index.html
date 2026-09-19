@@ -37,7 +37,7 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V10.1</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">3.6-FLASH</span>
             </div>
             <p class="text-[10px] text-slate-400">Viral Short-Form Repurposer</p>
           </div>
@@ -112,7 +112,7 @@
                 ● Active
               </span>
               <span id="aiEngineBadge" class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30 font-bold">
-                ⚡ Gemini AI
+                ⚡ Gemini 3.6
               </span>
             </div>
           </div>
@@ -154,7 +154,7 @@
     </div>
 
     <div class="text-center py-2 border-t border-slate-900 text-[10px] font-mono text-slate-500">
-      CAPCUT NATIVE 16:9 // COLD OPEN VIRAL HOOK GENERATION
+      CAPCUT NATIVE 16:9 // POWERED BY GEMINI 3.6 FLASH
     </div>
   </div>
 
@@ -203,7 +203,7 @@
 
       <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 space-y-1 text-[10px] font-mono text-slate-400">
         <div>• Generates punchy cold-open hooks (e.g. "Before you earn, learn how to spend").</div>
-        <div>• Excludes generic templates, timestamps, and irrelevant tags.</div>
+        <div>• Strictly excludes generic templates, timestamps, and irrelevant tags.</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
@@ -305,7 +305,7 @@
   </div>
 
 
-  <!-- ==================== JAVASCRIPT STATE & DYNAMIC MODEL DISCOVERY ==================== -->
+  <!-- ==================== JAVASCRIPT STATE & VIRAL LOGIC ==================== -->
   <script>
     let appState = {
       campaigns: [],
@@ -409,7 +409,7 @@
             <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips into "${camp.name}".</p>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract viral moments.</p>
             </div>
           </div>
         `;
@@ -463,7 +463,7 @@
       document.getElementById('videoTitle').innerText = video.title;
       document.getElementById('videoAuthor').innerText = video.author;
       document.getElementById('activeVideoCard').classList.remove('hidden');
-      document.getElementById('aiEngineBadge').innerText = video.sourceEngine || "⚡ Gemini AI";
+      document.getElementById('aiEngineBadge').innerText = video.sourceEngine || "⚡ Gemini 3.6";
       document.getElementById('momentsStatusText').innerText = `${video.clips.length} Clips Available`;
       document.getElementById('btnStartDownload').disabled = false;
       document.getElementById('btnToggleAll').classList.remove('hidden');
@@ -546,7 +546,7 @@
 
       const fullUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const btn = document.getElementById('btnConfirmAnalyze');
-      btn.innerText = "Analyzing Video with AI...";
+      btn.innerText = "Analyzing Video with Gemini 3.6...";
       btn.disabled = true;
 
       try {
@@ -559,14 +559,14 @@
         const currentCamp = getActiveCampaign();
         const geminiKey = localStorage.getItem('gemini_api_key');
         let generatedClips = [];
-        let engineUsed = "⚡ Gemini AI";
+        let engineUsed = "⚡ Gemini 3.6";
 
         if (geminiKey) {
           try {
             generatedClips = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
           } catch (apiErr) {
             console.error("Gemini Error:", apiErr);
-            alert(`Gemini Notice: ${apiErr.message}.\nUsing Cold-Open Engine.`);
+            alert(`Notice: ${apiErr.message}.\nUsing Cold-Open Engine.`);
             generatedClips = generateIntelligentMoments(title, author, currentCamp);
             engineUsed = "⚙ Cold-Open Engine";
           }
@@ -600,31 +600,7 @@
       }
     };
 
-    // DYNAMIC MODEL DISCOVERY: Queries Google's ListModels directly
-    async function getActiveGeminiModel(apiKey) {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error?.message || "Invalid API key or unauthorized.");
-      }
-      const data = await res.json();
-      const valid = (data.models || []).filter(m => 
-        m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent")
-      );
-      if (valid.length === 0) {
-        throw new Error("No generateContent models available for this API key.");
-      }
-
-      // Prioritize flash models
-      const priorities = ["flash", "pro"];
-      for (const p of priorities) {
-        const found = valid.find(m => m.name.toLowerCase().includes(p));
-        if (found) return found.name; // e.g. "models/gemini-2.0-flash"
-      }
-      return valid[0].name;
-    }
-
-    // GEMINI PROMPT EXECUTION (Guaranteed Working Model & JSON Mode)
+    // DIRECT GEMINI 3.6 FLASH CALL
     async function generateGeminiMoments(apiKey, title, author, videoUrl, camp) {
       const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
       const creatorTag = creatorClean ? `#${creatorClean}` : "";
@@ -651,11 +627,8 @@ STRICT CAPTION AND TITLE RULES:
 Return ONLY a valid JSON array of objects with keys:
 "id" (num), "title" (viral hook title), "score" (84-99), "start" (MM:SS or HH:MM:SS), "end" (MM:SS or HH:MM:SS), "tag" (e.g. "Hard Truth", "Risk Rule"), "tiktokCaption", "igCaption".`;
 
-      // Auto-discover the active model name from Google
-      const targetModel = await getActiveGeminiModel(apiKey);
-      console.log("[*] Using verified active Gemini model:", targetModel);
-
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/${targetModel}:generateContent?key=${apiKey}`, {
+      // Call Gemini 3.6 Flash directly
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
