@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VERTEX PRO // Maximum Clip Campaign Engine</title>
+  <title>VERTEX PRO // Campaign Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,13 +22,13 @@
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden select-none">
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden select-none pb-24">
 
   <!-- ==================== MAIN WORKSPACE ==================== -->
   <div class="max-w-md mx-auto w-full min-h-screen p-4 flex flex-col justify-between">
     <div class="space-y-4 pt-2">
       
-      <!-- Brand Header -->
+      <!-- Header -->
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-2.5">
           <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#00F0FF] to-[#0072FF] text-black font-black text-sm flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.4)]">
@@ -37,14 +37,13 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">MAX-CLIPS</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">V9.0</span>
             </div>
-            <p class="text-[10px] text-slate-400">High-Density Campaign Repurposer</p>
+            <p class="text-[10px] text-slate-400">Custom Campaign Clipper</p>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <!-- [+] Add Video Button -->
           <button id="btnOpenAddModal" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs flex items-center gap-1.5 shadow-[0_4px_15px_rgba(0,240,255,0.3)] active:scale-95 transition">
             <span class="text-sm leading-none">+</span>
             <span>Add Video</span>
@@ -55,15 +54,20 @@
         </div>
       </div>
 
-      <!-- CAMPAIGN / NOTEBOOK SELECTOR -->
+      <!-- CAMPAIGN / NOTEBOOK SELECTOR & CONTROLS -->
       <div class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold">
-            CAMPAIGN NOTEBOOK
+            ACTIVE CAMPAIGN
           </span>
-          <button id="btnNewCampaign" class="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1">
-            <span>+</span><span>New Notebook</span>
-          </button>
+          <div class="flex items-center gap-3">
+            <button id="btnNewCampaign" class="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1">
+              <span>+</span><span>New</span>
+            </button>
+            <button id="btnDeleteCampaign" class="text-[10px] font-mono text-rose-400 hover:text-rose-300 flex items-center gap-1" title="Delete current campaign">
+              <span>🗑</span><span>Delete</span>
+            </button>
+          </div>
         </div>
 
         <div class="flex items-center gap-2">
@@ -75,15 +79,21 @@
             <span id="historyCountBadge">0 Videos</span>
           </button>
         </div>
+
+        <!-- Campaign Rules Summary Pill -->
+        <div id="campaignRulesPill" class="text-[9px] font-mono text-slate-400 bg-[#0B0D14] px-2.5 py-1 rounded-lg border border-slate-800 flex justify-between items-center">
+          <span class="truncate" id="campaignRulesText">Rules: Default Creator Style</span>
+          <span class="text-[#00F0FF] shrink-0 font-bold ml-2 cursor-pointer" id="btnEditCampaignRules">Edit Rules</span>
+        </div>
       </div>
 
-      <!-- SAVED VIDEOS IN NOTEBOOK (HISTORY DRAWER) -->
+      <!-- SAVED VIDEOS DRAWER -->
       <div id="campaignHistoryDrawer" class="card-titanium rounded-2xl p-3.5 space-y-2.5 shadow-xl hidden">
         <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
           <span class="text-[10px] font-mono uppercase tracking-wider text-slate-300 font-bold">
-            Videos In This Notebook
+            Videos In This Campaign
           </span>
-          <span class="text-[9px] font-mono text-slate-500">Tap to load saved clips</span>
+          <span class="text-[9px] font-mono text-slate-500">Tap to load clips</span>
         </div>
         <div id="campaignVideosList" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar">
           <!-- Populated by JS -->
@@ -98,7 +108,7 @@
             <span id="videoAuthor" class="text-[10px] font-mono text-[#00F0FF] truncate block">Channel Name</span>
             <h3 id="videoTitle" class="text-xs font-bold text-white leading-snug line-clamp-2 mt-0.5">Video Title</h3>
             <span class="inline-block mt-1 text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
-              ● Active in Campaign
+              ● Active
             </span>
           </div>
         </div>
@@ -109,9 +119,9 @@
         <div class="flex justify-between items-center pb-2 border-b border-slate-800">
           <div>
             <span class="text-[11px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-              EXTRACTED MOMENTS
+              DETECTED CLIPS
             </span>
-            <span id="momentsStatusText" class="text-[10px] text-slate-400">Add a video or choose from notebook</span>
+            <span id="momentsStatusText" class="text-[10px] text-slate-400">Add a video or pick from notebook</span>
           </div>
           <div class="flex items-center gap-2">
             <button id="btnToggleAll" class="text-[10px] font-mono text-[#00F0FF] underline hidden">Select All</button>
@@ -119,13 +129,13 @@
           </div>
         </div>
 
-        <!-- Scrollable Moments List (Max Density) -->
+        <!-- Scrollable Moments List -->
         <div id="viralClipsList" class="space-y-2.5 max-h-[380px] overflow-y-auto no-scrollbar pr-0.5">
           <div id="emptyStateBox" class="py-12 text-center space-y-3">
             <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract up to 35+ viral clips.</p>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan any YouTube link.</p>
             </div>
           </div>
         </div>
@@ -139,7 +149,33 @@
     </div>
 
     <div class="text-center py-2 border-t border-slate-900 text-[10px] font-mono text-slate-500">
-      CAPCUT NATIVE 16:9 // MAXIMUM VIRAL MOMENT EXTRACTION
+      TURBO ENGINE // CAPCUT NATIVE 16:9 H.264
+    </div>
+  </div>
+
+
+  <!-- ==================== PERSISTENT BOTTOM DOCK / PROGRESS BAR ==================== -->
+  <div id="bottomDockBar" class="fixed bottom-3 left-4 right-4 max-w-md mx-auto card-titanium p-3 rounded-2xl border border-[#00F0FF]/30 shadow-2xl z-40 hidden flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+      <div id="dockSpinner" class="w-3 h-3 rounded-full bg-[#00F0FF] animate-ping shrink-0"></div>
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center justify-between text-[10px] font-mono pr-1">
+          <span id="dockStatusText" class="text-white truncate font-bold">Initializing...</span>
+          <span id="dockPct" class="text-[#00F0FF] font-bold">5%</span>
+        </div>
+        <div class="w-full bg-[#0B0D14] h-1.5 rounded-full overflow-hidden mt-1 border border-slate-800">
+          <div id="dockProgressBar" class="h-full bg-gradient-to-r from-[#00F0FF] to-emerald-400 transition-all duration-300" style="width: 5%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-1.5 shrink-0">
+      <a id="btnDockDirectDownload" href="#" target="_blank" class="hidden px-3 py-1.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-[11px] rounded-xl uppercase active:scale-95 transition">
+        ⬇ Download
+      </a>
+      <button id="btnReopenModal" class="px-2.5 py-1.5 bg-[#161A29] hover:bg-[#202538] text-slate-300 font-mono text-[10px] rounded-xl border border-slate-700">
+        View
+      </button>
     </div>
   </div>
 
@@ -161,41 +197,50 @@
       </div>
 
       <div class="bg-[#161A29] p-3 rounded-xl border border-slate-800 space-y-1 text-[10px] font-mono text-slate-400">
-        <div>• Deep scan across the entire video timeline.</div>
-        <div>• Generates the maximum number of clips possible (25–35+).</div>
-        <div>• Saves permanently into your campaign notebook.</div>
+        <div>• Clips will be formatted according to this campaign's rules.</div>
+        <div>• Real human captions without timestamps or emoji spam.</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
-        <span>⚡ Extract Maximum Clips</span>
+        <span>⚡ Extract Viral Clips</span>
       </button>
     </div>
   </div>
 
 
-  <!-- ==================== MODAL: CREATE NEW CAMPAIGN ==================== -->
-  <div id="newCampaignModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-    <div class="card-titanium rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+  <!-- ==================== MODAL: CREATE / EDIT CAMPAIGN & REQUIREMENTS ==================== -->
+  <div id="campaignModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="card-titanium rounded-3xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
-        <h3 class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider">
-          New Campaign Notebook
+        <h3 id="campaignModalTitle" class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider">
+          Campaign Rules & Setup
         </h3>
         <button id="btnCloseCampaignModal" class="w-6 h-6 rounded-full bg-[#161A29] text-slate-400 text-xs flex items-center justify-center">✕</button>
       </div>
 
-      <div class="space-y-2">
-        <label class="text-[10px] font-mono text-slate-400 block uppercase">Campaign / Notebook Name:</label>
-        <input type="text" id="inputCampaignName" placeholder="e.g. Finance Podcasts Q4" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-[#00F0FF]">
+      <div class="space-y-1.5">
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">1. Campaign / Client Name:</label>
+        <input type="text" id="inputCampaignName" placeholder="e.g. Health & Longevity Q4" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Required Campaign Hashtags:</label>
+        <input type="text" id="inputCampaignHashtags" placeholder="#longevity #healthtips #biohacking" class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">3. Custom Description Rules / Tone:</label>
+        <textarea id="inputCampaignPrompt" rows="3" placeholder="e.g. Write punchy 1-sentence hooks like a real human. Focus on the core argument. Max 1 natural emoji." class="w-full bg-[#0B0D14] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]"></textarea>
       </div>
 
       <button id="btnSaveCampaign" class="w-full py-3 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition">
-        Create Notebook
+        Save Campaign Requirements
       </button>
     </div>
   </div>
 
 
-  <!-- ==================== ANIMATED DOWNLOAD PROGRESS MODAL ==================== -->
+  <!-- ==================== MAIN DOWNLOAD PROGRESS MODAL ==================== -->
   <div id="exportModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
       <div class="w-12 h-12 mx-auto rounded-2xl bg-[#00F0FF]/15 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] text-xl">
@@ -206,7 +251,7 @@
           <h3 class="text-sm font-mono font-bold uppercase tracking-wider text-white">Downloading Clips</h3>
           <span id="exportProgressPct" class="text-xs font-mono font-bold text-[#00F0FF]">5%</span>
         </div>
-        <p id="exportStatusMsg" class="text-xs text-slate-400 mt-1">Starting runner...</p>
+        <p id="exportStatusMsg" class="text-xs text-slate-400 mt-1 font-mono">Initializing runner...</p>
       </div>
 
       <div class="w-full bg-[#161A29] h-2.5 rounded-full overflow-hidden border border-slate-800 p-0.5">
@@ -222,14 +267,14 @@
         </a>
       </div>
 
-      <button id="btnCloseExport" class="text-xs font-mono text-slate-400 hover:text-white pt-2">
-        Close Window
+      <button id="btnCloseExport" class="text-xs font-mono text-slate-400 hover:text-white pt-2 block mx-auto">
+        ✕ Close Window (Keeps Running in Background)
       </button>
     </div>
   </div>
 
 
-  <!-- ==================== GITHUB & GEMINI SETTINGS MODAL ==================== -->
+  <!-- ==================== ENGINE SETTINGS MODAL ==================== -->
   <div id="tokenModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
     <div class="card-titanium rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
@@ -238,7 +283,7 @@
       </div>
 
       <div class="space-y-1.5">
-        <label class="text-[10px] font-mono text-slate-400 block uppercase">1. GitHub Personal Access Token (Required):</label>
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">1. GitHub Access Token (Required):</label>
         <input type="password" id="inputGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-[#090A0F] border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
       </div>
 
@@ -264,15 +309,14 @@
     let currentVideoData = null;
     let allSelected = false;
     let renderSimulationTimer = null;
+    let activePollInterval = null;
+    let editingCampaignMode = false;
 
     function loadState() {
       const saved = localStorage.getItem('vertex_campaign_state');
       if (saved) {
-        try {
-          appState = JSON.parse(saved);
-        } catch (e) {
-          initDefaultState();
-        }
+        try { appState = JSON.parse(saved); }
+        catch (e) { initDefaultState(); }
       } else {
         initDefaultState();
       }
@@ -284,6 +328,8 @@
       const defaultCampaign = {
         id: "camp_" + Date.now(),
         name: "General Campaign",
+        hashtags: "#podcast #viral #growth",
+        instructions: "Write natural, human-sounding hooks. No timestamps, max 1 subtle emoji.",
         videos: []
       };
       appState = {
@@ -319,9 +365,29 @@
       updateActiveCampaignUI();
     };
 
+    // Delete Campaign Button
+    document.getElementById('btnDeleteCampaign').onclick = () => {
+      const camp = getActiveCampaign();
+      if (!confirm(`Are you sure you want to delete the campaign "${camp.name}"? This cannot be undone.`)) {
+        return;
+      }
+
+      appState.campaigns = appState.campaigns.filter(c => c.id !== camp.id);
+      if (appState.campaigns.length === 0) {
+        initDefaultState();
+      } else {
+        appState.activeCampaignId = appState.campaigns[0].id;
+        saveState();
+      }
+      renderCampaignDropdown();
+      updateActiveCampaignUI();
+      alert("Campaign deleted.");
+    };
+
     function updateActiveCampaignUI() {
       const camp = getActiveCampaign();
       document.getElementById('historyCountBadge').innerText = `${camp.videos.length} Videos`;
+      document.getElementById('campaignRulesText').innerText = `Tags: ${camp.hashtags || 'None'} • Rules: ${camp.instructions ? camp.instructions.slice(0, 32) + '...' : 'Human style'}`;
       renderHistoryList(camp);
 
       if (camp.videos.length > 0) {
@@ -334,7 +400,7 @@
             <div class="w-12 h-12 mx-auto rounded-2xl bg-[#161A29] border border-slate-800 flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to extract maximum viral clips.</p>
+              <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips into "${camp.name}".</p>
             </div>
           </div>
         `;
@@ -388,7 +454,7 @@
       document.getElementById('videoTitle').innerText = video.title;
       document.getElementById('videoAuthor').innerText = video.author;
       document.getElementById('activeVideoCard').classList.remove('hidden');
-      document.getElementById('momentsStatusText').innerText = `${video.clips.length} Viral Moments Available`;
+      document.getElementById('momentsStatusText').innerText = `${video.clips.length} Clips Available`;
       document.getElementById('btnStartDownload').disabled = false;
       document.getElementById('btnToggleAll').classList.remove('hidden');
       renderClipsList();
@@ -399,23 +465,54 @@
       document.getElementById('campaignHistoryDrawer').classList.toggle('hidden');
     };
 
-    // Campaign Creation Modal
-    const newCampModal = document.getElementById('newCampaignModal');
-    document.getElementById('btnNewCampaign').onclick = () => newCampModal.classList.remove('hidden');
-    document.getElementById('btnCloseCampaignModal').onclick = () => newCampModal.classList.add('hidden');
+    // Campaign Modal (Create or Edit Rules)
+    const campModal = document.getElementById('campaignModal');
+    document.getElementById('btnNewCampaign').onclick = () => {
+      editingCampaignMode = false;
+      document.getElementById('campaignModalTitle').innerText = "New Campaign Notebook";
+      document.getElementById('inputCampaignName').value = '';
+      document.getElementById('inputCampaignHashtags').value = '';
+      document.getElementById('inputCampaignPrompt').value = '';
+      campModal.classList.remove('hidden');
+    };
+
+    document.getElementById('btnEditCampaignRules').onclick = () => {
+      editingCampaignMode = true;
+      const camp = getActiveCampaign();
+      document.getElementById('campaignModalTitle').innerText = `Edit: ${camp.name}`;
+      document.getElementById('inputCampaignName').value = camp.name;
+      document.getElementById('inputCampaignHashtags').value = camp.hashtags || '';
+      document.getElementById('inputCampaignPrompt').value = camp.instructions || '';
+      campModal.classList.remove('hidden');
+    };
+
+    document.getElementById('btnCloseCampaignModal').onclick = () => campModal.classList.add('hidden');
+
     document.getElementById('btnSaveCampaign').onclick = () => {
       const name = document.getElementById('inputCampaignName').value.trim();
-      if (!name) return alert("Enter a campaign name.");
-      const newCampaign = {
-        id: "camp_" + Date.now(),
-        name: name,
-        videos: []
-      };
-      appState.campaigns.push(newCampaign);
-      appState.activeCampaignId = newCampaign.id;
+      const hashtags = document.getElementById('inputCampaignHashtags').value.trim();
+      const instructions = document.getElementById('inputCampaignPrompt').value.trim();
+      if (!name) return alert("Please enter a campaign name.");
+
+      if (editingCampaignMode) {
+        const camp = getActiveCampaign();
+        camp.name = name;
+        camp.hashtags = hashtags;
+        camp.instructions = instructions;
+      } else {
+        const newCampaign = {
+          id: "camp_" + Date.now(),
+          name,
+          hashtags,
+          instructions,
+          videos: []
+        };
+        appState.campaigns.push(newCampaign);
+        appState.activeCampaignId = newCampaign.id;
+      }
+
       saveState();
-      document.getElementById('inputCampaignName').value = '';
-      newCampModal.classList.add('hidden');
+      campModal.classList.add('hidden');
       renderCampaignDropdown();
       updateActiveCampaignUI();
     };
@@ -437,7 +534,7 @@
 
       const fullUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const btn = document.getElementById('btnConfirmAnalyze');
-      btn.innerText = "Extracting Maximum Clips...";
+      btn.innerText = "Extracting Clips...";
       btn.disabled = true;
 
       try {
@@ -447,12 +544,14 @@
         const author = meta.author_name || "Creator";
         const thumb = meta.thumbnail_url || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
+        const currentCamp = getActiveCampaign();
         const geminiKey = localStorage.getItem('gemini_api_key');
         let generatedClips = [];
+
         if (geminiKey) {
-          generatedClips = await generateGeminiMoments(geminiKey, title, author, fullUrl);
+          generatedClips = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
         } else {
-          generatedClips = generateIntelligentMoments(title, author);
+          generatedClips = generateIntelligentMoments(title, author, currentCamp);
         }
 
         const newVideoObj = {
@@ -464,8 +563,7 @@
           clips: generatedClips
         };
 
-        const camp = getActiveCampaign();
-        camp.videos.push(newVideoObj);
+        currentCamp.videos.push(newVideoObj);
         saveState();
 
         addModal.classList.add('hidden');
@@ -475,33 +573,31 @@
       } catch (err) {
         alert("Error: " + err.message);
       } finally {
-        btn.innerText = "⚡ Extract Maximum Clips";
+        btn.innerText = "⚡ Extract Viral Clips";
         btn.disabled = false;
       }
     };
 
-    // GEMINI MAXIMUM CLIPS GENERATOR (Requests 25–35+ Clips)
-    async function generateGeminiMoments(apiKey, title, author, videoUrl) {
+    // GEMINI PROMPT (Zero timestamps in captions, real human tone, custom hashtags applied)
+    async function generateGeminiMoments(apiKey, title, author, videoUrl, camp) {
       try {
-        const prompt = `You are an elite video repurposing strategist. Analyze this YouTube video:
-Title: "${title}"
+        const prompt = `You are a professional social media manager writing authentic, human captions for short-form clips.
+Video Title: "${title}"
 Creator: "${author}"
-URL: "${videoUrl}"
+Campaign Specific Instructions: "${camp.instructions || 'Casual, punchy, human tone. No cringe, no timestamps, max 1 subtle emoji.'}"
+Campaign Required Hashtags: "${camp.hashtags || '#podcast #viral #growth'}"
 
-Generate the MAXIMUM possible number of viral, high-retention podcast/video clips (aim for 25 to 35 distinct clips, each 30 to 60 seconds long) covering the entire timeline from beginning to end.
-Ensure each clip features a compelling hook, heated debate, breakthrough insight, confession, or emotional peak.
+Task:
+Generate 25 to 30 high-retention video moments (30 to 60s each).
+IMPORTANT CAPTION RULES:
+1. DO NOT mention timestamps in the description (NEVER write "at 00:25" or anything like that).
+2. Write like a real human who actually watched the video. No cheesy robotic phrases like "Major lesson on Teaching from TJR!".
+3. Use at most ONE subtle emoji or zero emojis.
+4. Include the campaign hashtags naturally.
 
 Return ONLY a valid JSON array of objects with keys:
-"id" (number),
-"title" (viral hook title),
-"score" (number 80-99),
-"start" (MM:SS or HH:MM:SS),
-"end" (MM:SS or HH:MM:SS),
-"tag" (e.g. "⚠️ Core Warning", "💡 Big Reveal", "🔥 Intense Debate"),
-"tiktokCaption" (punchy caption + 5-7 viral hashtags),
-"igCaption" (insightful caption + 5-7 hashtags).
-
-Output pure JSON only without markdown code blocks.`;
+"id" (num), "title" (catchy hook), "score" (82-99), "start" (MM:SS), "end" (MM:SS), "tag" (e.g. "Key Insight", "Counter-intuitive"), "tiktokCaption", "igCaption".
+Output pure JSON only without markdown formatting.`;
 
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
           method: "POST",
@@ -512,55 +608,52 @@ Output pure JSON only without markdown code blocks.`;
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
         const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(cleaned);
-        return parsed.map((c, i) => ({ ...c, selected: i < 5 }));
+        return parsed.map((c, i) => ({ ...c, selected: i < 3 }));
       } catch (e) {
-        console.warn("Falling back to intelligent generator:", e);
-        return generateIntelligentMoments(title, author);
+        return generateIntelligentMoments(title, author, camp);
       }
     }
 
-    // HIGH-DENSITY INTELLIGENT GENERATOR (Generates 30 Full Timeline Clips)
-    function generateIntelligentMoments(title, author) {
+    // HUMAN-LIKE FALLBACK GENERATOR (No robotic timestamps, no emoji overload)
+    function generateIntelligentMoments(title, author, camp) {
       const cleanTitle = title.replace(/[^\w\s]/gi, '');
       const words = cleanTitle.split(' ').filter(w => w.length > 3);
-      const k1 = words[0] || "Strategy";
-      const k2 = words[1] || "Moment";
-
-      const tags = [
-        "⚠️ Critical Warning", "💡 Paradigm Shift", "🔥 High-Energy Debate",
-        "🤯 Shocking Truth", "🎯 Core Protocol", "🚀 Game Changer",
-        "🧠 Masterclass Lesson", "⚡ Raw Confession", "📉 Crucial Mistake",
-        "💎 Golden Rule", "🎙 Exclusive Insight", "⏳ Timeless Principle"
-      ];
+      const topic = words[0] || "Consistency";
+      const tags = ["Core Principle", "Perspective Shift", "Honest Breakdown", "Debated Point", "The Real Process"];
+      const customTags = camp.hashtags ? camp.hashtags.trim() : "#podcast #mindset #growth";
 
       const generated = [];
-      const totalClips = 30; // Max clips
-
-      for (let i = 0; i < totalClips; i++) {
-        const startSec = 25 + (i * 160); // Spaced across video
+      for (let i = 0; i < 25; i++) {
+        const startSec = 20 + (i * 180);
         const endSec = startSec + 40;
         const fmt = s => {
           const hrs = Math.floor(s / 3600);
           const mins = Math.floor((s % 3600) / 60);
           const secs = s % 60;
-          if (hrs > 0) {
-            return `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-          }
+          if (hrs > 0) return `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
           return `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
         };
-        const sTime = fmt(startSec);
-        const eTime = fmt(endSec);
+
+        // Real human-written style hooks
+        const humanHooks = [
+          `Most people get this completely wrong about ${topic.toLowerCase()}. Here's the realistic approach from ${author}.`,
+          `This completely changed how I think about ${topic.toLowerCase()}.`,
+          `The hard truth about ${topic.toLowerCase()} nobody wants to admit.`,
+          `If you only take one piece of advice from ${author}, make it this one.`,
+          `Why conventional wisdom about ${topic.toLowerCase()} usually fails in practice.`
+        ];
+        const chosenHook = humanHooks[i % humanHooks.length];
 
         generated.push({
           id: i + 1,
-          title: i === 0 ? `The Main Breakthrough on ${k1}` : `${tags[i % tags.length].split(' ')[1]} with ${author} (Part ${i+1})`,
+          title: i === 0 ? `The Truth About ${topic}` : `${tags[i % tags.length]}: Part ${i+1}`,
           score: Math.floor(82 + Math.random() * 17),
-          start: sTime,
-          end: eTime,
+          start: fmt(startSec),
+          end: fmt(endSec),
           tag: tags[i % tags.length],
-          tiktokCaption: `Major lesson on ${k1} from ${author} at ${sTime}. 🎙️\n\n#${k1.toLowerCase()} #${k2.toLowerCase()} #podcastclips #viral #growth`,
-          igCaption: `Key insight shared by ${author}.\n\nSave this for your notes.\n\n#${k1.toLowerCase()} #learning #education`,
-          selected: i < 5
+          tiktokCaption: `${chosenHook}\n\n${customTags}`,
+          igCaption: `${chosenHook}\n\nSave this if you needed to hear it today.\n\n${customTags}`,
+          selected: i < 3
         });
       }
       return generated;
@@ -621,7 +714,7 @@ Output pure JSON only without markdown code blocks.`;
       const item = currentVideoData.clips[idx];
       const text = platform === 'tiktok' ? item.tiktokCaption : item.igCaption;
       navigator.clipboard.writeText(text);
-      alert(`Copied ${platform.toUpperCase()} caption and hashtags!`);
+      alert(`Copied clean ${platform.toUpperCase()} caption!`);
     };
 
     document.getElementById('btnToggleAll').onclick = () => {
@@ -632,7 +725,7 @@ Output pure JSON only without markdown code blocks.`;
       renderClipsList();
     };
 
-    // Engine Settings Modal
+    // Engine Settings
     const tokenModal = document.getElementById('tokenModal');
     document.getElementById('btnSettingsHome').onclick = () => {
       document.getElementById('inputGithubToken').value = localStorage.getItem('autoclip_token') || '';
@@ -647,7 +740,24 @@ Output pure JSON only without markdown code blocks.`;
       alert("Settings saved!");
     };
 
-    // Cloud Slicer Dispatch
+    // Bottom Dock Controls
+    const dock = document.getElementById('bottomDockBar');
+    const dockStatus = document.getElementById('dockStatusText');
+    const dockPct = document.getElementById('dockPct');
+    const dockBar = document.getElementById('dockProgressBar');
+    const dockDownloadBtn = document.getElementById('btnDockDirectDownload');
+    const dockSpinner = document.getElementById('dockSpinner');
+
+    document.getElementById('btnReopenModal').onclick = () => {
+      document.getElementById('exportModal').classList.remove('hidden');
+    };
+
+    document.getElementById('btnCloseExport').onclick = () => {
+      document.getElementById('exportModal').classList.add('hidden');
+      dock.classList.remove('hidden');
+    };
+
+    // CLIP-BY-CLIP CONTINUOUS PROGRESS DOWNLOAD ENGINE
     document.getElementById('btnStartDownload').onclick = async () => {
       if (!currentVideoData) return;
       const chosen = currentVideoData.clips.filter(c => c.selected);
@@ -668,24 +778,55 @@ Output pure JSON only without markdown code blocks.`;
       const ghBackupBtn = document.getElementById('btnGitHubRunBackup');
 
       modal.classList.remove('hidden');
+      dock.classList.remove('hidden');
       dlBox.classList.add('hidden');
+      dockDownloadBtn.classList.add('hidden');
+      dockSpinner.className = "w-3 h-3 rounded-full bg-[#00F0FF] animate-ping shrink-0";
       bar.className = "h-full bg-gradient-to-r from-[#00F0FF] to-[#0077B6] rounded-full transition-all duration-300";
 
-      let progress = 5;
+      // Dynamic clip-by-clip progress tracking
+      let currentProgress = 5;
+      const totalClips = chosen.length;
+      let activeClipNum = 1;
+
       bar.style.width = '5%';
+      dockBar.style.width = '5%';
       pct.innerText = '5%';
-      msg.innerText = `Dispatching runner for ${chosen.length} CapCut clips...`;
+      dockPct.innerText = '5%';
+      msg.innerText = `Starting runner for ${totalClips} clips...`;
+      dockStatus.innerText = `Starting runner...`;
 
       if (renderSimulationTimer) clearInterval(renderSimulationTimer);
+      
+      // Each clip gets an equal segment of progress between 15% and 94%
       renderSimulationTimer = setInterval(() => {
-        if (progress < 90) {
-          progress += (progress < 30 ? 4.0 : progress < 60 ? 2.5 : 1.2);
-          bar.style.width = Math.min(92, progress) + '%';
-          pct.innerText = Math.round(Math.min(92, progress)) + '%';
-          if (progress > 10 && progress < 45) msg.innerText = "Downloading video from YouTube...";
-          else if (progress >= 45 && progress < 90) msg.innerText = "Encoding standard H.264/AAC CapCut MP4 files...";
+        if (currentProgress < 96) {
+          // Smooth increment without stalling at 91%
+          currentProgress += (currentProgress < 20 ? 3.0 : currentProgress < 85 ? 1.4 : 0.4);
+          const pVal = Math.round(Math.min(96, currentProgress));
+          const pStr = pVal + '%';
+
+          bar.style.width = pStr;
+          dockBar.style.width = pStr;
+          pct.innerText = pStr;
+          dockPct.innerText = pStr;
+
+          if (currentProgress < 18) {
+            msg.innerText = "Initializing cloud environment...";
+            dockStatus.innerText = "Initializing...";
+          } else {
+            // Calculate which clip is currently being downloaded/transcoded
+            const progressSpan = 96 - 18;
+            const clipChunk = progressSpan / totalClips;
+            activeClipNum = Math.min(totalClips, Math.floor((currentProgress - 18) / clipChunk) + 1);
+            const currentClipTitle = chosen[activeClipNum - 1]?.title || `Clip ${activeClipNum}`;
+            const shortTitle = currentClipTitle.length > 22 ? currentClipTitle.slice(0, 22) + '...' : currentClipTitle;
+
+            msg.innerText = `Slicing Clip ${activeClipNum} of ${totalClips}: "${shortTitle}"`;
+            dockStatus.innerText = `Clip ${activeClipNum}/${totalClips}: ${shortTitle}`;
+          }
         }
-      }, 800);
+      }, 750);
 
       try {
         await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
@@ -706,7 +847,8 @@ Output pure JSON only without markdown code blocks.`;
           })
         });
 
-        const poll = setInterval(async () => {
+        if (activePollInterval) clearInterval(activePollInterval);
+        activePollInterval = setInterval(async () => {
           const res = await fetch("https://api.github.com/repos/clipeasyfree/Pk/actions/runs?per_page=1", {
             headers: { "Authorization": `Bearer ${token}` }
           });
@@ -714,24 +856,34 @@ Output pure JSON only without markdown code blocks.`;
           const run = data.workflow_runs?.[0];
 
           if (run && run.status === "completed") {
-            clearInterval(poll);
+            clearInterval(activePollInterval);
             clearInterval(renderSimulationTimer);
 
             if (run.conclusion === "success") {
               bar.style.width = '100%';
+              dockBar.style.width = '100%';
               pct.innerText = '100%';
-              msg.innerText = `All ${chosen.length} clips downloaded!`;
-              dlBtn.href = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/capcut-ready-clips.zip`;
+              dockPct.innerText = '100%';
+              msg.innerText = `✓ All ${totalClips} clips downloaded & ready for CapCut!`;
+              dockStatus.innerText = "✓ Ready to download!";
+              dockSpinner.className = "w-3 h-3 rounded-full bg-emerald-400 shrink-0";
+
+              const zipUrl = `https://nightly.link/clipeasyfree/Pk/actions/runs/${run.id}/capcut-ready-clips.zip`;
+              dlBtn.href = zipUrl;
+              dockDownloadBtn.href = zipUrl;
+              dockDownloadBtn.classList.remove('hidden');
               ghBackupBtn.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
               dlBox.classList.remove('hidden');
             } else {
               bar.className = "h-full bg-red-500 rounded-full";
-              msg.innerText = "Error during download. Check GitHub logs.";
+              msg.innerText = "Error in GitHub run. Check logs.";
+              dockStatus.innerText = "Error occurred";
+              dockSpinner.className = "w-3 h-3 rounded-full bg-red-500 shrink-0";
               ghBackupBtn.href = `https://github.com/clipeasyfree/Pk/actions/runs/${run.id}`;
               dlBox.classList.remove('hidden');
             }
           }
-        }, 5000);
+        }, 4000);
 
       } catch (err) {
         clearInterval(renderSimulationTimer);
@@ -739,8 +891,6 @@ Output pure JSON only without markdown code blocks.`;
         msg.innerText = "Error: " + err.message;
       }
     };
-
-    document.getElementById('btnCloseExport').onclick = () => document.getElementById('exportModal').classList.add('hidden');
 
     loadState();
   </script>
