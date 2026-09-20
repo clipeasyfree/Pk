@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VERTEX PRO // Glass Campaign Studio</title>
+  <title>VERTEX PRO // Speech-Perfect Clipper</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,8 +15,6 @@
       -webkit-tap-highlight-color: transparent;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-
-    /* Glassmorphic Acrylic Containers */
     .glass-panel {
       background: rgba(17, 21, 37, 0.45);
       backdrop-filter: blur(20px) saturate(190%);
@@ -24,23 +22,12 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
     }
-    .glass-panel:hover {
-      border-color: rgba(0, 240, 255, 0.25);
-    }
-
-    /* Sub-elements & Cards */
     .glass-item {
       background: rgba(22, 28, 48, 0.4);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.06);
     }
-    .glass-item:hover {
-      background: rgba(28, 36, 62, 0.55);
-      border-color: rgba(0, 240, 255, 0.2);
-    }
-
-    /* Floating Dock Glass */
     .glass-dock {
       background: rgba(11, 14, 25, 0.75);
       backdrop-filter: blur(24px) saturate(200%);
@@ -48,8 +35,6 @@
       border: 1px solid rgba(0, 240, 255, 0.25);
       box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.65);
     }
-
-    /* Modal Glass */
     .glass-modal {
       background: rgba(13, 16, 28, 0.85);
       backdrop-filter: blur(28px) saturate(200%);
@@ -57,8 +42,6 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 16px 50px 0 rgba(0, 0, 0, 0.7);
     }
-
-    /* Glowing Ambient Background Elements */
     .ambient-glow-1 {
       position: fixed;
       top: -100px;
@@ -82,18 +65,16 @@
       pointer-events: none;
       z-index: 0;
     }
-
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between overflow-x-hidden select-none pb-24 relative">
 
-  <!-- Ambient Light Blobs for Glass Refraction -->
   <div class="ambient-glow-1"></div>
   <div class="ambient-glow-2"></div>
 
-  <!-- ==================== MAIN WORKSPACE ==================== -->
+  <!-- WORKSPACE -->
   <div class="max-w-md mx-auto w-full min-h-screen p-4 flex flex-col justify-between relative z-10">
     <div class="space-y-4 pt-2">
       
@@ -106,7 +87,7 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">GLASS-UI</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">SPEECH-SAFE</span>
             </div>
             <p class="text-[10px] text-slate-400">Viral Short-Form Repurposer</p>
           </div>
@@ -185,7 +166,7 @@
         </div>
       </div>
 
-      <!-- VIRAL MOMENTS CATALOG -->
+      <!-- DETECTED CLIPS -->
       <div class="glass-panel rounded-2xl p-4 space-y-3 shadow-xl">
         <div class="flex justify-between items-center pb-2 border-b border-white/10">
           <div>
@@ -200,18 +181,17 @@
           </div>
         </div>
 
-        <!-- Scrollable Moments List -->
         <div id="viralClipsList" class="space-y-2.5 max-h-[340px] overflow-y-auto no-scrollbar pr-0.5">
           <div id="emptyStateBox" class="py-12 text-center space-y-3">
             <div class="w-12 h-12 mx-auto rounded-2xl glass-item flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips with viral cold opens.</p>
+              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips with clean speech endings.</p>
             </div>
           </div>
         </div>
 
-        <!-- QUALITY SELECTOR OPTION -->
+        <!-- QUALITY SELECTOR -->
         <div class="bg-black/35 p-2.5 rounded-xl border border-white/5 flex items-center justify-between gap-2">
           <div class="flex items-center gap-1.5">
             <span class="text-xs">⚙</span>
@@ -224,7 +204,7 @@
           </select>
         </div>
 
-        <!-- Download Action Button -->
+        <!-- DOWNLOAD BUTTON -->
         <button id="btnStartDownload" disabled class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_8px_25px_rgba(16,185,129,0.35)] active:scale-[0.98] transition disabled:opacity-40 disabled:pointer-events-none">
           <span>⬇ Download Selected Clips (.MP4)</span>
         </button>
@@ -233,12 +213,11 @@
     </div>
 
     <div class="text-center py-2 border-t border-white/5 text-[10px] font-mono text-slate-500">
-      CAPCUT NATIVE 16:9 // FROSTED GLASS EDITING STUDIO
+      CAPCUT NATIVE 16:9 // SPEECH-SAFE SENTENCE COMPLETION
     </div>
   </div>
 
-
-  <!-- ==================== PERSISTENT BOTTOM DOCK / PROGRESS BAR ==================== -->
+  <!-- BOTTOM DOCK -->
   <div id="bottomDockBar" class="fixed bottom-3 left-4 right-4 max-w-md mx-auto glass-dock p-3 rounded-2xl shadow-2xl z-40 hidden flex items-center justify-between gap-3">
     <div class="flex items-center gap-2.5 min-w-0 flex-1">
       <div id="dockSpinner" class="w-3 h-3 rounded-full bg-[#00F0FF] animate-ping shrink-0"></div>
@@ -263,8 +242,7 @@
     </div>
   </div>
 
-
-  <!-- ==================== MODAL: [+] ADD VIDEO ==================== -->
+  <!-- MODAL: ADD VIDEO -->
   <div id="addVideoModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="glass-modal rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
@@ -281,8 +259,8 @@
       </div>
 
       <div class="bg-black/30 p-3 rounded-xl border border-white/5 space-y-1 text-[10px] font-mono text-slate-400">
-        <div>• Auto-scans across models with high-availability cascade.</div>
-        <div>• Generates punchy cold-open hooks (no template filler).</div>
+        <div>• Locks cuts to complete sentences and natural breath pauses.</div>
+        <div>• Zero mid-word or abrupt speech interruptions.</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-[0_4px_20px_rgba(0,240,255,0.3)] active:scale-95 transition flex items-center justify-center gap-2">
@@ -291,8 +269,7 @@
     </div>
   </div>
 
-
-  <!-- ==================== MODAL: CREATE / EDIT CAMPAIGN ==================== -->
+  <!-- MODAL: CAMPAIGN RULES -->
   <div id="campaignModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="glass-modal rounded-3xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
@@ -323,8 +300,7 @@
     </div>
   </div>
 
-
-  <!-- ==================== MAIN DOWNLOAD PROGRESS MODAL ==================== -->
+  <!-- MODAL: EXPORT -->
   <div id="exportModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="glass-modal rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
       <div class="w-12 h-12 mx-auto rounded-2xl bg-[#00F0FF]/15 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] text-xl">
@@ -357,8 +333,7 @@
     </div>
   </div>
 
-
-  <!-- ==================== ENGINE SETTINGS MODAL ==================== -->
+  <!-- MODAL: SETTINGS -->
   <div id="tokenModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="glass-modal rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
@@ -383,14 +358,8 @@
     </div>
   </div>
 
-
-  <!-- ==================== JAVASCRIPT STATE & DISPATCH LOGIC ==================== -->
   <script>
-    let appState = {
-      campaigns: [],
-      activeCampaignId: null
-    };
-
+    let appState = { campaigns: [], activeCampaignId: null };
     let currentVideoData = null;
     let allSelected = false;
     let renderSimulationTimer = null;
@@ -403,16 +372,11 @@
         try { 
           appState = JSON.parse(saved); 
           appState.campaigns.forEach(c => {
-            if (c.hashtags) {
-              c.hashtags = c.hashtags.replace(/#podcast\b/gi, '').replace(/#podcasts\b/gi, '').replace(/\s+/g, ' ').trim();
-            }
-            if (c.instructions) {
-              c.instructions = c.instructions.replace(/podcast/gi, 'video');
-            }
+            if (c.hashtags) c.hashtags = c.hashtags.replace(/#podcast\b/gi, '').replace(/\s+/g, ' ').trim();
+            if (c.instructions) c.instructions = c.instructions.replace(/podcast/gi, 'video');
           });
           saveState();
-        }
-        catch (e) { initDefaultState(); }
+        } catch (e) { initDefaultState(); }
       } else {
         initDefaultState();
       }
@@ -425,13 +389,10 @@
         id: "camp_" + Date.now(),
         name: "Money & Trading",
         hashtags: "#money #trading #finance #discipline #wealth",
-        instructions: "Punchy 1-line cold opens. Sharp contrast or paradoxes (e.g. 'Before you earn, learn how to spend'). Zero timestamps, zero generic intros.",
+        instructions: "Punchy 1-line cold opens. Complete thoughts only. Zero timestamps, zero generic intros.",
         videos: []
       };
-      appState = {
-        campaigns: [defaultCampaign],
-        activeCampaignId: defaultCampaign.id
-      };
+      appState = { campaigns: [defaultCampaign], activeCampaignId: defaultCampaign.id };
       saveState();
     }
 
@@ -475,7 +436,7 @@
     function updateActiveCampaignUI() {
       const camp = getActiveCampaign();
       document.getElementById('historyCountBadge').innerText = `${camp.videos.length} Videos`;
-      document.getElementById('campaignRulesText').innerText = `Tags: ${camp.hashtags || 'None'} • Tone: ${camp.instructions ? camp.instructions.slice(0, 30) + '...' : 'Cold-open viral'}`;
+      document.getElementById('campaignRulesText').innerText = `Tags: ${camp.hashtags || 'None'} • Tone: ${camp.instructions ? camp.instructions.slice(0, 30) + '...' : 'Speech-safe cold open'}`;
       renderHistoryList(camp);
 
       if (camp.videos.length > 0) {
@@ -488,7 +449,7 @@
             <div class="w-12 h-12 mx-auto rounded-2xl glass-item flex items-center justify-center text-[#00F0FF] text-xl">+</div>
             <div class="space-y-1">
               <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to extract clips into "${camp.name}".</p>
+              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips with clean speech endings.</p>
             </div>
           </div>
         `;
@@ -554,7 +515,6 @@
       document.getElementById('campaignHistoryDrawer').classList.toggle('hidden');
     };
 
-    // Campaign Modal Setup
     const campModal = document.getElementById('campaignModal');
     document.getElementById('btnNewCampaign').onclick = () => {
       editingCampaignMode = false;
@@ -591,13 +551,7 @@
         camp.hashtags = hashtags;
         camp.instructions = instructions;
       } else {
-        const newCampaign = {
-          id: "camp_" + Date.now(),
-          name,
-          hashtags,
-          instructions,
-          videos: []
-        };
+        const newCampaign = { id: "camp_" + Date.now(), name, hashtags, instructions, videos: [] };
         appState.campaigns.push(newCampaign);
         appState.activeCampaignId = newCampaign.id;
       }
@@ -608,7 +562,6 @@
       updateActiveCampaignUI();
     };
 
-    // Add Video Modal
     const addModal = document.getElementById('addVideoModal');
     document.getElementById('btnOpenAddModal').onclick = () => addModal.classList.remove('hidden');
     document.getElementById('btnCloseAddModal').onclick = () => addModal.classList.add('hidden');
@@ -648,11 +601,11 @@
           } catch (apiErr) {
             console.warn("Cascade completed with fallback:", apiErr.message);
             generatedClips = generateIntelligentMoments(title, author, currentCamp);
-            engineUsed = "⚙ Cold-Open Engine";
+            engineUsed = "⚙ Speech-Safe Engine";
           }
         } else {
           generatedClips = generateIntelligentMoments(title, author, currentCamp);
-          engineUsed = "⚙ Cold-Open Engine";
+          engineUsed = "⚙ Speech-Safe Engine";
         }
 
         const newVideoObj = {
@@ -680,40 +633,35 @@
       }
     };
 
-    // MULTI-MODEL ZERO-FAIL CASCADE ENGINE
+    // SPEECH-BOUNDARY AWARE GEMINI PROMPT
     async function generateGeminiMoments(apiKey, title, author, videoUrl, camp) {
       const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
       const creatorTag = creatorClean ? `#${creatorClean}` : "";
       
-      const prompt = `You are an elite short-form video clipping editor. Analyze this video:
+      const prompt = `You are a high-level video clipping editor. Analyze this video:
 Title: "${title}"
 Creator: "${author}"
-Tone Requirements: "${camp.instructions || 'Punchy, cold-open 1-liners. Sharp rules and contrast. No generic intros.'}"
+Tone Requirements: "${camp.instructions || 'Punchy, cold-open 1-liners. Complete thoughts only. No generic intros.'}"
 Campaign Hashtags: "${camp.hashtags || '#money #trading #finance'}"
 
-TASK:
-Identify 15 distinct viral clips (30 to 60 seconds each) across the timeline.
+CRITICAL TIMING & SPEECH COMPLETION RULES:
+1. NEVER cut off a speaker mid-sentence, mid-word, or mid-thought.
+2. The 'start' timestamp MUST align cleanly with the start of a clear spoken sentence.
+3. The 'end' timestamp MUST only happen AFTER the speaker has finished their sentence and reached a natural pause or breath.
+4. Keep clips between 30 and 55 seconds. It is always better to add 2-3 extra seconds than to cut speech abruptly.
 
-STRICT CAPTION AND TITLE RULES:
-1. FORBIDDEN WORDS: NEVER use "podcast", "podcasts", "lesson", "insights", "realistic approach", or mention timestamps ("at 00:25").
-2. REQUIRED HOOK STYLE: Sharp cold opens, paradoxes, and hard-hitting rules. Examples:
-   - "Before you earn, learn how to spend."
-   - "The easiest way to lose $10,000 in your 20s."
-   - "Lifestyle creep is how you go broke making six figures."
-   - "If you cannot manage risk, the market will manage it for you."
-3. HASHTAGS: Include ${creatorTag} and the campaign hashtags. Never include #podcast. Max 5 hashtags.
-4. EMOJIS: Max 1 subtle emoji, or zero.
+CAPTION & METADATA RULES:
+- FORBIDDEN: Never use "podcast", "podcasts", "lesson", "insights", or mention timestamps ("at 00:25").
+- STYLE: Cold open hooks and counter-intuitive rules.
+- HASHTAGS: Include ${creatorTag} and campaign hashtags (max 5 tags). Max 1 subtle emoji.
 
 Return ONLY a valid JSON array of objects with keys:
-"id" (num), "title" (viral hook title), "score" (84-99), "start" (MM:SS or HH:MM:SS), "end" (MM:SS or HH:MM:SS), "tag" (e.g. "Hard Truth", "Risk Rule"), "tiktokCaption", "igCaption".`;
+"id" (num), "title", "score" (84-99), "start" (MM:SS), "end" (MM:SS), "tag", "tiktokCaption", "igCaption".`;
 
       const candidateModels = [
-        'gemini-3.8-flash',
-        'gemini-3.7-flash',
-        'gemini-3.5-flash',
-        'gemini-3.1-flash-lite',
-        'gemini-3.6-flash',
-        'gemini-2.0-flash'
+        'gemini-2.5-flash',
+        'gemini-2.0-flash',
+        'gemini-1.5-flash'
       ];
 
       let lastErr = null;
@@ -725,9 +673,7 @@ Return ONLY a valid JSON array of objects with keys:
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: {
-                response_mime_type: "application/json"
-              }
+              generationConfig: { response_mime_type: "application/json" }
             })
           });
 
@@ -755,7 +701,7 @@ Return ONLY a valid JSON array of objects with keys:
       throw lastErr || new Error("All cascade models busy.");
     }
 
-    // REAL-TALK FALLBACK
+    // SPEECH-SAFE FALLBACK
     function generateIntelligentMoments(title, author, camp) {
       const cleanTitle = title.replace(/[^\w\s]/gi, '');
       const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -780,8 +726,8 @@ Return ONLY a valid JSON array of objects with keys:
       ];
 
       for (let i = 0; i < 18; i++) {
-        const startSec = 20 + (i * 180);
-        const endSec = startSec + 40;
+        const startSec = 25 + (i * 180);
+        const endSec = startSec + 42;
         const fmt = s => {
           const hrs = Math.floor(s / 3600);
           const mins = Math.floor((s % 3600) / 60);
@@ -807,7 +753,6 @@ Return ONLY a valid JSON array of objects with keys:
       return generated;
     }
 
-    // Render Clips List in Glass
     function renderClipsList() {
       const container = document.getElementById('viralClipsList');
       container.innerHTML = '';
@@ -873,7 +818,6 @@ Return ONLY a valid JSON array of objects with keys:
       renderClipsList();
     };
 
-    // Engine Settings
     const tokenModal = document.getElementById('tokenModal');
     document.getElementById('btnSettingsHome').onclick = () => {
       document.getElementById('inputGithubToken').value = localStorage.getItem('autoclip_token') || '';
@@ -888,7 +832,6 @@ Return ONLY a valid JSON array of objects with keys:
       alert("Settings saved!");
     };
 
-    // Bottom Dock Controls
     const dock = document.getElementById('bottomDockBar');
     const dockStatus = document.getElementById('dockStatusText');
     const dockPct = document.getElementById('dockPct');
@@ -905,7 +848,6 @@ Return ONLY a valid JSON array of objects with keys:
       dock.classList.remove('hidden');
     };
 
-    // Download Engine with Selected Quality
     document.getElementById('btnStartDownload').onclick = async () => {
       if (!currentVideoData) return;
       const chosen = currentVideoData.clips.filter(c => c.selected);
@@ -958,8 +900,8 @@ Return ONLY a valid JSON array of objects with keys:
           dockPct.innerText = pStr;
 
           if (currentProgress < 18) {
-            msg.innerText = "Downloading source stream...";
-            dockStatus.innerText = "Downloading source...";
+            msg.innerText = "Extracting stream section directly...";
+            dockStatus.innerText = "Extracting stream...";
           } else {
             const progressSpan = 96 - 18;
             const clipChunk = progressSpan / totalClips;
