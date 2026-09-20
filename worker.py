@@ -5,7 +5,7 @@ import json
 import re
 import subprocess
 
-print("[*] Initializing Netscape-Compliant Direct Slicer...")
+print("[*] Initializing Resilient Speech-Safe Video Slicer...")
 
 # 1. Setup Persistent Netscape Cookie File
 cookie_file = os.path.abspath("youtube_cookies.txt")
@@ -13,22 +13,18 @@ cookies_env = os.environ.get('COOKIES_DATA', '').strip()
 has_valid_cookies = False
 
 if cookies_env and len(cookies_env) > 30:
-    # Netscape specification strictly requires this exact header line at index 0
     lines_out = ["# Netscape HTTP Cookie File", "# https://curl.se/docs/http-cookies.html", ""]
     valid_count = 0
 
     for raw_line in cookies_env.splitlines():
         line = raw_line.strip()
-        if not line:
-            continue
-        if line.startswith("# Netscape") or line.startswith("# HTTP"):
+        if not line or line.startswith("# Netscape") or line.startswith("# HTTP"):
             continue
         if line.startswith("#") and not line.startswith("#HttpOnly_"):
             continue
         if line.startswith("#HttpOnly_"):
             line = line[len("#HttpOnly_"):]
 
-        # Handle both tab-separated and multi-space converted inputs
         parts = line.split("\t")
         if len(parts) < 7:
             parts = re.split(r'\t+|\s{2,}', line)
@@ -50,10 +46,8 @@ if cookies_env and len(cookies_env) > 30:
     if os.path.exists(cookie_file) and valid_count > 0:
         has_valid_cookies = True
         print(f"[✓] Netscape cookie file locked with {valid_count} entries.")
-    else:
-        print("[!] Failed to format Netscape cookie file.")
 else:
-    print("[!] No session cookies found in environment.")
+    print("[!] Running without session cookies.")
 
 # 2. Parse Payload & Quality Settings
 payload_env = os.environ.get('JOB_PAYLOAD', '')
@@ -84,18 +78,19 @@ for f in glob.glob("temp/*"):
     try: os.remove(f)
     except: pass
 
+# Multi-tier format fallback prevents "format not available" errors
 if quality_mode == 'fast':
-    ytdl_format = "bv*[height<=720]+ba/b[height<=720]/best"
+    ytdl_format = "bv*[height<=720]+ba/b[height<=720]/bv*+ba/b/best"
     ffmpeg_crf = "22"
     ffmpeg_preset = "ultrafast"
     audio_br = "128k"
 elif quality_mode == 'master':
-    ytdl_format = "bv*[height<=1080]+ba/b[height<=1080]/best"
+    ytdl_format = "bv*[height<=1080]+ba/b[height<=1080]/bv*+ba/b/best"
     ffmpeg_crf = "16"
     ffmpeg_preset = "faster"
     audio_br = "320k"
 else:  # balanced
-    ytdl_format = "bv*[height<=1080]+ba/b[height<=1080]/best"
+    ytdl_format = "bv*[height<=1080]+ba/b[height<=1080]/bv*+ba/b/best"
     ffmpeg_crf = "18"
     ffmpeg_preset = "faster"
     audio_br = "192k"
@@ -117,7 +112,7 @@ def sec_to_str(total_sec):
         return f"{hrs:02d}:{mins:02d}:{secs:04.1f}"
     return f"{mins:02d}:{secs:04.1f}"
 
-# 3. Pull Sections Directly & Add Sentence Buffers
+# 3. Download Sections with Speech Padding
 for idx, clip_item in enumerate(clips, start=1):
     cid = clip_item.get('id', idx)
     raw_start = clip_item.get('start', '00:00')
@@ -127,20 +122,21 @@ for idx, clip_item in enumerate(clips, start=1):
     start_sec = parse_to_sec(raw_start)
     end_sec = parse_to_sec(raw_end)
 
-    # 2.5-second tail padding preserves complete words and final thoughts
+    # Padding: Start 0.5s earlier, finish 2.5s later so thoughts never get cut off
+    padded_start_sec = max(0.0, start_sec - 0.5)
     padded_end_sec = end_sec + 2.5
-    dl_start = sec_to_str(start_sec)
+    dl_start = sec_to_str(padded_start_sec)
     dl_end = sec_to_str(padded_end_sec)
-    duration = padded_end_sec - start_sec
 
     out_mp4 = f"output/clip_{cid}_{clean_label}.mp4"
     temp_raw = f"temp/raw_{cid}.%(ext)s"
 
-    print(f"\n[*] [{idx}/{len(clips)}] Extracting {dl_start} -> {dl_end}...")
+    print(f"\n[*] [{idx}/{len(clips)}] Pulling section {dl_start} -> {dl_end} (speech-padded)...")
 
     cmd_dl = [
         "yt-dlp",
         "--remote-components", "ejs:github",
+        "--extractor-args", "youtube:player_client=web_embedded,mweb,android,ios",
         "--download-sections", f"*{dl_start}-{dl_end}",
         "-f", ytdl_format,
         "--merge-output-format", "mp4",
@@ -150,9 +146,6 @@ for idx, clip_item in enumerate(clips, start=1):
 
     if has_valid_cookies and os.path.exists(cookie_file):
         cmd_dl.extend(["--cookies", cookie_file])
-        cmd_dl.extend(["--extractor-args", "youtube:player_client=web,tv_embedded"])
-    else:
-        cmd_dl.extend(["--extractor-args", "youtube:player_client=android,ios"])
 
     cmd_dl.extend([url, "-o", temp_raw])
     subprocess.run(cmd_dl, check=True)
@@ -162,8 +155,7 @@ for idx, clip_item in enumerate(clips, start=1):
         raise FileNotFoundError(f"Download failed for clip {cid}")
     source_file = downloaded[0]
 
-    # Remux with smooth 0.3s audio fade-out to prevent audio pops
-    fade_start = max(0, duration - 0.3)
+    # Remux to standard CapCut H.264 MP4 with intact audio
     cmd_remux = [
         "ffmpeg", "-y",
         "-i", source_file,
@@ -171,7 +163,6 @@ for idx, clip_item in enumerate(clips, start=1):
         "-preset", ffmpeg_preset,
         "-crf", ffmpeg_crf,
         "-pix_fmt", "yuv420p",
-        "-af", f"afade=t=out:st={fade_start}:d=0.3",
         "-c:a", "aac",
         "-b:a", audio_br,
         "-movflags", "+faststart",
@@ -181,4 +172,3 @@ for idx, clip_item in enumerate(clips, start=1):
     print(f"[✓] Finished Clip {cid}: {out_mp4}")
 
 print(f"\n[✓] All {len(clips)} clips exported cleanly!")
-
