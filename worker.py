@@ -4,9 +4,9 @@ import glob
 import json
 import subprocess
 
-print("[*] Initializing Fast Direct-Section Slicer...")
+print("[*] Initializing Cloud Anti-Bot Direct Slicer...")
 
-# 1. Setup Cookies
+# 1. Setup Cookies (if provided in GitHub Secrets)
 cookies_path = None
 cookies_env = os.environ.get('COOKIES_DATA', '').strip()
 if cookies_env and len(cookies_env) > 20:
@@ -26,6 +26,9 @@ if cookies_env and len(cookies_env) > 20:
             sanitized.append(line)
     with open(cookies_path, "w", encoding="utf-8") as f:
         f.write("\n".join(sanitized) + "\n")
+    print("[✓] Custom YouTube session cookies loaded.")
+else:
+    print("[!] No session cookies found. Relying on Android/iOS mobile client bypass.")
 
 # 2. Parse Payload & Quality Settings
 payload_env = os.environ.get('JOB_PAYLOAD', '')
@@ -58,22 +61,22 @@ for f in glob.glob("temp/*"):
 
 # Configure Quality Settings
 if quality_mode == 'fast':
-    ytdl_format = "bv*[height<=720][vcodec^=avc1]+ba[acodec^=mp4a]/bv*[height<=720]+ba/b[height<=720]/best"
+    ytdl_format = "bv*[height<=720]+ba/b[height<=720]/best"
     ffmpeg_crf = "23"
     ffmpeg_preset = "ultrafast"
     audio_br = "128k"
 elif quality_mode == 'master':
-    ytdl_format = "bv*[height<=1080][vcodec^=avc1]+ba[acodec^=mp4a]/bv*[height<=1080]+ba/b[height<=1080]/best"
+    ytdl_format = "bv*[height<=1080]+ba/b[height<=1080]/best"
     ffmpeg_crf = "16"
     ffmpeg_preset = "faster"
     audio_br = "320k"
 else:  # balanced
-    ytdl_format = "bv*[height<=1080][vcodec^=avc1]+ba[acodec^=mp4a]/bv*[height<=1080]+ba/b[height<=1080]/best"
+    ytdl_format = "bv*[height<=1080]+ba/b[height<=1080]/best"
     ffmpeg_crf = "19"
     ffmpeg_preset = "faster"
     audio_br = "192k"
 
-# 3. Direct Section Download (Downloads ONLY requested timestamps)
+# 3. Direct Section Download (Android/iOS client bypasses cloud IP bot checks)
 for idx, clip_item in enumerate(clips, start=1):
     cid = clip_item.get('id', idx)
     start = clip_item.get('start', '00:00')
@@ -83,12 +86,12 @@ for idx, clip_item in enumerate(clips, start=1):
     out_mp4 = f"output/clip_{cid}_{clean_label}.mp4"
     temp_target = f"temp/raw_{cid}.%(ext)s"
 
-    print(f"\n[*] [{idx}/{len(clips)}] Pulling section {start} -> {end} directly from YouTube...")
+    print(f"\n[*] [{idx}/{len(clips)}] Extracting {start} -> {end} via mobile client bypass...")
 
     cmd_dl = [
         "yt-dlp",
         "--remote-components", "ejs:github",
-        "--extractor-args", "youtube:player_client=default,web_embedded",
+        "--extractor-args", "youtube:player_client=android,ios",
         "--download-sections", f"*{start}-{end}",
         "-f", ytdl_format,
         "--merge-output-format", "mp4",
@@ -106,8 +109,8 @@ for idx, clip_item in enumerate(clips, start=1):
         raise FileNotFoundError(f"Download failed for clip {cid}")
     source_file = downloaded[0]
 
-    # Fast CapCut remux
-    print(f"[*] Encoding CapCut MP4 ({ffmpeg_preset}, CRF {ffmpeg_crf})...")
+    # Remux to standard CapCut H.264 MP4
+    print(f"[*] Remuxing to CapCut MP4 (CRF {ffmpeg_crf})...")
     cmd_remux = [
         "ffmpeg", "-y",
         "-i", source_file,
@@ -123,4 +126,4 @@ for idx, clip_item in enumerate(clips, start=1):
     subprocess.run(cmd_remux, check=True)
     print(f"[✓] Clip {cid} ready: {out_mp4}")
 
-print(f"\n[✓] All {len(clips)} clips downloaded and ready!")
+print(f"\n[✓] All {len(clips)} clips extracted successfully!")
