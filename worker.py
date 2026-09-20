@@ -4,7 +4,7 @@ import glob
 import json
 import subprocess
 
-print("[*] Initializing Dynamic Quality Slicer...")
+print("[*] Initializing Fast Direct-Section Slicer...")
 
 # 1. Setup Cookies
 cookies_path = None
@@ -52,60 +52,28 @@ os.makedirs('temp', exist_ok=True)
 for f in glob.glob("output/*"):
     try: os.remove(f)
     except: pass
+for f in glob.glob("temp/*"):
+    try: os.remove(f)
+    except: pass
 
-# Configure Quality Profile
+# Configure Quality Settings
 if quality_mode == 'fast':
-    print("[*] Profile: FAST MOBILE (720p, lightweight compression, ~8MB/clip)")
     ytdl_format = "bv*[height<=720][vcodec^=avc1]+ba[acodec^=mp4a]/bv*[height<=720]+ba/b[height<=720]/best"
-    ffmpeg_preset = "ultrafast"
     ffmpeg_crf = "23"
-    audio_bitrate = "128k"
-    extra_video_flags = ["-maxrate", "3M", "-bufsize", "6M"]
+    ffmpeg_preset = "ultrafast"
+    audio_br = "128k"
 elif quality_mode == 'master':
-    print("[*] Profile: STUDIO MASTER (1080p/Max, CRF 16, 320k Audio)")
     ytdl_format = "bv*[height<=1080][vcodec^=avc1]+ba[acodec^=mp4a]/bv*[height<=1080]+ba/b[height<=1080]/best"
-    ffmpeg_preset = "faster"
     ffmpeg_crf = "16"
-    audio_bitrate = "320k"
-    extra_video_flags = []
-else:  # 'balanced' (Recommended default)
-    print("[*] Profile: BALANCED HD (1080p, CRF 19, ~20MB/clip, CapCut ready)")
-    ytdl_format = "bv*[height<=1080][vcodec^=avc1]+ba[acodec^=mp4a]/bv*[height<=1080]+ba/b[height<=1080]/best"
     ffmpeg_preset = "faster"
+    audio_br = "320k"
+else:  # balanced
+    ytdl_format = "bv*[height<=1080][vcodec^=avc1]+ba[acodec^=mp4a]/bv*[height<=1080]+ba/b[height<=1080]/best"
     ffmpeg_crf = "19"
-    audio_bitrate = "192k"
-    extra_video_flags = []
+    ffmpeg_preset = "faster"
+    audio_br = "192k"
 
-# 3. Download Source Stream Once
-master_file = "temp/master_video.mp4"
-print(f"\n[*] Downloading source stream for profile '{quality_mode}'...")
-
-cmd_dl = [
-    "yt-dlp",
-    "--remote-components", "ejs:github",
-    "--extractor-args", "youtube:player_client=default,web_embedded",
-    "-f", ytdl_format,
-    "--merge-output-format", "mp4",
-    "--no-check-certificates"
-]
-if cookies_path and os.path.exists(cookies_path):
-    cmd_dl.extend(["--cookies", cookies_path])
-cmd_dl.extend([url, "-o", master_file])
-
-subprocess.run(cmd_dl, check=True)
-
-if not os.path.exists(master_file):
-    matches = glob.glob("temp/master_video.*")
-    if matches:
-        master_file = matches[0]
-    else:
-        raise FileNotFoundError("Master video download failed.")
-
-print(f"[✓] Source stream ready: {master_file}")
-
-# 4. Slice Selected Clips
-print(f"\n[*] Slicing {len(clips)} clips...")
-
+# 3. Direct Section Download (Downloads ONLY requested timestamps)
 for idx, clip_item in enumerate(clips, start=1):
     cid = clip_item.get('id', idx)
     start = clip_item.get('start', '00:00')
@@ -113,25 +81,46 @@ for idx, clip_item in enumerate(clips, start=1):
     clean_label = clip_item.get('label', f'clip_{cid}').replace(' ', '_').replace(':', '')
 
     out_mp4 = f"output/clip_{cid}_{clean_label}.mp4"
-    print(f"[{idx}/{len(clips)}] Cutting {start} -> {end}: {out_mp4}")
+    temp_target = f"temp/raw_{cid}.%(ext)s"
 
-    cmd_slice = [
+    print(f"\n[*] [{idx}/{len(clips)}] Pulling section {start} -> {end} directly from YouTube...")
+
+    cmd_dl = [
+        "yt-dlp",
+        "--remote-components", "ejs:github",
+        "--extractor-args", "youtube:player_client=default,web_embedded",
+        "--download-sections", f"*{start}-{end}",
+        "-f", ytdl_format,
+        "--merge-output-format", "mp4",
+        "--force-keyframes-at-cuts",
+        "--no-check-certificates"
+    ]
+    if cookies_path and os.path.exists(cookies_path):
+        cmd_dl.extend(["--cookies", cookies_path])
+    cmd_dl.extend([url, "-o", temp_target])
+
+    subprocess.run(cmd_dl, check=True)
+
+    downloaded = [f for f in glob.glob(f"temp/raw_{cid}.*") if not f.endswith(".part") and not f.endswith(".ytdl")]
+    if not downloaded:
+        raise FileNotFoundError(f"Download failed for clip {cid}")
+    source_file = downloaded[0]
+
+    # Fast CapCut remux
+    print(f"[*] Encoding CapCut MP4 ({ffmpeg_preset}, CRF {ffmpeg_crf})...")
+    cmd_remux = [
         "ffmpeg", "-y",
-        "-ss", start,
-        "-to", end,
-        "-i", master_file,
+        "-i", source_file,
         "-c:v", "libx264",
         "-preset", ffmpeg_preset,
         "-crf", ffmpeg_crf,
         "-pix_fmt", "yuv420p",
         "-c:a", "aac",
-        "-b:a", audio_bitrate,
-        "-movflags", "+faststart"
+        "-b:a", audio_br,
+        "-movflags", "+faststart",
+        out_mp4
     ]
-    if extra_video_flags:
-        cmd_slice.extend(extra_video_flags)
-    cmd_slice.append(out_mp4)
+    subprocess.run(cmd_remux, check=True)
+    print(f"[✓] Clip {cid} ready: {out_mp4}")
 
-    subprocess.run(cmd_slice, check=True)
-
-print(f"\n[✓] All {len(clips)} clips successfully processed with profile: {quality_mode}!")
+print(f"\n[✓] All {len(clips)} clips downloaded and ready!")
