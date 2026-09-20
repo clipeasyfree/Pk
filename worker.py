@@ -5,7 +5,7 @@ import json
 import re
 import subprocess
 
-print("[*] Initializing Resilient Speech-Safe Video Slicer...")
+print("[*] Initializing Single-Stream Transcript-Guided Slicer...")
 
 # 1. Setup Persistent Netscape Cookie File
 cookie_file = os.path.abspath("youtube_cookies.txt")
@@ -45,7 +45,7 @@ if cookies_env and len(cookies_env) > 30:
 
     if os.path.exists(cookie_file) and valid_count > 0:
         has_valid_cookies = True
-        print(f"[✓] Netscape cookie file locked with {valid_count} entries.")
+        print(f"[✓] Authenticated session cookies loaded ({valid_count} entries).")
 else:
     print("[!] Running without session cookies.")
 
@@ -78,7 +78,6 @@ for f in glob.glob("temp/*"):
     try: os.remove(f)
     except: pass
 
-# Multi-tier format fallback prevents "format not available" errors
 if quality_mode == 'fast':
     ytdl_format = "bv*[height<=720]+ba/b[height<=720]/bv*+ba/b/best"
     ffmpeg_crf = "22"
@@ -104,61 +103,135 @@ def parse_to_sec(time_str):
     return parts[0]
 
 def sec_to_str(total_sec):
-    total_sec = max(0, total_sec)
+    total_sec = max(0.0, total_sec)
     hrs = int(total_sec // 3600)
     mins = int((total_sec % 3600) // 60)
     secs = total_sec % 60
     if hrs > 0:
-        return f"{hrs:02d}:{mins:02d}:{secs:04.1f}"
-    return f"{mins:02d}:{secs:04.1f}"
+        return f"{hrs:02d}:{mins:02d}:{secs:05.2f}"
+    return f"{mins:02d}:{secs:05.2f}"
 
-# 3. Download Sections with Speech Padding
+# 3. Pull Subtitles First (Takes ~1s to get real word timings)
+print("\n[*] Fetching spoken word timings from YouTube transcript...")
+sub_prefix = "temp/subs"
+cmd_sub = [
+    "yt-dlp",
+    "--skip-download",
+    "--write-auto-sub",
+    "--sub-lang", "en",
+    "--sub-format", "vtt",
+    "--extractor-args", "youtube:player_client=web_embedded,mweb,android,ios",
+    "-o", sub_prefix,
+    url
+]
+if has_valid_cookies and os.path.exists(cookie_file):
+    cmd_sub.extend(["--cookies", cookie_file])
+subprocess.run(cmd_sub, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+
+vtt_files = glob.glob("temp/subs*.vtt")
+transcript_cues = []
+
+if vtt_files:
+    with open(vtt_files[0], 'r', encoding='utf-8', errors='ignore') as f:
+        vtt_content = f.read()
+    pattern = re.compile(r'((?:\d{2}:)?\d{2}:\d{2}\.\d{3})\s*-->\s*((?:\d{2}:)?\d{2}:\d{2}\.\d{3})(?:[^\n]*)\n([\s\S]*?)(?=\n\n|\n(?:\d{2}:)?\d{2}:\d{2}\.\d{3}|\Z)')
+    for m in pattern.finditer(vtt_content):
+        s_str, e_str, raw_txt = m.groups()
+        clean_txt = re.sub(r'<[^>]+>', '', raw_txt).strip()
+        if clean_txt:
+            transcript_cues.append({
+                'start': parse_to_sec(s_str),
+                'end': parse_to_sec(e_str),
+                'text': clean_txt
+            })
+    print(f"[✓] Parsed {len(transcript_cues)} speech cues from video transcript.")
+else:
+    print("[!] No English transcript found; falling back to silence pause snapping.")
+
+def snap_to_speech(target_start, target_end, cues):
+    if not cues:
+        return max(0.0, target_start - 0.4), target_end + 2.5
+
+    # Snap start to sentence beginning
+    start_cues = [c for c in cues if abs(c['start'] - target_start) <= 5.0]
+    if start_cues:
+        best_start = min(start_cues, key=lambda c: abs(c['start'] - target_start))
+        clean_start = max(0.0, best_start['start'] - 0.2)
+    else:
+        clean_start = max(0.0, target_start - 0.4)
+
+    # Snap end to sentence completion (punctuation or breath pause)
+    end_cues = [c for c in cues if c['end'] >= target_end - 1.0 and c['end'] <= target_end + 9.0]
+    clean_end = target_end + 2.5
+    if end_cues:
+        found = False
+        for i, c in enumerate(end_cues):
+            t = c['text'].strip()
+            if t.endswith(('.', '!', '?', '."', '?"', '!"')):
+                clean_end = c['end'] + 0.3
+                found = True
+                break
+            if i + 1 < len(end_cues):
+                gap = end_cues[i+1]['start'] - c['end']
+                if gap >= 0.45:
+                    clean_end = c['end'] + 0.25
+                    found = True
+                    break
+        if not found:
+            clean_end = end_cues[-1]['end'] + 0.3
+
+    return clean_start, clean_end
+
+# 4. Download Full Video Stream ONCE (15-20s on Gigabit Network)
+master_file = "temp/master_video.mp4"
+print("\n[*] Downloading video stream ONCE (eliminates 40-minute network throttle)...")
+
+cmd_dl = [
+    "yt-dlp",
+    "--remote-components", "ejs:github",
+    "--extractor-args", "youtube:player_client=web_embedded,mweb,android,ios",
+    "-f", ytdl_format,
+    "--merge-output-format", "mp4",
+    "--no-check-certificates"
+]
+if has_valid_cookies and os.path.exists(cookie_file):
+    cmd_dl.extend(["--cookies", cookie_file])
+cmd_dl.extend([url, "-o", master_file])
+
+subprocess.run(cmd_dl, check=True)
+
+if not os.path.exists(master_file):
+    matches = glob.glob("temp/master_video.*")
+    if matches:
+        master_file = matches[0]
+    else:
+        raise FileNotFoundError("Master video download failed.")
+
+print(f"[✓] Master stream cached locally: {master_file}")
+
+# 5. Slice All Clips Locally with Complete Sentence Snapping
+print(f"\n[*] Slicing {len(clips)} clips locally at exact sentence boundaries...")
+
 for idx, clip_item in enumerate(clips, start=1):
     cid = clip_item.get('id', idx)
     raw_start = clip_item.get('start', '00:00')
     raw_end = clip_item.get('end', '00:30')
     clean_label = clip_item.get('label', f'clip_{cid}').replace(' ', '_').replace(':', '')
 
-    start_sec = parse_to_sec(raw_start)
-    end_sec = parse_to_sec(raw_end)
+    t_start = parse_to_sec(raw_start)
+    t_end = parse_to_sec(raw_end)
 
-    # Padding: Start 0.5s earlier, finish 2.5s later so thoughts never get cut off
-    padded_start_sec = max(0.0, start_sec - 0.5)
-    padded_end_sec = end_sec + 2.5
-    dl_start = sec_to_str(padded_start_sec)
-    dl_end = sec_to_str(padded_end_sec)
+    clean_start, clean_end = snap_to_speech(t_start, t_end, transcript_cues)
+    duration = clean_end - clean_start
 
     out_mp4 = f"output/clip_{cid}_{clean_label}.mp4"
-    temp_raw = f"temp/raw_{cid}.%(ext)s"
+    print(f"[{idx}/{len(clips)}] Cutting {sec_to_str(clean_start)} -> {sec_to_str(clean_end)} (Duration: {duration:.1f}s)...")
 
-    print(f"\n[*] [{idx}/{len(clips)}] Pulling section {dl_start} -> {dl_end} (speech-padded)...")
-
-    cmd_dl = [
-        "yt-dlp",
-        "--remote-components", "ejs:github",
-        "--extractor-args", "youtube:player_client=web_embedded,mweb,android,ios",
-        "--download-sections", f"*{dl_start}-{dl_end}",
-        "-f", ytdl_format,
-        "--merge-output-format", "mp4",
-        "--force-keyframes-at-cuts",
-        "--no-check-certificates"
-    ]
-
-    if has_valid_cookies and os.path.exists(cookie_file):
-        cmd_dl.extend(["--cookies", cookie_file])
-
-    cmd_dl.extend([url, "-o", temp_raw])
-    subprocess.run(cmd_dl, check=True)
-
-    downloaded = [f for f in glob.glob(f"temp/raw_{cid}.*") if not f.endswith(".part") and not f.endswith(".ytdl")]
-    if not downloaded:
-        raise FileNotFoundError(f"Download failed for clip {cid}")
-    source_file = downloaded[0]
-
-    # Remux to standard CapCut H.264 MP4 with intact audio
-    cmd_remux = [
+    cmd_slice = [
         "ffmpeg", "-y",
-        "-i", source_file,
+        "-ss", str(clean_start),
+        "-t", str(duration),
+        "-i", master_file,
         "-c:v", "libx264",
         "-preset", ffmpeg_preset,
         "-crf", ffmpeg_crf,
@@ -168,7 +241,7 @@ for idx, clip_item in enumerate(clips, start=1):
         "-movflags", "+faststart",
         out_mp4
     ]
-    subprocess.run(cmd_remux, check=True)
+    subprocess.run(cmd_slice, check=True)
     print(f"[✓] Finished Clip {cid}: {out_mp4}")
 
-print(f"\n[✓] All {len(clips)} clips exported cleanly!")
+print(f"\n[✓] All {len(clips)} clips exported with complete sentence conclusions!")
