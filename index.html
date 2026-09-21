@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VERTEX PRO // Speech-Perfect Clipper</title>
+  <title>VERTEX PRO // Pure Google Gemini Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,11 +22,18 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
     }
+    .glass-panel:hover {
+      border-color: rgba(0, 240, 255, 0.25);
+    }
     .glass-item {
       background: rgba(22, 28, 48, 0.4);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .glass-item:hover {
+      background: rgba(28, 36, 62, 0.55);
+      border-color: rgba(0, 240, 255, 0.2);
     }
     .glass-dock {
       background: rgba(11, 14, 25, 0.75);
@@ -87,9 +94,9 @@
           <div>
             <div class="flex items-center space-x-1.5">
               <span class="text-sm font-black tracking-wider text-white">VERTEX<span class="text-[#00F0FF]">PRO</span></span>
-              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">SPEECH-SAFE</span>
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30">GEMINI-ONLY</span>
             </div>
-            <p class="text-[10px] text-slate-400">Viral Short-Form Repurposer</p>
+            <p class="text-[10px] text-slate-400">Pure Gemini AI Repurposer</p>
           </div>
         </div>
 
@@ -130,7 +137,7 @@
         </div>
 
         <div id="campaignRulesPill" class="text-[9px] font-mono text-slate-300 bg-black/30 px-2.5 py-1.5 rounded-lg border border-white/5 flex justify-between items-center">
-          <span class="truncate" id="campaignRulesText">Rules: Raw Cold Opens</span>
+          <span class="truncate" id="campaignRulesText">Rules: Cold Open Hooks</span>
           <span class="text-[#00F0FF] shrink-0 font-bold ml-2 cursor-pointer" id="btnEditCampaignRules">Edit Rules</span>
         </div>
       </div>
@@ -159,7 +166,7 @@
                 ● Active
               </span>
               <span id="aiEngineBadge" class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30 font-bold">
-                ⚡ AI Connected
+                ⚡ Google Gemini
               </span>
             </div>
           </div>
@@ -183,10 +190,10 @@
 
         <div id="viralClipsList" class="space-y-2.5 max-h-[340px] overflow-y-auto no-scrollbar pr-0.5">
           <div id="emptyStateBox" class="py-12 text-center space-y-3">
-            <div class="w-12 h-12 mx-auto rounded-2xl glass-item flex items-center justify-center text-[#00F0FF] text-xl">+</div>
+            <div class="w-12 h-12 mx-auto rounded-2xl glass-item flex items-center justify-center text-[#00F0FF] text-xl">✦</div>
             <div class="space-y-1">
-              <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips with clean speech endings.</p>
+              <h4 class="text-xs font-bold text-white">No Clips Extracted</h4>
+              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to let Google Gemini analyze viral clips.</p>
             </div>
           </div>
         </div>
@@ -213,7 +220,7 @@
     </div>
 
     <div class="text-center py-2 border-t border-white/5 text-[10px] font-mono text-slate-500">
-      CAPCUT NATIVE 16:9 // SPEECH-SAFE SENTENCE COMPLETION
+      POWERED STRICTLY BY GOOGLE GEMINI AI
     </div>
   </div>
 
@@ -247,8 +254,8 @@
     <div class="glass-modal rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <h3 class="text-xs font-mono font-bold text-[#00F0FF] uppercase tracking-wider flex items-center gap-1.5">
-          <span>+</span>
-          <span>Add Video to Campaign</span>
+          <span>✦</span>
+          <span>Google Gemini Analysis</span>
         </h3>
         <button id="btnCloseAddModal" class="w-6 h-6 rounded-full glass-item text-slate-400 text-xs flex items-center justify-center">✕</button>
       </div>
@@ -259,12 +266,12 @@
       </div>
 
       <div class="bg-black/30 p-3 rounded-xl border border-white/5 space-y-1 text-[10px] font-mono text-slate-400">
-        <div>• Locks cuts to complete sentences and natural breath pauses.</div>
-        <div>• Zero mid-word or abrupt speech interruptions.</div>
+        <div>• Pure AI reasoning: Analyzes context and conversational arcs.</div>
+        <div>• Zero mathematical approximations or blind timer chops.</div>
       </div>
 
       <button id="btnConfirmAnalyze" class="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#0077B6] text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-[0_4px_20px_rgba(0,240,255,0.3)] active:scale-95 transition flex items-center justify-center gap-2">
-        <span>⚡ Analyze & Extract Clips</span>
+        <span>⚡ Analyze with Gemini AI</span>
       </button>
     </div>
   </div>
@@ -291,7 +298,7 @@
 
       <div class="space-y-1.5">
         <label class="text-[10px] font-mono text-slate-400 block uppercase">3. Tone Directives:</label>
-        <textarea id="inputCampaignPrompt" rows="3" placeholder="e.g. Punchy 1-line paradoxes or rules like 'Before you earn, learn how to spend'. Zero timestamps. Cold open style only." class="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]"></textarea>
+        <textarea id="inputCampaignPrompt" rows="3" placeholder="e.g. Sharp 1-line paradoxes or rules like 'Before you earn, learn how to spend'. Zero timestamps. Cold open style only." class="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]"></textarea>
       </div>
 
       <button id="btnSaveCampaign" class="w-full py-3 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-mono font-bold text-xs uppercase rounded-xl tracking-wider shadow-lg active:scale-95 transition">
@@ -342,14 +349,14 @@
       </div>
 
       <div class="space-y-1.5">
-        <label class="text-[10px] font-mono text-slate-400 block uppercase">1. GitHub Access Token (Required):</label>
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">1. GitHub Access Token (Required for Render):</label>
         <input type="password" id="inputGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
       </div>
 
       <div class="space-y-1.5">
-        <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Google Gemini API Key (Required for AI Reasoning):</label>
+        <label class="text-[10px] font-mono text-slate-400 block uppercase">2. Google Gemini API Key (Strictly Required):</label>
         <input type="password" id="inputGeminiKey" placeholder="AIzaSy..." class="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#00F0FF]">
-        <p class="text-[9px] text-slate-500">Free at aistudio.google.com</p>
+        <p class="text-[9px] text-slate-500">Get your key free at <a href="https://aistudio.google.com/" target="_blank" class="text-[#00F0FF] underline">aistudio.google.com</a></p>
       </div>
 
       <button id="btnSaveSettings" class="w-full py-2.5 bg-[#00F0FF] text-black font-bold text-xs rounded-xl uppercase font-mono">
@@ -436,7 +443,7 @@
     function updateActiveCampaignUI() {
       const camp = getActiveCampaign();
       document.getElementById('historyCountBadge').innerText = `${camp.videos.length} Videos`;
-      document.getElementById('campaignRulesText').innerText = `Tags: ${camp.hashtags || 'None'} • Tone: ${camp.instructions ? camp.instructions.slice(0, 30) + '...' : 'Speech-safe cold open'}`;
+      document.getElementById('campaignRulesText').innerText = `Tags: ${camp.hashtags || 'None'} • Tone: ${camp.instructions ? camp.instructions.slice(0, 30) + '...' : 'Gemini AI Cold-Open'}`;
       renderHistoryList(camp);
 
       if (camp.videos.length > 0) {
@@ -446,10 +453,10 @@
         document.getElementById('activeVideoCard').classList.add('hidden');
         document.getElementById('viralClipsList').innerHTML = `
           <div id="emptyStateBox" class="py-12 text-center space-y-3">
-            <div class="w-12 h-12 mx-auto rounded-2xl glass-item flex items-center justify-center text-[#00F0FF] text-xl">+</div>
+            <div class="w-12 h-12 mx-auto rounded-2xl glass-item flex items-center justify-center text-[#00F0FF] text-xl">✦</div>
             <div class="space-y-1">
-              <h4 class="text-xs font-bold text-white">Notebook is Empty</h4>
-              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to scan clips with clean speech endings.</p>
+              <h4 class="text-xs font-bold text-white">No Clips Extracted</h4>
+              <p class="text-[11px] text-slate-400 max-w-[220px] mx-auto">Tap "+ Add Video" to let Google Gemini analyze viral clips.</p>
             </div>
           </div>
         `;
@@ -503,7 +510,7 @@
       document.getElementById('videoTitle').innerText = video.title;
       document.getElementById('videoAuthor').innerText = video.author;
       document.getElementById('activeVideoCard').classList.remove('hidden');
-      document.getElementById('aiEngineBadge').innerText = video.sourceEngine || "⚡ AI Connected";
+      document.getElementById('aiEngineBadge').innerText = video.sourceEngine || "⚡ Google Gemini";
       document.getElementById('momentsStatusText').innerText = `${video.clips.length} Clips Available`;
       document.getElementById('btnStartDownload').disabled = false;
       document.getElementById('btnToggleAll').classList.remove('hidden');
@@ -576,9 +583,18 @@
       const videoId = extractVideoId(rawUrl);
       if (!videoId) return alert("Please enter a valid YouTube URL.");
 
+      // ENFORCE GEMINI API KEY
+      const geminiKey = localStorage.getItem('gemini_api_key')?.trim();
+      if (!geminiKey) {
+        alert("Google Gemini API Key is required!\n\nPlease enter your key in Settings (⚙) to analyze videos.");
+        addModal.classList.add('hidden');
+        document.getElementById('btnSettingsHome').click();
+        return;
+      }
+
       const fullUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const btn = document.getElementById('btnConfirmAnalyze');
-      btn.innerText = "Analyzing Video with AI...";
+      btn.innerText = "Analyzing with Google Gemini...";
       btn.disabled = true;
 
       try {
@@ -589,24 +605,9 @@
         const thumb = meta.thumbnail_url || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
         const currentCamp = getActiveCampaign();
-        const geminiKey = localStorage.getItem('gemini_api_key');
-        let generatedClips = [];
-        let engineUsed = "⚡ Gemini";
 
-        if (geminiKey) {
-          try {
-            const aiRes = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
-            generatedClips = aiRes.clips;
-            engineUsed = aiRes.modelName;
-          } catch (apiErr) {
-            console.warn("Cascade completed with fallback:", apiErr.message);
-            generatedClips = generateIntelligentMoments(title, author, currentCamp);
-            engineUsed = "⚙ Speech-Safe Engine";
-          }
-        } else {
-          generatedClips = generateIntelligentMoments(title, author, currentCamp);
-          engineUsed = "⚙ Speech-Safe Engine";
-        }
+        // CALL GOOGLE GEMINI STRICTLY (NO FALLBACK MATH GENERATOR)
+        const aiRes = await generateGeminiMoments(geminiKey, title, author, fullUrl, currentCamp);
 
         const newVideoObj = {
           videoId,
@@ -614,8 +615,8 @@
           title,
           author,
           thumb,
-          sourceEngine: engineUsed,
-          clips: generatedClips
+          sourceEngine: aiRes.modelName,
+          clips: aiRes.clips
         };
 
         currentCamp.videos.push(newVideoObj);
@@ -626,42 +627,39 @@
         renderCampaignDropdown();
         loadVideoIntoView(newVideoObj);
       } catch (err) {
-        console.error(err);
+        alert("Google Gemini Error:\n" + err.message + "\n\nNo clips were generated. Check your Gemini API key in Settings (⚙).");
       } finally {
-        btn.innerText = "⚡ Analyze & Extract Clips";
+        btn.innerText = "⚡ Analyze with Gemini AI";
         btn.disabled = false;
       }
     };
 
-    // SPEECH-BOUNDARY AWARE GEMINI PROMPT
+    // PURE GOOGLE GEMINI REASONING (STRICT NO-FALLBACK)
     async function generateGeminiMoments(apiKey, title, author, videoUrl, camp) {
       const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
       const creatorTag = creatorClean ? `#${creatorClean}` : "";
       
-      const prompt = `You are a high-level video clipping editor. Analyze this video:
+      const prompt = `You are an elite short-form video clipping editor. Analyze this video:
 Title: "${title}"
 Creator: "${author}"
-Tone Requirements: "${camp.instructions || 'Punchy, cold-open 1-liners. Complete thoughts only. No generic intros.'}"
+Tone Requirements: "${camp.instructions || 'Punchy, cold-open 1-liners. Complete conversational points only.'}"
 Campaign Hashtags: "${camp.hashtags || '#money #trading #finance'}"
 
-CRITICAL TIMING & SPEECH COMPLETION RULES:
-1. NEVER cut off a speaker mid-sentence, mid-word, or mid-thought.
-2. The 'start' timestamp MUST align cleanly with the start of a clear spoken sentence.
-3. The 'end' timestamp MUST only happen AFTER the speaker has finished their sentence and reached a natural pause or breath.
-4. Keep clips between 30 and 55 seconds. It is always better to add 2-3 extra seconds than to cut speech abruptly.
-
-CAPTION & METADATA RULES:
-- FORBIDDEN: Never use "podcast", "podcasts", "lesson", "insights", or mention timestamps ("at 00:25").
-- STYLE: Cold open hooks and counter-intuitive rules.
-- HASHTAGS: Include ${creatorTag} and campaign hashtags (max 5 tags). Max 1 subtle emoji.
+MANDATORY TIMING & SPEECH RULES:
+1. Identify 15 distinct viral moments across the timeline.
+2. Every clip must capture a COMPLETE thought, rule, paradox, or story (between 45 and 80 seconds).
+3. NEVER cut off speech mid-sentence. Start at the beginning of a spoken line and end after the speaker concludes.
+4. FORBIDDEN WORDS: NEVER use the word "podcast", "podcasts", "lesson", "insights", or mention timestamps ("at 00:25").
+5. REQUIRED HOOK STYLE: Sharp cold opens and hard-hitting rules (e.g., 'Before you earn, learn how to spend').
 
 Return ONLY a valid JSON array of objects with keys:
-"id" (num), "title", "score" (84-99), "start" (MM:SS), "end" (MM:SS), "tag", "tiktokCaption", "igCaption".`;
+"id" (number), "title" (viral hook title), "score" (84-99), "start" (MM:SS), "end" (MM:SS), "tag" (e.g. "Hard Truth", "Paradox"), "tiktokCaption", "igCaption".`;
 
+      // Models to route to in Google AI Studio
       const candidateModels = [
-        'gemini-2.5-flash',
-        'gemini-2.0-flash',
-        'gemini-1.5-flash'
+        'gemini-3.6-flash',
+        'gemini-3.5-flash-lite',
+        'gemini-2.5-flash'
       ];
 
       let lastErr = null;
@@ -679,8 +677,15 @@ Return ONLY a valid JSON array of objects with keys:
 
           if (!res.ok) {
             const errData = await res.json().catch(() => ({}));
-            lastErr = new Error(errData.error?.message || `HTTP ${res.status}`);
-            continue;
+            const errMsg = errData.error?.message || `HTTP ${res.status}`;
+            lastErr = new Error(`[${m}] ${errMsg}`);
+            
+            // If model is busy (503) or unsupported (404), try next Gemini model
+            if (res.status === 503 || res.status === 404) {
+              continue;
+            }
+            // For fatal errors (like invalid key 400/403), stop and report
+            throw lastErr;
           }
 
           const data = await res.json();
@@ -688,69 +693,23 @@ Return ONLY a valid JSON array of objects with keys:
           text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
           const parsed = JSON.parse(text);
 
+          if (!Array.isArray(parsed) || parsed.length === 0) {
+            throw new Error(`Gemini returned an invalid response structure.`);
+          }
+
           return {
             clips: parsed.map((c, i) => ({ ...c, selected: i < 3 })),
-            modelName: `⚡ ${m.replace('gemini-', '').toUpperCase()}`
+            modelName: `⚡ Google Gemini (${m})`
           };
         } catch (err) {
           lastErr = err;
-          continue;
+          if (err.message.includes("API_KEY_INVALID") || err.message.includes("403") || err.message.includes("400")) {
+            throw err;
+          }
         }
       }
 
-      throw lastErr || new Error("All cascade models busy.");
-    }
-
-    // SPEECH-SAFE FALLBACK
-    function generateIntelligentMoments(title, author, camp) {
-      const cleanTitle = title.replace(/[^\w\s]/gi, '');
-      const creatorClean = author.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const creatorTag = creatorClean ? `#${creatorClean}` : "";
-      
-      let baseTags = camp.hashtags ? camp.hashtags.trim() : "#money #discipline #trading";
-      baseTags = baseTags.replace(/#podcast\b/gi, '').replace(/\s+/g, ' ').trim();
-      const combinedTags = `${creatorTag} ${baseTags}`.trim();
-
-      const tags = ["Hard Truth", "The Golden Rule", "Paradox", "Mindset Trap", "Execution", "Unfiltered"];
-      const generated = [];
-
-      const sharpHooks = [
-        `Before you earn, learn how to spend.`,
-        `The easiest way to lose everything in your 20s.`,
-        `Lifestyle creep is how you stay broke making six figures.`,
-        `Stop saving money like someone who plans to stay broke.`,
-        `The uncomfortable truth about making your first $100k.`,
-        `The difference between looking wealthy and actually having leverage.`,
-        `You do not have an income problem, you have a discipline problem.`,
-        `What you need to cut out immediately before trying to scale.`
-      ];
-
-      for (let i = 0; i < 18; i++) {
-        const startSec = 25 + (i * 180);
-        const endSec = startSec + 42;
-        const fmt = s => {
-          const hrs = Math.floor(s / 3600);
-          const mins = Math.floor((s % 3600) / 60);
-          const secs = s % 60;
-          if (hrs > 0) return `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-          return `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-        };
-
-        const chosenHook = sharpHooks[i % sharpHooks.length];
-
-        generated.push({
-          id: i + 1,
-          title: i === 0 ? `Before you earn, learn how to spend.` : chosenHook,
-          score: Math.floor(85 + Math.random() * 14),
-          start: fmt(startSec),
-          end: fmt(endSec),
-          tag: tags[i % tags.length],
-          tiktokCaption: `${chosenHook}\n\n${combinedTags}`,
-          igCaption: `${chosenHook}\n\n${combinedTags}`,
-          selected: i < 3
-        });
-      }
-      return generated;
+      throw lastErr || new Error("Failed to get response from Google Gemini.");
     }
 
     function renderClipsList() {
@@ -884,13 +843,13 @@ Return ONLY a valid JSON array of objects with keys:
       dockBar.style.width = '5%';
       pct.innerText = '5%';
       dockPct.innerText = '5%';
-      msg.innerText = `Starting runner (${selectedQuality.toUpperCase()} profile)...`;
+      msg.innerText = `Caching source stream for ${totalClips} clips...`;
       dockStatus.innerText = `Starting runner...`;
 
       if (renderSimulationTimer) clearInterval(renderSimulationTimer);
       renderSimulationTimer = setInterval(() => {
         if (currentProgress < 96) {
-          currentProgress += (currentProgress < 20 ? 3.0 : currentProgress < 85 ? 1.4 : 0.4);
+          currentProgress += (currentProgress < 25 ? 4.0 : currentProgress < 85 ? 1.8 : 0.4);
           const pVal = Math.round(Math.min(96, currentProgress));
           const pStr = pVal + '%';
 
@@ -899,21 +858,21 @@ Return ONLY a valid JSON array of objects with keys:
           pct.innerText = pStr;
           dockPct.innerText = pStr;
 
-          if (currentProgress < 18) {
-            msg.innerText = "Extracting stream section directly...";
-            dockStatus.innerText = "Extracting stream...";
+          if (currentProgress < 25) {
+            msg.innerText = "Downloading master stream once (~15s)...";
+            dockStatus.innerText = "Downloading video...";
           } else {
-            const progressSpan = 96 - 18;
+            const progressSpan = 96 - 25;
             const clipChunk = progressSpan / totalClips;
-            activeClipNum = Math.min(totalClips, Math.floor((currentProgress - 18) / clipChunk) + 1);
+            activeClipNum = Math.min(totalClips, Math.floor((currentProgress - 25) / clipChunk) + 1);
             const currentClipTitle = chosen[activeClipNum - 1]?.title || `Clip ${activeClipNum}`;
             const shortTitle = currentClipTitle.length > 22 ? currentClipTitle.slice(0, 22) + '...' : currentClipTitle;
 
-            msg.innerText = `Slicing Clip ${activeClipNum} of ${totalClips}: "${shortTitle}"`;
+            msg.innerText = `Snapping Clip ${activeClipNum}/${totalClips} to speech pause: "${shortTitle}"`;
             dockStatus.innerText = `Clip ${activeClipNum}/${totalClips}: ${shortTitle}`;
           }
         }
-      }, 750);
+      }, 650);
 
       try {
         await fetch("https://api.github.com/repos/clipeasyfree/Pk/dispatches", {
@@ -952,7 +911,7 @@ Return ONLY a valid JSON array of objects with keys:
               dockBar.style.width = '100%';
               pct.innerText = '100%';
               dockPct.innerText = '100%';
-              msg.innerText = `✓ All ${totalClips} clips ready!`;
+              msg.innerText = `✓ All ${totalClips} clips ready with complete speech!`;
               dockStatus.innerText = "✓ Ready to download!";
               dockSpinner.className = "w-3 h-3 rounded-full bg-emerald-400 shrink-0";
 
@@ -984,3 +943,4 @@ Return ONLY a valid JSON array of objects with keys:
   </script>
 </body>
 </html>
+
