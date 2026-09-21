@@ -1,12 +1,9 @@
-name: AutoClip Render Pipeline
+name: render
 
 on:
   repository_dispatch:
     types: [start-render]
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   render:
@@ -23,29 +20,29 @@ jobs:
 
       - name: Install FFmpeg
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
 
       - name: Setup Deno Engine
-        run: |
-          curl -fsSL https://deno.land/install.sh | sh
-          echo "$HOME/.deno/bin" >> $GITHUB_PATH
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
 
       - name: Install Video Extraction Engine
         run: |
-          pip install --upgrade pip
-          pip install yt-dlp yt-dlp-ejs
+          python -m pip install --upgrade pip
+          pip install --upgrade yt-dlp
 
       - name: Download & Slice High-Res Clips
         env:
           JOB_PAYLOAD: ${{ toJson(github.event.client_payload) }}
           COOKIES_DATA: ${{ secrets.YT_COOKIES }}
-        run: |
-          python worker.py
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python worker.py
 
       - name: Upload Finished Clips Package
         uses: actions/upload-artifact@v4
         with:
           name: capcut-ready-clips
-          path: output/*.mp4
-          retention-days: 7
+          path: output/
+          if-no-files-found: error
